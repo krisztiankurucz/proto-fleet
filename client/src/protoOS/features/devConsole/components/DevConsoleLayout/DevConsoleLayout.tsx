@@ -3,8 +3,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import ConnectionStatusIndicator from "./ConnectionStatusIndicator";
+import { useDevConsoleAvailability } from "@/protoOS/features/devConsole/hooks/useDevConsoleAvailability";
 import DevConsoleDataProvider from "@/protoOS/features/devConsole/nats/DevConsoleDataProvider";
 import NatsProvider from "@/protoOS/features/devConsole/nats/NatsProvider";
+import ProgressCircular from "@/shared/components/ProgressCircular";
 import SegmentedControl from "@/shared/components/SegmentedControl";
 
 const TAB_SEGMENTS = [
@@ -16,6 +18,7 @@ const TAB_SEGMENTS = [
 ];
 
 function DevConsoleLayout() {
+  const availability = useDevConsoleAvailability();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +35,24 @@ function DevConsoleLayout() {
     },
     [navigate],
   );
+
+  if (availability === "probing") {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <ProgressCircular indeterminate />
+      </div>
+    );
+  }
+
+  if (availability === "unavailable") {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-body-200 text-text-secondary">
+          Dev Console is not available. The NATS WebSocket server is not running.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <NatsProvider>

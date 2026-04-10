@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file miner_psu_api.proto.
  */
 export const file_miner_psu_api: GenFile = /*@__PURE__*/
-  fileDesc("ChNtaW5lcl9wc3VfYXBpLnByb3RvEg1taW5lcl9wc3VfYXBpIn0KCFBzdUVycm9yEikKBGNvZGUYASABKA4yGy5taW5lcl9wc3VfYXBpLlBzdUVycm9yQ29kZRINCgVpbmRleBgCIAEoDRItCgpzdWJfcHN1X2lkGAMgASgOMhcubWluZXJfcHN1X2FwaS5TdWJQc3VJZEgAQggKBmRldGFpbCKIAQoOUHN1TWVhc3VyZW1lbnQSOwoQbWVhc3VyZW1lbnRfdHlwZRgBIAEoDjIhLm1pbmVyX3BzdV9hcGkuUHN1TWVhc3VyZW1lbnRUeXBlEg0KBXZhbHVlGAIgASgFEioKBHVuaXQYAyABKA4yHC5taW5lcl9jb21tb25fYXBpLk1ldHJpY1VuaXQikwEKCFBzdUxpbWl0EjUKCmxpbWl0X3R5cGUYASABKA4yIS5taW5lcl9wc3VfYXBpLlBzdU1lYXN1cmVtZW50VHlwZRIRCgltYXhfdmFsdWUYAiABKAUSEQoJbWluX3ZhbHVlGAMgASgFEioKBHVuaXQYBCABKA4yHC5taW5lcl9jb21tb25fYXBpLk1ldHJpY1VuaXQiOwoQUHN1RmlybXdhcmVBc3NldBITCgthcHBfdmVyc2lvbhgBIAEoCRISCgpibF92ZXJzaW9uGAIgASgJItwBCgdQc3VJbmZvEgoKAmlkGAEgASgNEhUKDXNlcmlhbF9udW1iZXIYAiABKAkSNgoIZmlybXdhcmUYAyABKAsyHy5taW5lcl9wc3VfYXBpLlBzdUZpcm13YXJlQXNzZXRIAIgBARIOCgZ2ZW5kb3IYBCABKAkSDQoFbW9kZWwYBSABKAkSEwoLaHdfcmV2aXNpb24YBiABKAkSJwoGbGltaXRzGAcgAygLMhcubWluZXJfcHN1X2FwaS5Qc3VMaW1pdBIMCgRzbG90GAggASgNQgsKCV9maXJtd2FyZSKMAgoJUHN1U3RhdHVzEgoKAmlkGAEgASgNEiYKBXN0YXRlGAIgASgOMhcubWluZXJfcHN1X2FwaS5Qc3VTdGF0ZRIzCgxtZWFzdXJlbWVudHMYAyADKAsyHS5taW5lcl9wc3VfYXBpLlBzdU1lYXN1cmVtZW50Ei8KCmZhbl9zcGVlZHMYBSADKAsyGy5taW5lcl9wc3VfYXBpLlBzdUZhblN0YXR1cxInCgZmYXVsdHMYBiADKAsyFy5taW5lcl9wc3VfYXBpLlBzdUZhdWx0EhsKDmxhc3RfcHN1X2Vycm9yGAcgASgNSACIAQESDAoEc2xvdBgIIAEoDUIRCg9fbGFzdF9wc3VfZXJyb3Ii0QEKCFBzdUZhdWx0Ei8KCmZhdWx0X3R5cGUYASABKA4yGy5taW5lcl9wc3VfYXBpLlBzdUZhdWx0VHlwZRIxCgtmYXVsdF9sZXZlbBgCIAEoDjIcLm1pbmVyX3BzdV9hcGkuUHN1RmF1bHRMZXZlbBIUCgdtZXNzYWdlGAMgASgJSACIAQESMAoKc3ViX3BzdV9pZBgEIAEoDjIXLm1pbmVyX3BzdV9hcGkuU3ViUHN1SWRIAYgBAUIKCghfbWVzc2FnZUINCgtfc3ViX3BzdV9pZCJmCgxQc3VGYW5TdGF0dXMSDgoGZmFuX2lkGAEgASgNEhYKDnRhY2hvbWV0ZXJfcnBtGAIgASgNEhsKDnB3bV9wZXJjZW50YWdlGAMgASgNSACIAQFCEQoPX3B3bV9wZXJjZW50YWdlIsUBCgpQc3VJbmZvTXNnEhUKDXNlcmlhbF9udW1iZXIYASABKAkSNgoIZmlybXdhcmUYAiABKAsyHy5taW5lcl9wc3VfYXBpLlBzdUZpcm13YXJlQXNzZXRIAIgBARIOCgZ2ZW5kb3IYAyABKAkSDQoFbW9kZWwYBCABKAkSEwoLaHdfcmV2aXNpb24YBSABKAkSJwoGbGltaXRzGAYgAygLMhcubWluZXJfcHN1X2FwaS5Qc3VMaW1pdEILCglfZmlybXdhcmUiigEKDFBzdVN0YXR1c01zZxIwCgVzdGF0ZRgBIAEoDjIhLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbGxlclN0YXRlEiAKGHRhcmdldF9vdXRwdXRfdm9sdGFnZV9tdhgCIAEoDRIOCgZlbmFibGUYAyABKAgSFgoOdm9sdGFnZV9sb2NrZWQYBCABKAgiNAoJUHN1RXJyb3JzEicKBmVycm9ycxgBIAMoCzIXLm1pbmVyX3BzdV9hcGkuUHN1RXJyb3IiRgoPUHN1TWVhc3VyZW1lbnRzEjMKDG1lYXN1cmVtZW50cxgBIAMoCzIdLm1pbmVyX3BzdV9hcGkuUHN1TWVhc3VyZW1lbnQi0AQKClBzdUNvbnRyb2wSOAoGZW5hYmxlGAEgASgLMiYubWluZXJfcHN1X2FwaS5Qc3VDb250cm9sLk91dHB1dEVuYWJsZUgAEkgKEnNldF9vdXRwdXRfdm9sdGFnZRgCIAEoCzIqLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5TZXRPdXRwdXRWb2x0YWdlSAASOwoLY2xlYXJfZXJyb3IYAyABKAsyJC5taW5lcl9wc3VfYXBpLlBzdUNvbnRyb2wuQ2xlYXJFcnJvckgAEjcKCWZ3X3VwZGF0ZRgEIAEoCzIiLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5Gd1VwZGF0ZUgAEj0KDGxvY2tfdm9sdGFnZRgFIAEoCzIlLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5Mb2NrVm9sdGFnZUgAEk4KFXJlc2V0X3JlY292ZXJ5X2xpbWl0cxgGIAEoCzItLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5SZXNldFJlY292ZXJ5TGltaXRzSAAaHgoMT3V0cHV0RW5hYmxlEg4KBmVuYWJsZRgBIAEoCBotChBTZXRPdXRwdXRWb2x0YWdlEhkKEW91dHB1dF92b2x0YWdlX212GAEgASgNGhsKC0xvY2tWb2x0YWdlEgwKBGxvY2sYASABKAgaDAoKQ2xlYXJFcnJvchoVChNSZXNldFJlY292ZXJ5TGltaXRzGiEKCEZ3VXBkYXRlEhUKDWZpcm13YXJlX3BhdGgYASABKAlCBQoDY21kKjYKCFN1YlBzdUlkEhQKEFNVQl9QU1VfTU9EVUxFXzEQABIUChBTVUJfUFNVX01PRFVMRV8yEAEqrQcKDFBzdUVycm9yQ29kZRIgChxQU1VfRVJST1JfQ09ERV9QUk9CRV9GQUlMVVJFEAASJgoiUFNVX0VSUk9SX0NPREVfT1VUUFVUX09WRVJfVk9MVEFHRRABEiYKIlBTVV9FUlJPUl9DT0RFX09VVFBVVF9PVkVSX0NVUlJFTlQQAhIjCh9QU1VfRVJST1JfQ09ERV9PVkVSX1RFTVBFUkFUVVJFEAMSJwojUFNVX0VSUk9SX0NPREVfT1VUUFVUX1VOREVSX1ZPTFRBR0UQBBIXChNQU1VfRVJST1JfQ09ERV9GQU5TEAUSGAoUUFNVX0VSUk9SX0NPREVfSU5QVVQQBhIaChZQU1VfRVJST1JfQ09ERV9VTktOT1dOEAcSFgoSUFNVX0VSUk9SX0NPREVfT0ZGEAgSHQoZUFNVX0VSUk9SX0NPREVfUE9XRVJfR09PRBAJEiQKIFBTVV9FUlJPUl9DT0RFX09VVFBVVF9PVkVSX1BPV0VSEAoSIQodUFNVX0VSUk9SX0NPREVfT1VUUFVUX0ZBSUxVUkUQCxIXChNQU1VfRVJST1JfQ09ERV9CVVNZEAwSHAoYUFNVX0VSUk9SX0NPREVfQ09NTV9MT1NUEA0SHwobUFNVX0VSUk9SX0NPREVfR1BJT19GQUlMVVJFEA4SJAogUFNVX0VSUk9SX0NPREVfVU5ERVJfVEVNUEVSQVRVUkUQDxIbChdQU1VfRVJST1JfQ09ERV9SRUNPVkVSWRAQEiAKHFBTVV9FUlJPUl9DT0RFX1BPV0VSX05PX0dPT0QQERIeChpQU1VfRVJST1JfQ09ERV9QRkNfRkFJTFVSRRASEiMKH1BTVV9FUlJPUl9DT0RFX05PX0lOUFVUX1ZPTFRBR0UQExIhCh1QU1VfRVJST1JfQ09ERV9TV19FTkFCTEVfRkFJTBAUEi0KKVBTVV9FUlJPUl9DT0RFX1NXX1NFVF9PVVRQVVRfVk9MVEFHRV9GQUlMEBUSJAogUFNVX0VSUk9SX0NPREVfRklSTVdBUkVfTUlTTUFUQ0gQFhIlCiFQU1VfRVJST1JfQ09ERV9JTlBVVF9PVkVSX1ZPTFRBR0UQFxImCiJQU1VfRVJST1JfQ09ERV9JTlBVVF9VTkRFUl9WT0xUQUdFEBgSJQohUFNVX0VSUk9SX0NPREVfSU5QVVRfT1ZFUl9DVVJSRU5UEBkSHgoaUFNVX0VSUk9SX0NPREVfTExDX0ZBSUxVUkUQGirxBAoMUHN1RmF1bHRUeXBlEhcKE1BTVV9GQVVMVF9UWVBFX05PTkUQABIfChtQU1VfRkFVTFRfVFlQRV9PVkVSX1ZPTFRBR0UQARIfChtQU1VfRkFVTFRfVFlQRV9PVkVSX0NVUlJFTlQQAhIjCh9QU1VfRkFVTFRfVFlQRV9PVkVSX1RFTVBFUkFUVVJFEAMSIAocUFNVX0ZBVUxUX1RZUEVfVU5ERVJfVk9MVEFHRRAEEhcKE1BTVV9GQVVMVF9UWVBFX0ZBTlMQBRIYChRQU1VfRkFVTFRfVFlQRV9JTlBVVBAGEhoKFlBTVV9GQVVMVF9UWVBFX1VOS05PV04QBxIWChJQU1VfRkFVTFRfVFlQRV9PRkYQCBIdChlQU1VfRkFVTFRfVFlQRV9QT1dFUl9HT09EEAkSHQoZUFNVX0ZBVUxUX1RZUEVfT1ZFUl9QT1dFUhAKEhkKFVBTVV9GQVVMVF9UWVBFX09VVFBVVBALEhcKE1BTVV9GQVVMVF9UWVBFX0JVU1kQDBIYChRQU1VfRkFVTFRfVFlQRV9DT01NUxANEh8KG1BTVV9GQVVMVF9UWVBFX0dQSU9fRkFJTFVSRRAOEiQKIFBTVV9GQVVMVF9UWVBFX1VOREVSX1RFTVBFUkFUVVJFEA8SIAocUFNVX0ZBVUxUX1RZUEVfUE9XRVJfTk9fR09PRBAQEh4KGlBTVV9GQVVMVF9UWVBFX1BGQ19GQUlMVVJFEBESIwofUFNVX0ZBVUxUX1RZUEVfTk9fSU5QVVRfVk9MVEFHRRASEh4KGlBTVV9GQVVMVF9UWVBFX0xMQ19GQUlMVVJFEBMqYQoNUHN1RmF1bHRMZXZlbBIYChRQU1VfRkFVTFRfTEVWRUxfTk9ORRAAEhsKF1BTVV9GQVVMVF9MRVZFTF9XQVJOSU5HEAESGQoVUFNVX0ZBVUxUX0xFVkVMX0ZBVUxUEAIqpAEKCFBzdVN0YXRlEhUKEVBTVV9TVEFURV9VTktOT1dOEAASGQoVUFNVX1NUQVRFX0lOSVRJQUxJWkVEEAESFQoRUFNVX1NUQVRFX0VOQUJMRUQQAhIiCh5QU1VfU1RBVEVfT1VUUFVUX1ZPTFRBR0VfUkVBRFkQAxIWChJQU1VfU1RBVEVfRElTQUJMRUQQBBITCg9QU1VfU1RBVEVfRVJST1IQBSqvAwoSUHN1TWVhc3VyZW1lbnRUeXBlEiAKHFBTVV9NRUFTVVJFTUVOVF9UWVBFX1VOS05PV04QABInCiNQU1VfTUVBU1VSRU1FTlRfVFlQRV9PVVRQVVRfVk9MVEFHRRABEiYKIlBTVV9NRUFTVVJFTUVOVF9UWVBFX0lOUFVUX1ZPTFRBR0UQAhInCiNQU1VfTUVBU1VSRU1FTlRfVFlQRV9PVVRQVVRfQ1VSUkVOVBADEiYKIlBTVV9NRUFTVVJFTUVOVF9UWVBFX0lOUFVUX0NVUlJFTlQQBBIlCiFQU1VfTUVBU1VSRU1FTlRfVFlQRV9PVVRQVVRfUE9XRVIQBRIkCiBQU1VfTUVBU1VSRU1FTlRfVFlQRV9JTlBVVF9QT1dFUhAGEiwKKFBTVV9NRUFTVVJFTUVOVF9UWVBFX0hPVFNQT1RfVEVNUEVSQVRVUkUQBxIsCihQU1VfTUVBU1VSRU1FTlRfVFlQRV9BTUJJRU5UX1RFTVBFUkFUVVJFEAgSLAooUFNVX01FQVNVUkVNRU5UX1RZUEVfQVZFUkFHRV9URU1QRVJBVFVSRRAJKuUCChJQc3VDb250cm9sbGVyU3RhdGUSHQoZUFNVX0NPTlRST0xMRVJfU1RBVEVfSU5JVBAAEhwKGFBTVV9DT05UUk9MTEVSX1NUQVRFX09GRhABEiEKHVBTVV9DT05UUk9MTEVSX1NUQVRFX09OX1JFQURZEAISJQohUFNVX0NPTlRST0xMRVJfU1RBVEVfT05fTk9UX1JFQURZEAMSKgomUFNVX0NPTlRST0xMRVJfU1RBVEVfRVJST1JfUkVDT1ZFUkFCTEUQBBIjCh9QU1VfQ09OVFJPTExFUl9TVEFURV9SRUNPVkVSSU5HEAUSKgomUFNVX0NPTlRST0xMRVJfU1RBVEVfRklSTVdBUkVfVVBEQVRJTkcQBhIlCiFQU1VfQ09OVFJPTExFUl9TVEFURV9ESVNDT05ORUNURUQQBxIkCiBQU1VfQ09OVFJPTExFUl9TVEFURV9FUlJPUl9GQVRBTBAIQhVaE3BrZy9wcm90bzttaW5lcl9ycGNiBnByb3RvMw", [file_miner_common_api]);
+  fileDesc("ChNtaW5lcl9wc3VfYXBpLnByb3RvEg1taW5lcl9wc3VfYXBpIn0KCFBzdUVycm9yEikKBGNvZGUYASABKA4yGy5taW5lcl9wc3VfYXBpLlBzdUVycm9yQ29kZRINCgVpbmRleBgCIAEoDRItCgpzdWJfcHN1X2lkGAMgASgOMhcubWluZXJfcHN1X2FwaS5TdWJQc3VJZEgAQggKBmRldGFpbCKIAQoOUHN1TWVhc3VyZW1lbnQSOwoQbWVhc3VyZW1lbnRfdHlwZRgBIAEoDjIhLm1pbmVyX3BzdV9hcGkuUHN1TWVhc3VyZW1lbnRUeXBlEg0KBXZhbHVlGAIgASgFEioKBHVuaXQYAyABKA4yHC5taW5lcl9jb21tb25fYXBpLk1ldHJpY1VuaXQikwEKCFBzdUxpbWl0EjUKCmxpbWl0X3R5cGUYASABKA4yIS5taW5lcl9wc3VfYXBpLlBzdU1lYXN1cmVtZW50VHlwZRIRCgltYXhfdmFsdWUYAiABKAUSEQoJbWluX3ZhbHVlGAMgASgFEioKBHVuaXQYBCABKA4yHC5taW5lcl9jb21tb25fYXBpLk1ldHJpY1VuaXQiOwoQUHN1RmlybXdhcmVBc3NldBITCgthcHBfdmVyc2lvbhgBIAEoCRISCgpibF92ZXJzaW9uGAIgASgJItwBCgdQc3VJbmZvEgoKAmlkGAEgASgNEhUKDXNlcmlhbF9udW1iZXIYAiABKAkSNgoIZmlybXdhcmUYAyABKAsyHy5taW5lcl9wc3VfYXBpLlBzdUZpcm13YXJlQXNzZXRIAIgBARIOCgZ2ZW5kb3IYBCABKAkSDQoFbW9kZWwYBSABKAkSEwoLaHdfcmV2aXNpb24YBiABKAkSJwoGbGltaXRzGAcgAygLMhcubWluZXJfcHN1X2FwaS5Qc3VMaW1pdBIMCgRzbG90GAggASgNQgsKCV9maXJtd2FyZSKMAgoJUHN1U3RhdHVzEgoKAmlkGAEgASgNEiYKBXN0YXRlGAIgASgOMhcubWluZXJfcHN1X2FwaS5Qc3VTdGF0ZRIzCgxtZWFzdXJlbWVudHMYAyADKAsyHS5taW5lcl9wc3VfYXBpLlBzdU1lYXN1cmVtZW50Ei8KCmZhbl9zcGVlZHMYBSADKAsyGy5taW5lcl9wc3VfYXBpLlBzdUZhblN0YXR1cxInCgZmYXVsdHMYBiADKAsyFy5taW5lcl9wc3VfYXBpLlBzdUZhdWx0EhsKDmxhc3RfcHN1X2Vycm9yGAcgASgNSACIAQESDAoEc2xvdBgIIAEoDUIRCg9fbGFzdF9wc3VfZXJyb3Ii0QEKCFBzdUZhdWx0Ei8KCmZhdWx0X3R5cGUYASABKA4yGy5taW5lcl9wc3VfYXBpLlBzdUVycm9yQ29kZRIxCgtmYXVsdF9sZXZlbBgCIAEoDjIcLm1pbmVyX3BzdV9hcGkuUHN1RmF1bHRMZXZlbBIUCgdtZXNzYWdlGAMgASgJSACIAQESMAoKc3ViX3BzdV9pZBgEIAEoDjIXLm1pbmVyX3BzdV9hcGkuU3ViUHN1SWRIAYgBAUIKCghfbWVzc2FnZUINCgtfc3ViX3BzdV9pZCJmCgxQc3VGYW5TdGF0dXMSDgoGZmFuX2lkGAEgASgNEhYKDnRhY2hvbWV0ZXJfcnBtGAIgASgNEhsKDnB3bV9wZXJjZW50YWdlGAMgASgNSACIAQFCEQoPX3B3bV9wZXJjZW50YWdlInAKE1BzdUZ3VXBkYXRlUHJvZ3Jlc3MSLgoFc3RhdGUYASABKA4yHy5taW5lcl9wc3VfYXBpLlBzdUZ3VXBkYXRlU3RhdGUSGAoQcHJvZ3Jlc3NfcGVyY2VudBgCIAEoAhIPCgdtZXNzYWdlGAMgASgJIo0CCgpQc3VJbmZvTXNnEhUKDXNlcmlhbF9udW1iZXIYASABKAkSNgoIZmlybXdhcmUYAiABKAsyHy5taW5lcl9wc3VfYXBpLlBzdUZpcm13YXJlQXNzZXRIAIgBARIOCgZ2ZW5kb3IYAyABKAkSDQoFbW9kZWwYBCABKAkSEwoLaHdfcmV2aXNpb24YBSABKAkSJwoGbGltaXRzGAYgAygLMhcubWluZXJfcHN1X2FwaS5Qc3VMaW1pdBInChphdmFpbGFibGVfZmlybXdhcmVfdmVyc2lvbhgHIAEoCUgBiAEBQgsKCV9maXJtd2FyZUIdChtfYXZhaWxhYmxlX2Zpcm13YXJlX3ZlcnNpb24iigEKDFBzdVN0YXR1c01zZxIwCgVzdGF0ZRgBIAEoDjIhLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbGxlclN0YXRlEiAKGHRhcmdldF9vdXRwdXRfdm9sdGFnZV9tdhgCIAEoDRIOCgZlbmFibGUYAyABKAgSFgoOdm9sdGFnZV9sb2NrZWQYBCABKAgiNAoJUHN1RXJyb3JzEicKBmVycm9ycxgBIAMoCzIXLm1pbmVyX3BzdV9hcGkuUHN1RXJyb3IiRgoPUHN1TWVhc3VyZW1lbnRzEjMKDG1lYXN1cmVtZW50cxgBIAMoCzIdLm1pbmVyX3BzdV9hcGkuUHN1TWVhc3VyZW1lbnQiyAQKClBzdUNvbnRyb2wSOAoGZW5hYmxlGAEgASgLMiYubWluZXJfcHN1X2FwaS5Qc3VDb250cm9sLk91dHB1dEVuYWJsZUgAEkgKEnNldF9vdXRwdXRfdm9sdGFnZRgCIAEoCzIqLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5TZXRPdXRwdXRWb2x0YWdlSAASOwoLY2xlYXJfZXJyb3IYAyABKAsyJC5taW5lcl9wc3VfYXBpLlBzdUNvbnRyb2wuQ2xlYXJFcnJvckgAEjcKCWZ3X3VwZGF0ZRgEIAEoCzIiLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5Gd1VwZGF0ZUgAEj0KDGxvY2tfdm9sdGFnZRgFIAEoCzIlLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5Mb2NrVm9sdGFnZUgAEk4KFXJlc2V0X3JlY292ZXJ5X2xpbWl0cxgGIAEoCzItLm1pbmVyX3BzdV9hcGkuUHN1Q29udHJvbC5SZXNldFJlY292ZXJ5TGltaXRzSAAaHgoMT3V0cHV0RW5hYmxlEg4KBmVuYWJsZRgBIAEoCBotChBTZXRPdXRwdXRWb2x0YWdlEhkKEW91dHB1dF92b2x0YWdlX212GAEgASgNGhsKC0xvY2tWb2x0YWdlEgwKBGxvY2sYASABKAgaDAoKQ2xlYXJFcnJvchoVChNSZXNldFJlY292ZXJ5TGltaXRzGhkKCEZ3VXBkYXRlEg0KBWZvcmNlGAEgASgIQgUKA2NtZCo2CghTdWJQc3VJZBIUChBTVUJfUFNVX01PRFVMRV8xEAASFAoQU1VCX1BTVV9NT0RVTEVfMhABKqgGCgxQc3VFcnJvckNvZGUSHgoaUFNVX0VSUk9SX0NPREVfVU5TUEVDSUZJRUQQABImCiJQU1VfRVJST1JfQ09ERV9PVVRQVVRfT1ZFUl9WT0xUQUdFEAESJgoiUFNVX0VSUk9SX0NPREVfT1VUUFVUX09WRVJfQ1VSUkVOVBACEiMKH1BTVV9FUlJPUl9DT0RFX09WRVJfVEVNUEVSQVRVUkUQAxInCiNQU1VfRVJST1JfQ09ERV9PVVRQVVRfVU5ERVJfVk9MVEFHRRAEEhcKE1BTVV9FUlJPUl9DT0RFX0ZBTlMQBRIYChRQU1VfRVJST1JfQ09ERV9JTlBVVBAGEiQKIFBTVV9FUlJPUl9DT0RFX09VVFBVVF9PVkVSX1BPV0VSEAoSIQodUFNVX0VSUk9SX0NPREVfT1VUUFVUX0ZBSUxVUkUQCxIcChhQU1VfRVJST1JfQ09ERV9DT01NX0xPU1QQDRIkCiBQU1VfRVJST1JfQ09ERV9VTkRFUl9URU1QRVJBVFVSRRAPEiAKHFBTVV9FUlJPUl9DT0RFX1BPV0VSX05PX0dPT0QQERIeChpQU1VfRVJST1JfQ09ERV9QRkNfRkFJTFVSRRASEiMKH1BTVV9FUlJPUl9DT0RFX05PX0lOUFVUX1ZPTFRBR0UQExIhCh1QU1VfRVJST1JfQ09ERV9TV19FTkFCTEVfRkFJTBAUEi0KKVBTVV9FUlJPUl9DT0RFX1NXX1NFVF9PVVRQVVRfVk9MVEFHRV9GQUlMEBUSJAogUFNVX0VSUk9SX0NPREVfRklSTVdBUkVfTUlTTUFUQ0gQFhIlCiFQU1VfRVJST1JfQ09ERV9JTlBVVF9PVkVSX1ZPTFRBR0UQFxImCiJQU1VfRVJST1JfQ09ERV9JTlBVVF9VTkRFUl9WT0xUQUdFEBgSJQohUFNVX0VSUk9SX0NPREVfSU5QVVRfT1ZFUl9DVVJSRU5UEBkSHgoaUFNVX0VSUk9SX0NPREVfTExDX0ZBSUxVUkUQGhIlCiFQU1VfRVJST1JfQ09ERV9SRUNPVkVSWV9FWEhBVVNURUQQGyphCg1Qc3VGYXVsdExldmVsEhgKFFBTVV9GQVVMVF9MRVZFTF9OT05FEAASGwoXUFNVX0ZBVUxUX0xFVkVMX1dBUk5JTkcQARIZChVQU1VfRkFVTFRfTEVWRUxfRkFVTFQQAirFAQoIUHN1U3RhdGUSFQoRUFNVX1NUQVRFX1VOS05PV04QABIZChVQU1VfU1RBVEVfSU5JVElBTElaRUQQARIVChFQU1VfU1RBVEVfRU5BQkxFRBACEiIKHlBTVV9TVEFURV9PVVRQVVRfVk9MVEFHRV9SRUFEWRADEhYKElBTVV9TVEFURV9ESVNBQkxFRBAEEhMKD1BTVV9TVEFURV9FUlJPUhAFEh8KG1BTVV9TVEFURV9GSVJNV0FSRV9VUERBVElORxAGKq8DChJQc3VNZWFzdXJlbWVudFR5cGUSIAocUFNVX01FQVNVUkVNRU5UX1RZUEVfVU5LTk9XThAAEicKI1BTVV9NRUFTVVJFTUVOVF9UWVBFX09VVFBVVF9WT0xUQUdFEAESJgoiUFNVX01FQVNVUkVNRU5UX1RZUEVfSU5QVVRfVk9MVEFHRRACEicKI1BTVV9NRUFTVVJFTUVOVF9UWVBFX09VVFBVVF9DVVJSRU5UEAMSJgoiUFNVX01FQVNVUkVNRU5UX1RZUEVfSU5QVVRfQ1VSUkVOVBAEEiUKIVBTVV9NRUFTVVJFTUVOVF9UWVBFX09VVFBVVF9QT1dFUhAFEiQKIFBTVV9NRUFTVVJFTUVOVF9UWVBFX0lOUFVUX1BPV0VSEAYSLAooUFNVX01FQVNVUkVNRU5UX1RZUEVfSE9UU1BPVF9URU1QRVJBVFVSRRAHEiwKKFBTVV9NRUFTVVJFTUVOVF9UWVBFX0FNQklFTlRfVEVNUEVSQVRVUkUQCBIsCihQU1VfTUVBU1VSRU1FTlRfVFlQRV9BVkVSQUdFX1RFTVBFUkFUVVJFEAkq5QIKElBzdUNvbnRyb2xsZXJTdGF0ZRIdChlQU1VfQ09OVFJPTExFUl9TVEFURV9JTklUEAASHAoYUFNVX0NPTlRST0xMRVJfU1RBVEVfT0ZGEAESIQodUFNVX0NPTlRST0xMRVJfU1RBVEVfT05fUkVBRFkQAhIlCiFQU1VfQ09OVFJPTExFUl9TVEFURV9PTl9OT1RfUkVBRFkQAxIqCiZQU1VfQ09OVFJPTExFUl9TVEFURV9FUlJPUl9SRUNPVkVSQUJMRRAEEiMKH1BTVV9DT05UUk9MTEVSX1NUQVRFX1JFQ09WRVJJTkcQBRIqCiZQU1VfQ09OVFJPTExFUl9TVEFURV9GSVJNV0FSRV9VUERBVElORxAGEiUKIVBTVV9DT05UUk9MTEVSX1NUQVRFX0RJU0NPTk5FQ1RFRBAHEiQKIFBTVV9DT05UUk9MTEVSX1NUQVRFX0VSUk9SX0ZBVEFMEAgquAEKEFBzdUZ3VXBkYXRlU3RhdGUSHAoYUFNVX0ZXX1VQREFURV9TVEFURV9JRExFEAASIQodUFNVX0ZXX1VQREFURV9TVEFURV9VUExPQURJTkcQARIhCh1QU1VfRldfVVBEQVRFX1NUQVRFX1ZFUklGWUlORxACEiAKHFBTVV9GV19VUERBVEVfU1RBVEVfQ09NUExFVEUQAxIeChpQU1VfRldfVVBEQVRFX1NUQVRFX0ZBSUxFRBAEQhVaE3BrZy9wcm90bzttaW5lcl9ycGNiBnByb3RvMw", [file_miner_common_api]);
 
 /**
  * @generated from message miner_psu_api.PsuError
@@ -247,9 +247,9 @@ export const PsuStatusSchema: GenMessage<PsuStatus> = /*@__PURE__*/
  */
 export type PsuFault = Message<"miner_psu_api.PsuFault"> & {
   /**
-   * @generated from field: miner_psu_api.PsuFaultType fault_type = 1;
+   * @generated from field: miner_psu_api.PsuErrorCode fault_type = 1;
    */
-  faultType: PsuFaultType;
+  faultType: PsuErrorCode;
 
   /**
    * @generated from field: miner_psu_api.PsuFaultLevel fault_level = 2;
@@ -302,6 +302,35 @@ export const PsuFanStatusSchema: GenMessage<PsuFanStatus> = /*@__PURE__*/
   messageDesc(file_miner_psu_api, 7);
 
 /**
+ * Published on "psu.<id>.fw_progress"
+ *
+ * @generated from message miner_psu_api.PsuFwUpdateProgress
+ */
+export type PsuFwUpdateProgress = Message<"miner_psu_api.PsuFwUpdateProgress"> & {
+  /**
+   * @generated from field: miner_psu_api.PsuFwUpdateState state = 1;
+   */
+  state: PsuFwUpdateState;
+
+  /**
+   * @generated from field: float progress_percent = 2;
+   */
+  progressPercent: number;
+
+  /**
+   * @generated from field: string message = 3;
+   */
+  message: string;
+};
+
+/**
+ * Describes the message miner_psu_api.PsuFwUpdateProgress.
+ * Use `create(PsuFwUpdateProgressSchema)` to create a new message.
+ */
+export const PsuFwUpdateProgressSchema: GenMessage<PsuFwUpdateProgress> = /*@__PURE__*/
+  messageDesc(file_miner_psu_api, 8);
+
+/**
  * Publish on "psu.<id>.info".
  * Periodically publish static info about the PSU.
  * Each PSU instance will publish its own static info (PsuInfo), which should not change at runtime.
@@ -339,6 +368,11 @@ export type PsuInfoMsg = Message<"miner_psu_api.PsuInfoMsg"> & {
    * @generated from field: repeated miner_psu_api.PsuLimit limits = 6;
    */
   limits: PsuLimit[];
+
+  /**
+   * @generated from field: optional string available_firmware_version = 7;
+   */
+  availableFirmwareVersion?: string;
 };
 
 /**
@@ -346,7 +380,7 @@ export type PsuInfoMsg = Message<"miner_psu_api.PsuInfoMsg"> & {
  * Use `create(PsuInfoMsgSchema)` to create a new message.
  */
 export const PsuInfoMsgSchema: GenMessage<PsuInfoMsg> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 8);
+  messageDesc(file_miner_psu_api, 9);
 
 /**
  * publish on "psu.<id>.status"
@@ -383,7 +417,7 @@ export type PsuStatusMsg = Message<"miner_psu_api.PsuStatusMsg"> & {
  * Use `create(PsuStatusMsgSchema)` to create a new message.
  */
 export const PsuStatusMsgSchema: GenMessage<PsuStatusMsg> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 9);
+  messageDesc(file_miner_psu_api, 10);
 
 /**
  * publish on "psu.<id>.error"
@@ -403,7 +437,7 @@ export type PsuErrors = Message<"miner_psu_api.PsuErrors"> & {
  * Use `create(PsuErrorsSchema)` to create a new message.
  */
 export const PsuErrorsSchema: GenMessage<PsuErrors> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 10);
+  messageDesc(file_miner_psu_api, 11);
 
 /**
  * publish on "psu.<id>.data"
@@ -423,7 +457,7 @@ export type PsuMeasurements = Message<"miner_psu_api.PsuMeasurements"> & {
  * Use `create(PsuMeasurementsSchema)` to create a new message.
  */
 export const PsuMeasurementsSchema: GenMessage<PsuMeasurements> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 11);
+  messageDesc(file_miner_psu_api, 12);
 
 /**
  * Listen on "psu.<id>.control"
@@ -478,7 +512,7 @@ export type PsuControl = Message<"miner_psu_api.PsuControl"> & {
  * Use `create(PsuControlSchema)` to create a new message.
  */
 export const PsuControlSchema: GenMessage<PsuControl> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12);
+  messageDesc(file_miner_psu_api, 13);
 
 /**
  * @generated from message miner_psu_api.PsuControl.OutputEnable
@@ -495,7 +529,7 @@ export type PsuControl_OutputEnable = Message<"miner_psu_api.PsuControl.OutputEn
  * Use `create(PsuControl_OutputEnableSchema)` to create a new message.
  */
 export const PsuControl_OutputEnableSchema: GenMessage<PsuControl_OutputEnable> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 0);
+  messageDesc(file_miner_psu_api, 13, 0);
 
 /**
  * Set the output voltage
@@ -514,7 +548,7 @@ export type PsuControl_SetOutputVoltage = Message<"miner_psu_api.PsuControl.SetO
  * Use `create(PsuControl_SetOutputVoltageSchema)` to create a new message.
  */
 export const PsuControl_SetOutputVoltageSchema: GenMessage<PsuControl_SetOutputVoltage> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 1);
+  messageDesc(file_miner_psu_api, 13, 1);
 
 /**
  * Lock or unlock voltage changes. When locked and enabled, voltage cannot be changed.
@@ -533,7 +567,7 @@ export type PsuControl_LockVoltage = Message<"miner_psu_api.PsuControl.LockVolta
  * Use `create(PsuControl_LockVoltageSchema)` to create a new message.
  */
 export const PsuControl_LockVoltageSchema: GenMessage<PsuControl_LockVoltage> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 2);
+  messageDesc(file_miner_psu_api, 13, 2);
 
 /**
  * Request clearing all PSU hardware faults via PMBus CLEAR_FAULTS command
@@ -548,7 +582,7 @@ export type PsuControl_ClearError = Message<"miner_psu_api.PsuControl.ClearError
  * Use `create(PsuControl_ClearErrorSchema)` to create a new message.
  */
 export const PsuControl_ClearErrorSchema: GenMessage<PsuControl_ClearError> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 3);
+  messageDesc(file_miner_psu_api, 13, 3);
 
 /**
  * Reset recovery attempt limits, allowing the service to retry recovery sequences.
@@ -564,18 +598,18 @@ export type PsuControl_ResetRecoveryLimits = Message<"miner_psu_api.PsuControl.R
  * Use `create(PsuControl_ResetRecoveryLimitsSchema)` to create a new message.
  */
 export const PsuControl_ResetRecoveryLimitsSchema: GenMessage<PsuControl_ResetRecoveryLimits> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 4);
+  messageDesc(file_miner_psu_api, 13, 4);
 
 /**
- * Firmware update command (placeholder for future implementation)
+ * Firmware update command - triggers update from /etc/psu-firmware
  *
  * @generated from message miner_psu_api.PsuControl.FwUpdate
  */
 export type PsuControl_FwUpdate = Message<"miner_psu_api.PsuControl.FwUpdate"> & {
   /**
-   * @generated from field: string firmware_path = 1;
+   * @generated from field: bool force = 1;
    */
-  firmwarePath: string;
+  force: boolean;
 };
 
 /**
@@ -583,7 +617,7 @@ export type PsuControl_FwUpdate = Message<"miner_psu_api.PsuControl.FwUpdate"> &
  * Use `create(PsuControl_FwUpdateSchema)` to create a new message.
  */
 export const PsuControl_FwUpdateSchema: GenMessage<PsuControl_FwUpdate> = /*@__PURE__*/
-  messageDesc(file_miner_psu_api, 12, 5);
+  messageDesc(file_miner_psu_api, 13, 5);
 
 /**
  * @generated from enum miner_psu_api.SubPsuId
@@ -607,133 +641,86 @@ export const SubPsuIdSchema: GenEnum<SubPsuId> = /*@__PURE__*/
   enumDesc(file_miner_psu_api, 0);
 
 /**
- * PSU Error code offset start at  0x00000;
- * TODO: When cutting over to psu-service, re-number these enum values (unknown to 0, etc)
- *
  * @generated from enum miner_psu_api.PsuErrorCode
  */
 export enum PsuErrorCode {
   /**
-   * PSU failed to initialize during probe
-   *
-   * @generated from enum value: PSU_ERROR_CODE_PROBE_FAILURE = 0;
+   * @generated from enum value: PSU_ERROR_CODE_UNSPECIFIED = 0;
    */
-  PROBE_FAILURE = 0,
+  UNSPECIFIED = 0,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output voltage exceeds safe threshold
+   * [PMBUS] (PMBUS_STATUS_VOUT)           Output voltage exceeds safe threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_OUTPUT_OVER_VOLTAGE = 1;
    */
   OUTPUT_OVER_VOLTAGE = 1,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_IOUT)		      Output current exceeds safe threshold
+   * [PMBUS] (PMBUS_STATUS_IOUT)           Output current exceeds safe threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_OUTPUT_OVER_CURRENT = 2;
    */
   OUTPUT_OVER_CURRENT = 2,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)	  PSU temperature exceeds safe threshold
+   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)    PSU temperature exceeds safe threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_OVER_TEMPERATURE = 3;
    */
   OVER_TEMPERATURE = 3,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output voltage below minimum threshold
+   * [PMBUS] (PMBUS_STATUS_VOUT)           Output voltage below minimum threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_OUTPUT_UNDER_VOLTAGE = 4;
    */
   OUTPUT_UNDER_VOLTAGE = 4,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_FANS_1_2)		  PSU fan fault detected
+   * [PMBUS] (PMBUS_STATUS_FANS_1_2)       PSU fan fault detected
    *
    * @generated from enum value: PSU_ERROR_CODE_FANS = 5;
    */
   FANS = 5,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      Input-side fault (generic)
+   * [PMBUS] (PMBUS_STATUS_INPUT)          Input-side fault (generic)
    *
    * @generated from enum value: PSU_ERROR_CODE_INPUT = 6;
    */
   INPUT = 6,
 
   /**
-   * Catch-all for unrecognized errors
-   *
-   * @generated from enum value: PSU_ERROR_CODE_UNKNOWN = 7;
-   */
-  UNKNOWN = 7,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_WORD:OFF)		  PSU is powered off (status indicator)
-   *
-   * @generated from enum value: PSU_ERROR_CODE_OFF = 8;
-   */
-  OFF = 8,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_WORD:PG)	  	  Power good signal status indicator
-   *
-   * @generated from enum value: PSU_ERROR_CODE_POWER_GOOD = 9;
-   */
-  POWER_GOOD = 9,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_IOUT:POUT)		  Output power exceeds rated capacity
+   * [PMBUS] (PMBUS_STATUS_IOUT:POUT)     Output power exceeds rated capacity
    *
    * @generated from enum value: PSU_ERROR_CODE_OUTPUT_OVER_POWER = 10;
    */
   OUTPUT_OVER_POWER = 10,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output stage failure
+   * [PMBUS] (PMBUS_STATUS_VOUT)           Output stage failure
    *
    * @generated from enum value: PSU_ERROR_CODE_OUTPUT_FAILURE = 11;
    */
   OUTPUT_FAILURE = 11,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_WORD:BUSY)		  PSU busy processing a command
-   *
-   * @generated from enum value: PSU_ERROR_CODE_BUSY = 12;
-   */
-  BUSY = 12,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_CML)		        Communication with PSU lost (I2C/PMBus)
+   * [PMBUS] (PMBUS_STATUS_CML)            Communication with PSU lost (I2C/PMBus)
    *
    * @generated from enum value: PSU_ERROR_CODE_COMM_LOST = 13;
    */
   COMM_LOST = 13,
 
   /**
-   * PSU_EN GPIO control failure
-   *
-   * @generated from enum value: PSU_ERROR_CODE_GPIO_FAILURE = 14;
-   */
-  GPIO_FAILURE = 14,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)	  PSU temperature below minimum threshold
+   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)    PSU temperature below minimum threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_UNDER_TEMPERATURE = 15;
    */
   UNDER_TEMPERATURE = 15,
 
   /**
-   * PSU is in recovery mode
-   *
-   * @generated from enum value: PSU_ERROR_CODE_RECOVERY = 16;
-   */
-  RECOVERY = 16,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)	One of two internal PSU modules is not functioning properly (Chicony-specific)
+   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)  One of two internal PSU modules is not functioning properly (Chicony-specific)
    *
    * @generated from enum value: PSU_ERROR_CODE_POWER_NO_GOOD = 17;
    */
@@ -747,7 +734,7 @@ export enum PsuErrorCode {
   PFC_FAILURE = 18,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      No input AC/DC voltage detected
+   * [PMBUS] (PMBUS_STATUS_INPUT)          No input AC/DC voltage detected
    *
    * @generated from enum value: PSU_ERROR_CODE_NO_INPUT_VOLTAGE = 19;
    */
@@ -756,7 +743,7 @@ export enum PsuErrorCode {
   /**
    * Software detected errors
    *
-   * Failed to enable PSU output
+   * Failed to enable PSU output (includes voltage settle timeout)
    *
    * @generated from enum value: PSU_ERROR_CODE_SW_ENABLE_FAIL = 20;
    */
@@ -779,32 +766,41 @@ export enum PsuErrorCode {
   /**
    * Input-side faults
    *
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      Input voltage exceeds safe threshold
+   * [PMBUS] (PMBUS_STATUS_INPUT)           Input voltage exceeds safe threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_INPUT_OVER_VOLTAGE = 23;
    */
   INPUT_OVER_VOLTAGE = 23,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      Input voltage below minimum threshold
+   * [PMBUS] (PMBUS_STATUS_INPUT)           Input voltage below minimum threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_INPUT_UNDER_VOLTAGE = 24;
    */
   INPUT_UNDER_VOLTAGE = 24,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      Input current exceeds safe threshold
+   * [PMBUS] (PMBUS_STATUS_INPUT)           Input current exceeds safe threshold
    *
    * @generated from enum value: PSU_ERROR_CODE_INPUT_OVER_CURRENT = 25;
    */
   INPUT_OVER_CURRENT = 25,
 
   /**
-   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)   LLC circuit hardware failure (detected via Chicony vendor attributes)
+   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)    LLC circuit hardware failure (detected via Chicony vendor attributes)
    *
    * @generated from enum value: PSU_ERROR_CODE_LLC_FAILURE = 26;
    */
   LLC_FAILURE = 26,
+
+  /**
+   * State errors
+   *
+   * Recovery attempts exhausted; reset recovery limits or reboot to clear
+   *
+   * @generated from enum value: PSU_ERROR_CODE_RECOVERY_EXHAUSTED = 27;
+   */
+  RECOVERY_EXHAUSTED = 27,
 }
 
 /**
@@ -812,160 +808,6 @@ export enum PsuErrorCode {
  */
 export const PsuErrorCodeSchema: GenEnum<PsuErrorCode> = /*@__PURE__*/
   enumDesc(file_miner_psu_api, 1);
-
-/**
- * PSU fault types reported via MCDD PSU API
- * TODO: When cutting over to psu-service, remove entirely
- *
- * @generated from enum miner_psu_api.PsuFaultType
- */
-export enum PsuFaultType {
-  /**
-   * No fault present
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_NONE = 0;
-   */
-  NONE = 0,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output voltage exceeds safe threshold
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OVER_VOLTAGE = 1;
-   */
-  OVER_VOLTAGE = 1,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_IOUT)		      Output current exceeds safe threshold
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OVER_CURRENT = 2;
-   */
-  OVER_CURRENT = 2,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)	  PSU temperature exceeds safe threshold
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OVER_TEMPERATURE = 3;
-   */
-  OVER_TEMPERATURE = 3,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output voltage below minimum threshold
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_UNDER_VOLTAGE = 4;
-   */
-  UNDER_VOLTAGE = 4,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_FANS_1_2)		  PSU fan fault detected
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_FANS = 5;
-   */
-  FANS = 5,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      Input-side fault (generic)
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_INPUT = 6;
-   */
-  INPUT = 6,
-
-  /**
-   * Catch-all for unrecognized faults
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_UNKNOWN = 7;
-   */
-  UNKNOWN = 7,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_WORD:OFF)		  PSU is powered off
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OFF = 8;
-   */
-  OFF = 8,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_WORD:PG)	  	  Power good signal status
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_POWER_GOOD = 9;
-   */
-  POWER_GOOD = 9,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_IOUT:POUT)		  Output power exceeds rated capacity
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OVER_POWER = 10;
-   */
-  OVER_POWER = 10,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_VOUT)		      Output stage failure
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_OUTPUT = 11;
-   */
-  OUTPUT = 11,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_WORD:BUSY)		  PSU busy processing a command
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_BUSY = 12;
-   */
-  BUSY = 12,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_CML)		        Communication with PSU lost
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_COMMS = 13;
-   */
-  COMMS = 13,
-
-  /**
-   * GPIO control failure (non-PMBus)
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_GPIO_FAILURE = 14;
-   */
-  GPIO_FAILURE = 14,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_TEMPERATURE)	  PSU temperature below minimum threshold
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_UNDER_TEMPERATURE = 15;
-   */
-  UNDER_TEMPERATURE = 15,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)	One of two internal PSU modules is not functioning properly (Chicony-specific)
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_POWER_NO_GOOD = 16;
-   */
-  POWER_NO_GOOD = 16,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)  PFC circuit failure (Chicony-specific)
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_PFC_FAILURE = 17;
-   */
-  PFC_FAILURE = 17,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_INPUT)		      No input AC/DC voltage detected
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_NO_INPUT_VOLTAGE = 18;
-   */
-  NO_INPUT_VOLTAGE = 18,
-
-  /**
-   * [PMBUS] (PMBUS_STATUS_MFR_SPECIFIC)  LLC circuit hardware failure (Chicony-specific)
-   *
-   * @generated from enum value: PSU_FAULT_TYPE_LLC_FAILURE = 19;
-   */
-  LLC_FAILURE = 19,
-}
-
-/**
- * Describes the enum miner_psu_api.PsuFaultType.
- */
-export const PsuFaultTypeSchema: GenEnum<PsuFaultType> = /*@__PURE__*/
-  enumDesc(file_miner_psu_api, 2);
 
 /**
  * @generated from enum miner_psu_api.PsuFaultLevel
@@ -991,7 +833,7 @@ export enum PsuFaultLevel {
  * Describes the enum miner_psu_api.PsuFaultLevel.
  */
 export const PsuFaultLevelSchema: GenEnum<PsuFaultLevel> = /*@__PURE__*/
-  enumDesc(file_miner_psu_api, 3);
+  enumDesc(file_miner_psu_api, 2);
 
 /**
  * @generated from enum miner_psu_api.PsuState
@@ -1026,13 +868,18 @@ export enum PsuState {
    * @generated from enum value: PSU_STATE_ERROR = 5;
    */
   ERROR = 5,
+
+  /**
+   * @generated from enum value: PSU_STATE_FIRMWARE_UPDATING = 6;
+   */
+  FIRMWARE_UPDATING = 6,
 }
 
 /**
  * Describes the enum miner_psu_api.PsuState.
  */
 export const PsuStateSchema: GenEnum<PsuState> = /*@__PURE__*/
-  enumDesc(file_miner_psu_api, 4);
+  enumDesc(file_miner_psu_api, 3);
 
 /**
  * @generated from enum miner_psu_api.PsuMeasurementType
@@ -1093,7 +940,7 @@ export enum PsuMeasurementType {
  * Describes the enum miner_psu_api.PsuMeasurementType.
  */
 export const PsuMeasurementTypeSchema: GenEnum<PsuMeasurementType> = /*@__PURE__*/
-  enumDesc(file_miner_psu_api, 5);
+  enumDesc(file_miner_psu_api, 4);
 
 /**
  * Renamed to PsuControllerState for now to avoid confusion with the PsuState enum
@@ -1181,5 +1028,43 @@ export enum PsuControllerState {
  * Describes the enum miner_psu_api.PsuControllerState.
  */
 export const PsuControllerStateSchema: GenEnum<PsuControllerState> = /*@__PURE__*/
+  enumDesc(file_miner_psu_api, 5);
+
+/**
+ * Firmware update progress states
+ *
+ * @generated from enum miner_psu_api.PsuFwUpdateState
+ */
+export enum PsuFwUpdateState {
+  /**
+   * @generated from enum value: PSU_FW_UPDATE_STATE_IDLE = 0;
+   */
+  IDLE = 0,
+
+  /**
+   * @generated from enum value: PSU_FW_UPDATE_STATE_UPLOADING = 1;
+   */
+  UPLOADING = 1,
+
+  /**
+   * @generated from enum value: PSU_FW_UPDATE_STATE_VERIFYING = 2;
+   */
+  VERIFYING = 2,
+
+  /**
+   * @generated from enum value: PSU_FW_UPDATE_STATE_COMPLETE = 3;
+   */
+  COMPLETE = 3,
+
+  /**
+   * @generated from enum value: PSU_FW_UPDATE_STATE_FAILED = 4;
+   */
+  FAILED = 4,
+}
+
+/**
+ * Describes the enum miner_psu_api.PsuFwUpdateState.
+ */
+export const PsuFwUpdateStateSchema: GenEnum<PsuFwUpdateState> = /*@__PURE__*/
   enumDesc(file_miner_psu_api, 6);
 

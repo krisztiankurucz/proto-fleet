@@ -465,7 +465,7 @@ export const MinerSystemApi: GenService<{
     output: typeof UploadResponseSchema;
   },
   /**
-   * Endpoint for scheduling PSU firmware update to run on next reboot
+   * Endpoint for triggering PSU firmware update via NATS to psu-service
    *
    * @generated from rpc miner_system_api.MinerSystemApi.SchedulePsuFirmwareUpdate
    */

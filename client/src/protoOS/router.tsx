@@ -3,7 +3,6 @@ import { ComponentType, lazy, ReactNode } from "react";
 import { createBrowserRouter, Outlet, redirect, RouteObject } from "react-router-dom";
 
 import {
-  DEV_CONSOLE_ENABLED,
   DevConsoleContentLayout,
   DevConsoleLayout,
   HashboardsPanel,
@@ -164,24 +163,20 @@ export const routerConfig: CustomRouteObject[] = [
     title: "Mining Pool",
     fullscreen: true,
   }),
-  ...(DEV_CONSOLE_ENABLED
-    ? [
-        {
-          ...createRoute("dev-console", <DevConsoleLayout />, {
-            title: "Dev Console",
-            ContentLayout: DevConsoleContentLayout,
-          }),
-          children: [
-            { index: true, loader: () => redirect("hashboards") },
-            { path: "hashboards", element: <HashboardsPanel /> },
-            { path: "psu", element: <PsuPanel /> },
-            { path: "io", element: <IoPanel /> },
-            { path: "injection", element: <InjectionPanel /> },
-            { path: "messages", element: <MessageViewer /> },
-          ],
-        },
-      ]
-    : []),
+  {
+    ...createRoute("dev-console", <DevConsoleLayout />, {
+      title: "Dev Console",
+      ContentLayout: DevConsoleContentLayout,
+    }),
+    children: [
+      { index: true, loader: () => redirect("hashboards") },
+      { path: "hashboards", element: <HashboardsPanel /> },
+      { path: "psu", element: <PsuPanel /> },
+      { path: "io", element: <IoPanel /> },
+      { path: "injection", element: <InjectionPanel /> },
+      { path: "messages", element: <MessageViewer /> },
+    ],
+  },
   {
     ...createRoute("settings", <Outlet />, {
       title: "Settings",
