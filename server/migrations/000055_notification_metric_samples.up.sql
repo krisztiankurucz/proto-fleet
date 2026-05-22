@@ -4,6 +4,7 @@ CREATE TABLE notification_metric_sample (
     time              TIMESTAMPTZ      NOT NULL,
     metric            TEXT             NOT NULL,
     organization_id   TEXT             NOT NULL DEFAULT '',
+    site_id           TEXT             NOT NULL DEFAULT '',
     device_id         TEXT             NOT NULL DEFAULT '',
     device_group      TEXT             NOT NULL DEFAULT '',
     driver            TEXT             NOT NULL DEFAULT '',
