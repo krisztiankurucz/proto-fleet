@@ -125,6 +125,17 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	remainingRows := maxRowsPerRequest
 	persisted := 0
 	truncated := false
+	orgIDs := []int64{}
+
+	if h.orgLister != nil {
+		orgIDs, err = h.orgLister.ListActiveOrganizationIDs(r.Context())
+		if err != nil {
+			slog.Warn("alertmanager webhook: failed to list orgs for self-monitoring fan-out; recording as unscoped",
+				"error", err,
+			)
+		}
+	}
+
 	for i, alert := range payload.Alerts {
 		if remainingRows <= 0 {
 			slog.Warn("alertmanager webhook: per-request row cap reached; dropping remaining alerts",
@@ -134,7 +145,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			truncated = true
 			break
 		}
-		attempted, written := h.persistAlert(r.Context(), alert, remainingRows)
+		attempted, written := h.persistAlert(r.Context(), alert, remainingRows, orgIDs)
 		persisted += written
 		remainingRows -= attempted
 	}
@@ -167,7 +178,7 @@ func (h *Handler) authorized(r *http.Request) bool {
 	return subtle.ConstantTimeCompare([]byte(presented), []byte(h.webhookToken)) == 1
 }
 
-func (h *Handler) persistAlert(ctx context.Context, alert alertmanagerAlert, budget int) (attempted, persisted int) {
+func (h *Handler) persistAlert(ctx context.Context, alert alertmanagerAlert, budget int, orgIDs []int64) (attempted, persisted int) {
 	if budget <= 0 {
 		return 0, 0
 	}
@@ -183,7 +194,6 @@ func (h *Handler) persistAlert(ctx context.Context, alert alertmanagerAlert, bud
 		return 1, h.insertEvent(ctx, event, alert)
 	}
 
-	orgIDs := h.activeOrgIDsForFanOut(ctx, alert)
 	if len(orgIDs) == 0 {
 		// Persist the unscoped event so the alert still lands somewhere
 		return 1, h.insertEvent(ctx, event, alert)
@@ -209,7 +219,9 @@ func (h *Handler) persistAlert(ctx context.Context, alert alertmanagerAlert, bud
 	return n, persisted
 }
 
-func (h *Handler) insertEvent(ctx context.Context, event models.Event, alert alertmanagerAlert) int {
+func (h *Handler) insertEvent(parent context.Context, event models.Event, alert alertmanagerAlert) int {
+	ctx, cancel := context.WithTimeout(parent, 10*time.Second)
+	defer cancel()
 	if err := h.activitySvc.LogStrict(ctx, event); err != nil {
 		// We persist on a best-effort basis within a batch
 		slog.Error("alertmanager webhook: failed to insert activity event",
@@ -220,22 +232,6 @@ func (h *Handler) insertEvent(ctx context.Context, event models.Event, alert ale
 		return 0
 	}
 	return 1
-}
-
-func (h *Handler) activeOrgIDsForFanOut(ctx context.Context, alert alertmanagerAlert) []int64 {
-	if h.orgLister == nil {
-		return nil
-	}
-	ids, err := h.orgLister.ListActiveOrganizationIDs(ctx)
-	if err != nil {
-		slog.Warn("alertmanager webhook: failed to list orgs for self-monitoring fan-out; recording as unscoped",
-			"error", err,
-			"alertname", alert.Labels[labelAlertName],
-			"fingerprint", alert.Fingerprint,
-		)
-		return nil
-	}
-	return ids
 }
 
 func isGlobalSelfMonitoringAlert(labels map[string]string) bool {

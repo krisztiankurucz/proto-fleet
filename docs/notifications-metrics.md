@@ -14,7 +14,7 @@ hypertable in TimescaleDB by the in-process writer in fleet-api.
 Alert evaluation runs in a Grafana sidecar. Grafana provisions a
 PostgreSQL datasource pointed at TimescaleDB, evaluates the alert
 rules defined under
-[`deployment-files/server/monitoring/grafana/provisioning/alerting/`](../deployment-files/server/monitoring/grafana/provisioning/alerting/),
+[`server/monitoring/grafana/provisioning/alerting/`](../server/monitoring/grafana/provisioning/alerting/),
 and routes firing alerts through its built-in Alertmanager to the
 fleet-api webhook receiver.
 

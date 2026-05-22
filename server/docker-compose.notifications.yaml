@@ -51,8 +51,8 @@ services:
       file: ./docker-compose.base.yaml
       service: grafana
     volumes:
-      - ../deployment-files/server/monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-      - ../deployment-files/server/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
     ports:
       - "127.0.0.1:3000:3000"
 

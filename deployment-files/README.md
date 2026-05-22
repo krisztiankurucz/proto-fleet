@@ -130,7 +130,7 @@ authenticates as this role rather than the broader fleet-api app role.
 
 ### Configuration files
 
-The configs live under `deployment-files/server/monitoring/grafana/`:
+The configs live under `server/monitoring/grafana/`:
 
 - `grafana.ini` — base Grafana config: unified alerting on, anonymous
   sign-up off, no upstream phone-home.

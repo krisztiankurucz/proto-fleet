@@ -37,7 +37,7 @@ groups:
               type: math
               expression: $A
         noDataState: OK
-        execErrState: Alerting
+        execErrState: Error
         for: 5m
         labels:
           severity: warning
@@ -87,7 +87,7 @@ groups:
               type: math
               expression: $A
         noDataState: OK
-        execErrState: Alerting
+        execErrState: Error
         for: 10m
         labels:
           severity: warning
@@ -134,7 +134,7 @@ groups:
               type: math
               expression: $A > 0
         noDataState: OK
-        execErrState: Alerting
+        execErrState: Error
         for: 10m
         labels:
           severity: warning
@@ -193,7 +193,7 @@ groups:
               type: math
               expression: $A > 300
         noDataState: Alerting
-        execErrState: Alerting
+        execErrState: Error
         for: 5m
         labels:
           severity: critical
