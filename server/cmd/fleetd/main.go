@@ -86,6 +86,7 @@ import (
 	"github.com/block/proto-fleet/server/internal/domain/telemetry/scheduler"
 	tokenDomain "github.com/block/proto-fleet/server/internal/domain/token"
 	activityHandler "github.com/block/proto-fleet/server/internal/handlers/activity"
+	"github.com/block/proto-fleet/server/internal/handlers/alertmanagerwebhook"
 	apikeyHandler "github.com/block/proto-fleet/server/internal/handlers/apikey"
 	"github.com/block/proto-fleet/server/internal/handlers/auth"
 	authzHandler "github.com/block/proto-fleet/server/internal/handlers/authz"
@@ -168,7 +169,12 @@ func start(config *Config) error {
 		}
 	}()
 
-	metricsProvider, err := metrics.Setup(context.Background(), version, config.Metrics)
+	conn, err := db.ConnectAndMigrate(&config.DB)
+	if err != nil {
+		return err
+	}
+
+	metricsProvider, err := metrics.Setup(context.Background(), version, config.Metrics, conn)
 	if err != nil {
 		return fmt.Errorf("setup metrics provider: %w", err)
 	}
@@ -179,11 +185,6 @@ func start(config *Config) error {
 			slog.Error("Failed to shutdown metrics provider", "error", err)
 		}
 	}()
-
-	conn, err := db.ConnectAndMigrate(&config.DB)
-	if err != nil {
-		return err
-	}
 
 	// Cap the reconcile at 60s. The advisory lock inside Reconcile makes
 	// concurrent boots serialize, so a non-winner during a rolling
@@ -211,6 +212,7 @@ func start(config *Config) error {
 	deviceStore := sqlstores.NewSQLDeviceStore(conn)
 	collectionStore := sqlstores.NewSQLCollectionStore(conn)
 	activityStore := sqlstores.NewSQLActivityStore(conn)
+	organizationStore := sqlstores.NewSQLOrganizationStore(conn)
 
 	activitySvc := activityDomain.NewService(activityStore)
 
@@ -499,6 +501,12 @@ func start(config *Config) error {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/health", health.NewHandler())
+	if config.Metrics.Enabled {
+		if config.Metrics.WebhookToken == "" {
+			slog.Warn("FLEET_METRICS_WEBHOOK_TOKEN is not set; alertmanager webhook will reject every delivery")
+		}
+		mux.Handle("POST "+alertmanagerwebhook.Path, alertmanagerwebhook.NewHandler(activitySvc, config.Metrics.WebhookToken, organizationStore))
+	}
 	mux.Handle("/api/v1/firmware/upload", firmwareHandler.NewUploadHandler(filesService, sessionSvc, userStore, filesService.MaxFirmwareFileSize()))
 	mux.Handle("/api/v1/firmware/check", firmwareHandler.NewCheckHandler(filesService, sessionSvc, userStore))
 	mux.Handle("GET /api/v1/firmware/config", firmwareHandler.NewConfigHandler(filesService, sessionSvc, userStore, config.Files))
