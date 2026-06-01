@@ -23,6 +23,7 @@ import {
   type StreamingPointPayload,
 } from "./streamingTelemetry";
 import type { CoolingStatusCoolingstatus, TelemetryData, TimeSeriesResponse } from "@/protoOS/api/generatedApi";
+import type { Duration } from "@/shared/components/DurationSelector";
 
 // Enable Map/Set support for Immer
 enableMapSet();
@@ -107,9 +108,15 @@ export interface TelemetrySlice {
   lastApiResponse: any | null; // Store the API response
   lastUpdated: number;
   intervalMs: number; // sampling interval from API
+  // Last time-series response per duration, so switching back to a duration can
+  // restore its chart instantly instead of blanking while it refetches.
+  timeSeriesByDuration: Partial<Record<Duration, TimeSeriesResponse>>;
 
   // Data Update Actions
-  updateTimeSeriesTelemetry: (apiResponse: TimeSeriesResponse) => void;
+  updateTimeSeriesTelemetry: (apiResponse: TimeSeriesResponse, duration?: Duration) => void;
+  // Restore cached time series for a duration (used on duration change); falls
+  // back to clearing when nothing is cached yet.
+  restoreOrClearTimeSeries: (duration: Duration) => void;
   updateLatestTelemetry: (telemetryData: TelemetryData) => void;
   appendStreamingPoint: (point: StreamingPointPayload) => void;
   applyDiagnosticsStream: (payload: DiagnosticsStreamPayload) => void;
@@ -144,6 +151,7 @@ export interface TelemetrySlice {
 
 export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", never]], [], TelemetrySlice> = (
   set,
+  get,
 ) => ({
   // Initial state - normalized structure
   miner: null,
@@ -155,10 +163,16 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
   lastApiResponse: null,
   lastUpdated: Date.now(),
   intervalMs: 900000, // Default 15 minutes
+  timeSeriesByDuration: {},
 
   // Update time series telemetry data from time series API
-  updateTimeSeriesTelemetry: (apiResponse: TimeSeriesResponse) =>
+  updateTimeSeriesTelemetry: (apiResponse: TimeSeriesResponse, duration?: Duration) =>
     set((state) => {
+      // Cache the response per duration so switching back to it restores instantly.
+      if (duration) {
+        state.telemetry.timeSeriesByDuration[duration] = apiResponse;
+      }
+
       // adds ms equivalent to ISO8601 timestamps returned by API
       const transformedApiResponse = {
         ...apiResponse,
@@ -210,7 +224,9 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
 
             const metricTelemetry = state.telemetry.miner![field as MinerMetricKeys] as MetricTelemetry;
 
-            // Update only timeSeries, Immer preserves latest automatically
+            // Update only timeSeries, Immer preserves latest automatically.
+            // Preserve the live tail so the live tip survives a historical
+            // refetch / duration restore instead of blinking out for ~1s.
             metricTelemetry.timeSeries = {
               aggregates: metric.aggregates
                 ? {
@@ -223,6 +239,7 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
               values: metric.values || [],
               startTime,
               endTime,
+              liveTail: metricTelemetry.timeSeries?.liveTail,
             };
           });
       }
@@ -265,7 +282,8 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
 
               const metricTelemetry = hashboard[field as HashboardMetricKeys] as MetricTelemetry;
 
-              // Update only timeSeries, Immer preserves latest automatically
+              // Update only timeSeries, Immer preserves latest automatically.
+              // Preserve the live tail (see miner branch above).
               metricTelemetry.timeSeries = {
                 aggregates: metric.aggregates
                   ? {
@@ -278,6 +296,7 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
                 values: metric.values || [],
                 startTime,
                 endTime,
+                liveTail: metricTelemetry.timeSeries?.liveTail,
               };
             });
         });
@@ -351,6 +370,17 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
         });
       }
     }),
+
+  // On duration change, restore that duration's cached chart immediately so it
+  // doesn't blank while the fresh data refetches; clear only when uncached.
+  restoreOrClearTimeSeries: (duration: Duration) => {
+    const cached = get().telemetry.timeSeriesByDuration[duration];
+    if (cached) {
+      get().telemetry.updateTimeSeriesTelemetry(cached, duration);
+    } else {
+      get().telemetry.clearTimeSeriesData();
+    }
+  },
 
   // Update latest telemetry values from real-time telemetry API
   updateLatestTelemetry: (telemetryData: TelemetryData) =>

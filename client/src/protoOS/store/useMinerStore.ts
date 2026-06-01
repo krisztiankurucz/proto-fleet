@@ -209,13 +209,14 @@ export default useMinerStore;
 // Store Subscriptions
 // =============================================================================
 
-// Clear time series data when duration changes (preserve latest values)
+// On duration change, restore that duration's cached chart (so it doesn't blank
+// while refetching) or clear if we've never loaded it. Latest polling data is
+// preserved either way.
 useMinerStore.subscribe(
   (state) => state.ui.duration,
   (duration, prevDuration) => {
     if (duration !== prevDuration) {
-      // Clear only time series data, preserve latest polling data
-      useMinerStore.getState().telemetry.clearTimeSeriesData();
+      useMinerStore.getState().telemetry.restoreOrClearTimeSeries(duration);
     }
   },
 );

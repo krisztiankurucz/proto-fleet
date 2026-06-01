@@ -121,8 +121,9 @@ const useTimeSeries = ({ duration, levels, poll = true, pollIntervalMs = 30 * 10
           });
         }
 
-        // Update the telemetry store with the new data
-        useMinerStore.getState().telemetry.updateTimeSeriesTelemetry(response.data);
+        // Update the telemetry store with the new data (cached per duration so
+        // switching back to this duration restores instantly instead of blanking).
+        useMinerStore.getState().telemetry.updateTimeSeriesTelemetry(response.data, requestDuration);
       },
       onError: (err) => {
         setError(err?.error?.message ?? "Unknown error occurred");
