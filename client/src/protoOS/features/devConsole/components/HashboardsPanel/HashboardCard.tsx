@@ -165,7 +165,8 @@ function AsicStatsTable({ asicStats }: AsicStatsTableProps) {
               <td className="px-2 py-0.5 text-right">{formatFloat(a.temperature, 1)}</td>
               <td className="px-2 py-0.5 text-right">{a.frequency}</td>
               <td className="px-2 py-0.5 text-right">{formatFloat(a.passRate, 1)}</td>
-              <td className="px-2 py-0.5 text-right">{formatFloat(a.hashRate, 2)}</td>
+              {/* hash_rate is reported as raw H/s over NATS despite the GH/s proto label */}
+              <td className="px-2 py-0.5 text-right">{formatFloat(a.hashRate / 1e9, 2)}</td>
             </tr>
           ))}
         </tbody>

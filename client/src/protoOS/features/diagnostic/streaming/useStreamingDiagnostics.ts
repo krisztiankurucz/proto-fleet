@@ -119,7 +119,10 @@ export function useStreamingDiagnostics(): void {
           entry.asics = asicMsg.asicStats.map((a, index) => ({
             index,
             temperature: a.temperature,
-            hashRate: a.hashRate,
+            // asic_status.hash_rate is labeled GH/s in the proto, but the firmware
+            // actually reports raw H/s over NATS — convert to GH/s (the unit the
+            // store/UI expects). Keeps this payload's fields all display-ready.
+            hashRate: a.hashRate / 1e9,
             voltage: a.voltage,
             frequency: a.frequency,
           }));
