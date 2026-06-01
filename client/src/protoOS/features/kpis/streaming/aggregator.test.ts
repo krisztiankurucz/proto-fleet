@@ -33,22 +33,35 @@ describe("aggregateStreamingPoint", () => {
     expect(aggregateStreamingPoint(state, NOW)).toBeNull();
   });
 
-  it("sums per-hashboard hashrate and uses max board temp", () => {
+  it("sums per-hashboard hashrate and averages board temps across hashboards", () => {
     const state: StreamingSourceState = {
       hashboardStats: new Map([
-        [0, makeStats({ hashrate: 100, power: 1500, tempMax: 65 })],
-        [1, makeStats({ hashrate: 110, power: 1600, tempMax: 70 })],
-        [2, makeStats({ hashrate: 90, power: 1450, tempMax: 62 })],
+        [0, makeStats({ hashrate: 100, power: 1500, tempAvg: 60 })],
+        [1, makeStats({ hashrate: 110, power: 1600, tempAvg: 70 })],
+        [2, makeStats({ hashrate: 90, power: 1450, tempAvg: 65 })],
       ]),
       psuInputPowerW: new Map(),
     };
     const point = aggregateStreamingPoint(state, NOW);
     expect(point).not.toBeNull();
     expect(point!.miner.hashrateThs).toBe(300);
-    expect(point!.miner.temperatureC).toBe(70);
+    // mean(60, 70, 65)
+    expect(point!.miner.temperatureC).toBe(65);
     // No PSU data → falls back to Σ boardPower
     expect(point!.miner.powerW).toBe(4550);
     expect(point!.hashboards.size).toBe(3);
+  });
+
+  it("ignores hashboards with no temperature when averaging", () => {
+    const state: StreamingSourceState = {
+      hashboardStats: new Map([
+        [0, makeStats({ hashrate: 100, tempAvg: 60 })],
+        [1, makeStats({ hashrate: 100, tempAvg: 0 })], // no temp reported → skipped
+      ]),
+      psuInputPowerW: new Map(),
+    };
+    const point = aggregateStreamingPoint(state, NOW)!;
+    expect(point.miner.temperatureC).toBe(60);
   });
 
   it("prefers PSU INPUT_POWER sum over hashboard board power when available", () => {
@@ -81,20 +94,18 @@ describe("aggregateStreamingPoint", () => {
     expect(point.miner.efficiencyJTh).toBe(0);
   });
 
-  it("falls back to boardTemps.average when max is missing", () => {
+  it("uses boardTemps.average even when max is higher (match recorded average temp)", () => {
     const stats = create(HashboardOperatingStatsSchema, {
       boardHashrate: 50,
       boardPower: 800,
       boardEfficiency: 16,
-      boardTemps: { average: 55, min: 50, max: 0 },
+      boardTemps: { average: 55, min: 50, max: 82 },
     });
-    // Force max to 0 so the fallback kicks in:
     const state: StreamingSourceState = {
       hashboardStats: new Map([[0, stats]]),
       psuInputPowerW: new Map(),
     };
     const point = aggregateStreamingPoint(state, NOW)!;
-    // boardTemps.max === 0 means the chain treats that as the value (still >= -Infinity).
-    expect(point.miner.temperatureC).toBe(0);
+    expect(point.miner.temperatureC).toBe(55);
   });
 });

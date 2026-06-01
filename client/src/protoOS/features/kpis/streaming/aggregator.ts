@@ -23,7 +23,10 @@ function hashboardMetricsFromStats(stats: HashboardOperatingStats): StreamingMet
     hashrateThs: stats.boardHashrate,
     powerW: stats.boardPower,
     efficiencyJTh: stats.boardEfficiency,
-    temperatureC: stats.boardTemps?.max ?? stats.boardTemps?.average ?? 0,
+    // Use the AVERAGE board temperature so the live tip matches the recorded /
+    // historical miner temp (firmware telemetry temperature_c is an average).
+    // boardTemps.max is the hottest chip and would read far higher than history.
+    temperatureC: stats.boardTemps?.average ?? stats.boardTemps?.max ?? 0,
   };
 }
 
@@ -34,7 +37,8 @@ function hashboardMetricsFromStats(stats: HashboardOperatingStats): StreamingMet
  * Miner-level metrics:
  *   hashrate    = Σ boardHashrate (across hashboards)
  *   power       = Σ PSU INPUT_POWER (wall power); falls back to Σ boardPower when no PSU data
- *   temperature = max(boardTemps.max) across hashboards
+ *   temperature = mean(boardTemps.average) across reporting hashboards (matches
+ *                 the recorded average miner temp; boards with no temp are skipped)
  *   efficiency  = power / hashrate (J/TH)
  */
 export function aggregateStreamingPoint(state: StreamingSourceState, now: number): StreamingPoint | null {
@@ -43,14 +47,19 @@ export function aggregateStreamingPoint(state: StreamingSourceState, now: number
   const hashboards = new Map<number, StreamingMetrics>();
   let totalHashrate = 0;
   let totalBoardPower = 0;
-  let maxTemp = -Infinity;
+  let totalTemp = 0;
+  let tempCount = 0;
 
   state.hashboardStats.forEach((stats, slot) => {
     const m = hashboardMetricsFromStats(stats);
     hashboards.set(slot, m);
     totalHashrate += m.hashrateThs;
     totalBoardPower += m.powerW;
-    if (m.temperatureC > maxTemp) maxTemp = m.temperatureC;
+    // Skip boards with no temperature reported (0) so they don't drag the mean down.
+    if (m.temperatureC > 0) {
+      totalTemp += m.temperatureC;
+      tempCount += 1;
+    }
   });
 
   let totalPsuPower = 0;
@@ -60,7 +69,7 @@ export function aggregateStreamingPoint(state: StreamingSourceState, now: number
 
   const powerW = totalPsuPower > 0 ? totalPsuPower : totalBoardPower;
   const efficiencyJTh = totalHashrate > 0 ? powerW / totalHashrate : 0;
-  const temperatureC = maxTemp === -Infinity ? 0 : maxTemp;
+  const temperatureC = tempCount > 0 ? totalTemp / tempCount : 0;
 
   return {
     datetime: now,
