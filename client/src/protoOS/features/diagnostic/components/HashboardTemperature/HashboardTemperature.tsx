@@ -4,6 +4,8 @@ import AsicTable from "./Asic/AsicTableWrapper";
 import { AsicMetricProvider, type SelectedMetric } from "./AsicMetricContext";
 import HashboardSelector from "./HashboardSelector";
 import { useTelemetry } from "@/protoOS/api";
+import { useStreamingDiagnostics } from "@/protoOS/features/diagnostic/streaming";
+import { useNatsAvailability } from "@/protoOS/nats";
 import {
   convertAndFormatMeasurement,
   convertValueUnits,
@@ -64,13 +66,18 @@ const HashboardTemperature = ({ serial }: HashboardTemperatureProps) => {
 
   const navigate = useNavigate();
 
-  // Fetch latest telemetry data with polling
+  // Fetch latest telemetry data with polling. When NATS is available, the streaming
+  // hook below feeds the store at firmware cadence and we shut off the REST poll.
   // TODO: [STORE_REFACTOR] Telemetry API will give include miner and hashboard level data when we specify level=asic
   // We have another polling call in parent component KpiLayout.  If we want to remove extra requests we could add some logic to useTelemetry
   // so that the keeps track of the polling requests somehow and only lets the most specific one (level=asic) poll
+  const natsAvailability = useNatsAvailability();
+  const streamingActive = natsAvailability === "available";
   useTelemetry({
     level: ["asic"],
+    poll: !streamingActive,
   });
+  useStreamingDiagnostics();
 
   const close = () => {
     navigate("..", { relative: "path" });

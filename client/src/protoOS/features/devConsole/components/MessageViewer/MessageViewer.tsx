@@ -67,7 +67,7 @@ function MessageViewer() {
       <div className="flex items-center gap-3 text-300 text-text-primary-50">
         <span>
           {messages.length} message{messages.length !== 1 ? "s" : ""}
-          {paused && " (paused)"}
+          {paused ? " (paused)" : null}
         </span>
         <span className="text-text-primary-30">|</span>
         <span>{formatThroughput(throughput)}</span>

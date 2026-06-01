@@ -1,7 +1,6 @@
 import clsx from "clsx";
 
-import { useNatsConnection } from "@/protoOS/features/devConsole/hooks/useNatsConnection";
-import type { ConnectionState } from "@/protoOS/features/devConsole/nats/connection";
+import { type ConnectionState, useNatsConnection } from "@/protoOS/nats";
 
 const STATE_COLORS: Record<ConnectionState, string> = {
   connected: "bg-intent-success-fill",

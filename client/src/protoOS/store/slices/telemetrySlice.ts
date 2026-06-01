@@ -13,6 +13,15 @@ import type {
 } from "../types";
 import type { MinerStore } from "../useMinerStore";
 import { getAsicId } from "../utils/getAsicId";
+import type { DiagnosticsStreamPayload } from "./diagnosticsStream";
+import {
+  appendLiveSample,
+  DEFAULT_STREAMING_UNITS,
+  refreshAggregates,
+  STREAMABLE_METRICS,
+  type StreamableMetric,
+  type StreamingPointPayload,
+} from "./streamingTelemetry";
 import type { CoolingStatusCoolingstatus, TelemetryData, TimeSeriesResponse } from "@/protoOS/api/generatedApi";
 
 // Enable Map/Set support for Immer
@@ -32,6 +41,27 @@ type AsicMetricKeys = MetricKeys<AsicTelemetryData>;
 const isMetricField = (obj: any, key: string): boolean => {
   const value = obj[key];
   return value && typeof value === "object" && "unit" in value;
+};
+
+/**
+ * Clear the historical (REST-fetched) portion of a metric's time series while
+ * preserving the live NATS tail. Called on duration changes: history is refetched
+ * at the new interval, but the live tail is interval-independent and must persist
+ * so the live tip — and the whole "1m" view — doesn't blank out on every switch.
+ * Metrics with no live tail drop their timeSeries entirely (original behavior).
+ */
+const clearHistoricalTimeSeries = (metric: MetricTelemetry): void => {
+  const ts = metric.timeSeries;
+  if (!ts) return;
+
+  if (ts.liveTail && ts.liveTail.length > 0) {
+    ts.values = [];
+    ts.startTime = ts.liveTail[0].datetime;
+    ts.endTime = ts.liveTail[ts.liveTail.length - 1].datetime;
+    refreshAggregates(ts);
+  } else {
+    delete metric.timeSeries;
+  }
 };
 
 // Helper functions for API data transformation
@@ -81,6 +111,8 @@ export interface TelemetrySlice {
   // Data Update Actions
   updateTimeSeriesTelemetry: (apiResponse: TimeSeriesResponse) => void;
   updateLatestTelemetry: (telemetryData: TelemetryData) => void;
+  appendStreamingPoint: (point: StreamingPointPayload) => void;
+  applyDiagnosticsStream: (payload: DiagnosticsStreamPayload) => void;
 
   // need this because time series API currently doesn not return
   // inlet/outlet temps so we need to get them from separate API call
@@ -607,6 +639,168 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
       }
     }),
 
+  // Append a single live point produced by useStreamingTelemetry (NATS-driven).
+  appendStreamingPoint: (point: StreamingPointPayload) =>
+    set((state) => {
+      state.telemetry.lastUpdated = point.datetime;
+
+      if (!state.telemetry.miner) {
+        state.telemetry.miner = { hashboards: [] };
+      }
+
+      for (const metricKey of STREAMABLE_METRICS) {
+        const value = point.miner[metricKey];
+        if (!Number.isFinite(value)) continue;
+
+        if (!state.telemetry.miner![metricKey]) {
+          state.telemetry.miner![metricKey] = {};
+        }
+        const metric = state.telemetry.miner![metricKey] as MetricTelemetry;
+        appendLiveSample(metric, point.datetime, value, DEFAULT_STREAMING_UNITS[metricKey as StreamableMetric]);
+      }
+
+      const minerHashboardIds = state.telemetry.miner!.hashboards;
+      point.hashboards.forEach((metrics, serial) => {
+        if (!state.telemetry.hashboards.has(serial)) {
+          state.telemetry.hashboards.set(serial, { serial });
+        }
+        if (!minerHashboardIds.includes(serial)) {
+          minerHashboardIds.push(serial);
+        }
+        const hb = state.telemetry.hashboards.get(serial)!;
+
+        for (const metricKey of STREAMABLE_METRICS) {
+          const value = metrics[metricKey];
+          if (!Number.isFinite(value)) continue;
+
+          if (!hb[metricKey]) {
+            hb[metricKey] = {};
+          }
+          const metric = hb[metricKey] as MetricTelemetry;
+          appendLiveSample(metric, point.datetime, value, DEFAULT_STREAMING_UNITS[metricKey as StreamableMetric]);
+        }
+      });
+    }),
+
+  // Apply a NATS-driven diagnostics snapshot in one batched store mutation.
+  applyDiagnosticsStream: (payload: DiagnosticsStreamPayload) =>
+    set((state) => {
+      state.telemetry.lastUpdated = payload.datetime;
+
+      payload.hashboards.forEach((hb, serial) => {
+        if (!state.telemetry.hashboards.has(serial)) {
+          state.telemetry.hashboards.set(serial, { serial });
+        }
+        const target = state.telemetry.hashboards.get(serial)!;
+
+        if (hb.hashrate !== undefined) {
+          if (!target.hashrate) target.hashrate = {};
+          target.hashrate.latest = createMeasurement(hb.hashrate, "TH/s");
+        }
+        if (hb.power !== undefined) {
+          if (!target.power) target.power = {};
+          target.power.latest = createMeasurement(hb.power, "W");
+        }
+        if (hb.efficiency !== undefined) {
+          if (!target.efficiency) target.efficiency = {};
+          target.efficiency.latest = createMeasurement(hb.efficiency, "J/TH");
+        }
+        if (hb.boardTempMax !== undefined) {
+          if (!target.temperature) target.temperature = {};
+          target.temperature.latest = createMeasurement(hb.boardTempMax, "C");
+        }
+        if (hb.boardTempInlet !== undefined) {
+          if (!target.inletTemp) target.inletTemp = {};
+          target.inletTemp.latest = createMeasurement(hb.boardTempInlet, "C");
+        }
+        if (hb.boardTempOutlet !== undefined) {
+          if (!target.outletTemp) target.outletTemp = {};
+          target.outletTemp.latest = createMeasurement(hb.boardTempOutlet, "C");
+        }
+
+        if (hb.asics && hb.asics.length > 0) {
+          const temps: number[] = [];
+          for (const asic of hb.asics) {
+            if (Number.isFinite(asic.temperature)) temps.push(asic.temperature);
+
+            const asicId = getAsicId(serial, asic.index.toString());
+            if (!state.telemetry.asics.has(asicId)) {
+              state.telemetry.asics.set(asicId, { id: asicId });
+            }
+            const asicTarget = state.telemetry.asics.get(asicId)!;
+            if (!asicTarget.temperature) asicTarget.temperature = {};
+            asicTarget.temperature.latest = createMeasurement(asic.temperature, "C");
+            if (!asicTarget.hashrate) asicTarget.hashrate = {};
+            asicTarget.hashrate.latest = createMeasurement(asic.hashRate, "GH/s");
+            if (!asicTarget.voltage) asicTarget.voltage = {};
+            asicTarget.voltage.latest = createMeasurement(asic.voltage, "V");
+            if (!asicTarget.frequency) asicTarget.frequency = {};
+            asicTarget.frequency.latest = createMeasurement(asic.frequency, "MHz");
+          }
+          if (temps.length > 0) {
+            const avg = temps.reduce((s, t) => s + t, 0) / temps.length;
+            const max = Math.max(...temps);
+            if (!target.avgAsicTemp) target.avgAsicTemp = {};
+            target.avgAsicTemp.latest = createMeasurement(avg, "C");
+            if (!target.maxAsicTemp) target.maxAsicTemp = {};
+            target.maxAsicTemp.latest = createMeasurement(max, "C");
+          }
+        }
+      });
+
+      payload.psus.forEach((data, psuId) => {
+        if (!state.telemetry.psus.has(psuId)) {
+          state.telemetry.psus.set(psuId, { id: psuId });
+        }
+        const target = state.telemetry.psus.get(psuId)!;
+        if (data.inputVoltage !== undefined) {
+          if (!target.inputVoltage) target.inputVoltage = {};
+          target.inputVoltage.latest = createMeasurement(data.inputVoltage, "V");
+        }
+        if (data.outputVoltage !== undefined) {
+          if (!target.outputVoltage) target.outputVoltage = {};
+          target.outputVoltage.latest = createMeasurement(data.outputVoltage, "V");
+        }
+        if (data.inputCurrent !== undefined) {
+          if (!target.inputCurrent) target.inputCurrent = {};
+          target.inputCurrent.latest = createMeasurement(data.inputCurrent, "A");
+        }
+        if (data.outputCurrent !== undefined) {
+          if (!target.outputCurrent) target.outputCurrent = {};
+          target.outputCurrent.latest = createMeasurement(data.outputCurrent, "A");
+        }
+        if (data.inputPower !== undefined) {
+          if (!target.inputPower) target.inputPower = {};
+          target.inputPower.latest = createMeasurement(data.inputPower, "W");
+        }
+        if (data.outputPower !== undefined) {
+          if (!target.outputPower) target.outputPower = {};
+          target.outputPower.latest = createMeasurement(data.outputPower, "W");
+        }
+        if (data.temperatureAverage !== undefined) {
+          if (!target.temperatureAverage) target.temperatureAverage = {};
+          target.temperatureAverage.latest = createMeasurement(data.temperatureAverage, "C");
+        }
+        if (data.temperatureHotspot !== undefined) {
+          if (!target.temperatureHotspot) target.temperatureHotspot = {};
+          target.temperatureHotspot.latest = createMeasurement(data.temperatureHotspot, "C");
+        }
+        if (data.temperatureAmbient !== undefined) {
+          if (!target.temperatureAmbient) target.temperatureAmbient = {};
+          target.temperatureAmbient.latest = createMeasurement(data.temperatureAmbient, "C");
+        }
+      });
+
+      payload.fans.forEach((data, slot) => {
+        if (!state.telemetry.fans.has(slot)) {
+          state.telemetry.fans.set(slot, { slot });
+        }
+        const target = state.telemetry.fans.get(slot)!;
+        if (!target.rpm) target.rpm = {};
+        target.rpm.latest = createMeasurement(data.rpm, "RPM");
+      });
+    }),
+
   // Update optional hashboard temperature sensors
   updateHashboardTemperatures: (hashboardSerial, inletTemp, outletTemp, avgAsicTemp, maxAsicTemp) =>
     set((state) => {
@@ -681,32 +875,32 @@ export const createTelemetrySlice: StateCreator<MinerStore, [["zustand/immer", n
   // Clear all telemetry data (useful when duration changes)
   clearTimeSeriesData: () =>
     set((state) => {
-      // Clear timeSeries from miner metrics, preserve latest
+      // Clear timeSeries from miner metrics, preserve latest + live tail
       if (state.telemetry.miner) {
         Object.keys(state.telemetry.miner).forEach((key) => {
           const metric = state.telemetry.miner![key as keyof MinerTelemetryData];
           if (metric && typeof metric === "object" && "timeSeries" in metric) {
-            delete (metric as MetricTelemetry).timeSeries;
+            clearHistoricalTimeSeries(metric as MetricTelemetry);
           }
         });
       }
 
-      // Clear timeSeries from hashboard metrics, preserve latest
+      // Clear timeSeries from hashboard metrics, preserve latest + live tail
       for (const hashboard of state.telemetry.hashboards.values()) {
         Object.keys(hashboard).forEach((key) => {
           const metric = hashboard[key as keyof HashboardTelemetryData];
           if (metric && typeof metric === "object" && "timeSeries" in metric) {
-            delete (metric as MetricTelemetry).timeSeries;
+            clearHistoricalTimeSeries(metric as MetricTelemetry);
           }
         });
       }
 
-      // Clear timeSeries from ASIC metrics, preserve latest
+      // Clear timeSeries from ASIC metrics, preserve latest + live tail
       for (const asic of state.telemetry.asics.values()) {
         Object.keys(asic).forEach((key) => {
           const metric = asic[key as keyof AsicTelemetryData];
           if (metric && typeof metric === "object" && "timeSeries" in metric) {
-            delete (metric as MetricTelemetry).timeSeries;
+            clearHistoricalTimeSeries(metric as MetricTelemetry);
           }
         });
       }

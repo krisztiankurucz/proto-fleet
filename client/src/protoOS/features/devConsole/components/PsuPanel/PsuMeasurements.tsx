@@ -1,8 +1,7 @@
+import { formatDecimals, getDivisor } from "./units";
 import type { PsuMeasurement, PsuMeasurements } from "@/protoOS/api/generated/nats/miner_psu_api_pb";
 import { PsuMeasurementType } from "@/protoOS/api/generated/nats/miner_psu_api_pb";
 import LabeledValue from "@/protoOS/features/diagnostic/components/LabeledValue/LabeledValue";
-
-import { formatDecimals, getDivisor } from "./units";
 
 const PLACEHOLDER = "---";
 

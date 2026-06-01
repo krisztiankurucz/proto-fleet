@@ -2,9 +2,10 @@
 
 ## Source
 - Repository: miner-firmware (private)
-- Commit SHA: b9372f6a80379c857051758145c6a1748896f98a
-- Commit Date: 2026-05-04
-- Extraction Date: 2026-05-04
+- Branch: kkurucz/docker-sim-port-conflict
+- Commit SHA: 5cbdeeeba9e (tree); hashboard submodule: d828c7f107cff21141756ff076eda326e9855beb
+- Commit Date: 2026-05-26
+- Extraction Date: 2026-05-28
 
 ## Files Extracted
 
@@ -21,6 +22,7 @@
 - miner_psu_api.proto
 - miner_psu_test_api.proto
 - miner_system_api.proto
+- miner_telemetry_api.proto
 - miner_ui_api.proto
 
 ### Hashboard Proto Files (from `crates/mcdd/hashboard/lib/protobuf/protos/`)
@@ -28,6 +30,7 @@
 - hashboard_async.proto
 - hashboard_cmd.proto
 - hashboard_cmd_debug.proto
+- hashboard_cmd_evb.proto
 - hashboard_cmd_mfgtest.proto
 - hashboard_log.proto
 

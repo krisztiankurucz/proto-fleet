@@ -40,6 +40,24 @@ vi.mock("@/protoOS/store", async (importOriginal) => {
   };
 });
 
+// DiagnosticView reads NATS availability and runs the diagnostics stream; this
+// test renders it in isolation (no providers), so stub both.
+vi.mock("@/protoOS/nats", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/protoOS/nats")>();
+  return {
+    ...actual,
+    useNatsAvailability: () => "unavailable" as const,
+  };
+});
+
+vi.mock("@/protoOS/features/diagnostic/streaming", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/protoOS/features/diagnostic/streaming")>();
+  return {
+    ...actual,
+    useStreamingDiagnostics: () => {},
+  };
+});
+
 describe("DiagnosticView - Fans Section", () => {
   beforeEach(() => {
     vi.clearAllMocks();

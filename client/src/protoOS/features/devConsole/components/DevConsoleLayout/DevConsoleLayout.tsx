@@ -3,9 +3,8 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import ConnectionStatusIndicator from "./ConnectionStatusIndicator";
-import { useDevConsoleAvailability } from "@/protoOS/features/devConsole/hooks/useDevConsoleAvailability";
 import DevConsoleDataProvider from "@/protoOS/features/devConsole/nats/DevConsoleDataProvider";
-import NatsProvider from "@/protoOS/features/devConsole/nats/NatsProvider";
+import { useNatsAvailability } from "@/protoOS/nats";
 import ProgressCircular from "@/shared/components/ProgressCircular";
 import SegmentedControl from "@/shared/components/SegmentedControl";
 
@@ -18,7 +17,7 @@ const TAB_SEGMENTS = [
 ];
 
 function DevConsoleLayout() {
-  const availability = useDevConsoleAvailability();
+  const availability = useNatsAvailability();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -55,22 +54,20 @@ function DevConsoleLayout() {
   }
 
   return (
-    <NatsProvider>
-      <DevConsoleDataProvider>
-        <div className="flex h-full flex-col">
-          <div className={clsx("flex items-center justify-between px-6 py-3")}>
-            <div className="flex items-center gap-4">
-              <h1 className="text-heading-200 text-text-primary">Dev Console</h1>
-              <ConnectionStatusIndicator />
-            </div>
-            <SegmentedControl segments={segments} initialSegmentKey={currentTab} onSelect={handleTabSelect} />
+    <DevConsoleDataProvider>
+      <div className="flex h-full flex-col">
+        <div className={clsx("flex items-center justify-between px-6 py-3")}>
+          <div className="flex items-center gap-4">
+            <h1 className="text-heading-200 text-text-primary">Dev Console</h1>
+            <ConnectionStatusIndicator />
           </div>
-          <div className="min-h-0 flex-1 overflow-auto pb-6">
-            <Outlet />
-          </div>
+          <SegmentedControl segments={segments} initialSegmentKey={currentTab} onSelect={handleTabSelect} />
         </div>
-      </DevConsoleDataProvider>
-    </NatsProvider>
+        <div className="min-h-0 flex-1 overflow-auto pb-6">
+          <Outlet />
+        </div>
+      </div>
+    </DevConsoleDataProvider>
   );
 }
 

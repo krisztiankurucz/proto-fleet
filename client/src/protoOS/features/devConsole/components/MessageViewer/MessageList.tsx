@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 
-import { type DecodedMessage, tryDecodeMessage } from "@/protoOS/features/devConsole/nats/decode";
-import type { RawNatsMessage } from "@/protoOS/features/devConsole/nats/subscriptions";
+import { type DecodedMessage, type RawNatsMessage, tryDecodeMessage } from "@/protoOS/nats";
 
 interface MessageListProps {
   messages: RawNatsMessage[];
@@ -50,15 +49,15 @@ function MessageRow({ msg, isExpanded, onClick }: MessageRowProps) {
         </td>
         <td className="px-3 py-1 break-all">
           {msg.subject}
-          {isExpanded && decoded && (
+          {isExpanded && decoded ? (
             <span className="ml-2 rounded bg-core-accent-fill/20 px-1.5 py-0.5 text-core-accent-fill">
               {decoded.label}
             </span>
-          )}
+          ) : null}
         </td>
         <td className="px-3 py-1 pr-4 text-right whitespace-nowrap text-text-primary-50">{msg.size} B</td>
       </tr>
-      {isExpanded && (
+      {isExpanded ? (
         <tr className="bg-core-primary-10">
           <td colSpan={3} className="p-0">
             {decoded ? (
@@ -74,7 +73,7 @@ function MessageRow({ msg, isExpanded, onClick }: MessageRowProps) {
             )}
           </td>
         </tr>
-      )}
+      ) : null}
     </>
   );
 }

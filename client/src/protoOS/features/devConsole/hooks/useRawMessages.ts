@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useNatsConnection } from "./useNatsConnection";
 import { MAX_RAW_MESSAGES } from "@/protoOS/features/devConsole/constants";
-import { type RawNatsMessage, subscribeAll } from "@/protoOS/features/devConsole/nats/subscriptions";
+import { type RawNatsMessage, subscribeAll, useNatsConnection } from "@/protoOS/nats";
 
 export interface UseRawMessagesResult {
   messages: RawNatsMessage[];

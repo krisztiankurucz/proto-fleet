@@ -2,6 +2,18 @@ import { fromBinary } from "@bufbuild/protobuf";
 import type { NatsConnection, Subscription } from "@nats-io/nats-core";
 
 import {
+  type AsicOperatingStats,
+  AsicOperatingStatsSchema,
+  type FanData,
+  FanDataSchema,
+  type HashboardOperatingStats,
+  HashboardOperatingStatsSchema,
+  type HashboardStatus,
+  HashboardStatusSchema,
+  type Share,
+  ShareSchema,
+} from "@/protoOS/api/generated/nats/miner_hb_api_pb";
+import {
   type PsuErrors,
   PsuErrorsSchema,
   type PsuInfoMsg,
@@ -17,6 +29,13 @@ import {
   type LedStatus,
   LedStatusSchema,
 } from "@/protoOS/api/generated/nats/miner_ui_api_pb";
+
+export interface RawNatsMessage {
+  subject: string;
+  timestamp: number;
+  size: number;
+  data: Uint8Array;
+}
 
 export function subscribePsuMeasurements(
   nc: NatsConnection,
@@ -58,6 +77,52 @@ export function subscribePsuErrors(
   return sub;
 }
 
+export function subscribeHashboardOperatingStats(
+  nc: NatsConnection,
+  slot: number,
+  onMessage: (data: HashboardOperatingStats) => void,
+): Subscription {
+  const sub = nc.subscribe(`hb.${slot}.data.board`);
+  processSubscription(sub, HashboardOperatingStatsSchema, onMessage);
+  return sub;
+}
+
+export function subscribeHashboardAsicStats(
+  nc: NatsConnection,
+  slot: number,
+  onMessage: (data: AsicOperatingStats) => void,
+): Subscription {
+  const sub = nc.subscribe(`hb.${slot}.data.asic`);
+  processSubscription(sub, AsicOperatingStatsSchema, onMessage);
+  return sub;
+}
+
+export function subscribeHashboardStatus(
+  nc: NatsConnection,
+  slot: number,
+  onMessage: (data: HashboardStatus) => void,
+): Subscription {
+  const sub = nc.subscribe(`hb.${slot}.status`);
+  processSubscription(sub, HashboardStatusSchema, onMessage);
+  return sub;
+}
+
+export function subscribeHashboardShare(
+  nc: NatsConnection,
+  slot: number,
+  onMessage: (data: Share) => void,
+): Subscription {
+  const sub = nc.subscribe(`hb.${slot}.share`);
+  processSubscription(sub, ShareSchema, onMessage);
+  return sub;
+}
+
+export function subscribeFanData(nc: NatsConnection, fanId: number, onMessage: (data: FanData) => void): Subscription {
+  const sub = nc.subscribe(`fan.${fanId}.data`);
+  processSubscription(sub, FanDataSchema, onMessage);
+  return sub;
+}
+
 export function subscribeLedStatus(nc: NatsConnection, onMessage: (data: LedStatus) => void): Subscription {
   const sub = nc.subscribe("ui.led.status");
   processSubscription(sub, LedStatusSchema, onMessage);
@@ -68,13 +133,6 @@ export function subscribeButtonEvent(nc: NatsConnection, onMessage: (data: Butto
   const sub = nc.subscribe("ui.button.event");
   processSubscription(sub, ButtonEventSchema, onMessage);
   return sub;
-}
-
-export interface RawNatsMessage {
-  subject: string;
-  timestamp: number;
-  size: number;
-  data: Uint8Array;
 }
 
 export function subscribeAll(nc: NatsConnection, onMessage: (msg: RawNatsMessage) => void): Subscription {
@@ -92,7 +150,7 @@ export function subscribeAll(nc: NatsConnection, onMessage: (msg: RawNatsMessage
   return sub;
 }
 
-function processSubscription<T>(
+export function processSubscription<T>(
   sub: Subscription,
   schema: { readonly typeName: string } & Parameters<typeof fromBinary>[0],
   onMessage: (data: T) => void,

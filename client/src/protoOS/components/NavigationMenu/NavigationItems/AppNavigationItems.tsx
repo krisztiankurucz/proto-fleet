@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { navigationItems } from "../constants";
 import NavigationItem from "../NavigationItem";
 import { NavigationItemValue } from "../types";
-import { useDevConsoleAvailability } from "@/protoOS/features/devConsole/hooks/useDevConsoleAvailability";
+import { useNatsAvailability } from "@/protoOS/nats";
 import MorphingPlusMinus from "@/shared/components/MorphingPlusMinus";
 import useCssVariable from "@/shared/hooks/useCssVariable";
 import { cubicBezierValues } from "@/shared/utils/cssUtils";
@@ -15,7 +15,7 @@ interface AppNavigationItemsProps {
 }
 
 const AppNavigationItems = ({ onClick, pageName }: AppNavigationItemsProps) => {
-  const availability = useDevConsoleAvailability();
+  const availability = useNatsAvailability();
   const [showAccordionItems, setShowAccordionItems] = useState(pageName.startsWith("settings"));
   const [showAccordionExpand, setShowAccordionExpand] = useState(false);
 
@@ -42,14 +42,9 @@ const AppNavigationItems = ({ onClick, pageName }: AppNavigationItemsProps) => {
       <NavigationItem id={navigationItems.home} text="Home" onClick={handleClick} pageName={pageName} />
       <NavigationItem id={navigationItems.diagnostics} text="Diagnostics" onClick={handleClick} pageName={pageName} />
       <NavigationItem id={navigationItems.logs} text="Logs" onClick={handleClick} pageName={pageName} />
-      {availability === "available" && (
-        <NavigationItem
-          id={navigationItems.devConsole}
-          text="Dev Console"
-          onClick={handleClick}
-          pageName={pageName}
-        />
-      )}
+      {availability === "available" ? (
+        <NavigationItem id={navigationItems.devConsole} text="Dev Console" onClick={handleClick} pageName={pageName} />
+      ) : null}
       <NavigationItem
         suffixIcon={
           showAccordionExpand || showAccordionItems ? (

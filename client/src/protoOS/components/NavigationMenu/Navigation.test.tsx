@@ -1,8 +1,10 @@
+import { ReactNode } from "react";
 import { render, within } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 
 import { navigationMenuTypes } from "./constants";
 import Navigation from "./Navigation";
+import { NatsAvailabilityContext } from "@/protoOS/nats";
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
@@ -18,13 +20,17 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
+const withNatsAvailability = (children: ReactNode) => (
+  <NatsAvailabilityContext.Provider value="unavailable">{children}</NatsAvailabilityContext.Provider>
+);
+
 describe("Navigation", () => {
   const macValue = "00:11:22:33:44:55";
   const versionValue = "1.2.3";
 
   test("renders mac info", () => {
     const { getByTestId } = render(
-      <Navigation macInfo={{ loading: false, value: macValue }} type={navigationMenuTypes.app} />,
+      withNatsAvailability(<Navigation macInfo={{ loading: false, value: macValue }} type={navigationMenuTypes.app} />),
     );
     const { getByText } = within(getByTestId("mac-address-info-item"));
 
@@ -34,7 +40,9 @@ describe("Navigation", () => {
 
   test("renders version info", () => {
     const { getByTestId } = render(
-      <Navigation versionInfo={{ loading: false, value: versionValue }} type={navigationMenuTypes.app} />,
+      withNatsAvailability(
+        <Navigation versionInfo={{ loading: false, value: versionValue }} type={navigationMenuTypes.app} />,
+      ),
     );
     const { getByText } = within(getByTestId("version-info-item"));
 

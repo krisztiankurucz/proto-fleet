@@ -20,11 +20,12 @@ function DurationSelector<T extends string>({
   durations = defaultDurations as unknown as readonly T[],
   onSelect,
 }: DurationSelectorProps<T>) {
-  // Initialize with the provided duration or default to the first option
-  const [selectedDuration, setSelectedDuration] = useState<T>(duration || durations[0]);
+  // Controlled when `duration` is provided; falls back to local state otherwise.
+  const [internalDuration, setInternalDuration] = useState<T>(duration ?? durations[0]);
+  const selectedDuration = duration ?? internalDuration;
 
   const handleSelect = (d: T) => {
-    setSelectedDuration(d);
+    setInternalDuration(d);
     onSelect && onSelect(d);
   };
 

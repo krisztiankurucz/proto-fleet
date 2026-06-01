@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 
 import { ButtonEventType } from "@/protoOS/api/generated/nats/miner_ui_api_pb";
-import { useNatsConnection } from "@/protoOS/features/devConsole/hooks/useNatsConnection";
 import { publishButtonEvent } from "@/protoOS/features/devConsole/nats/commands";
 import Card from "@/protoOS/features/diagnostic/components/Card";
 import CardHeader from "@/protoOS/features/diagnostic/components/CardHeader";
+import { useNatsConnection } from "@/protoOS/nats";
 
 const BUTTON_EVENTS: { type: ButtonEventType; label: string; description: string }[] = [
   {

@@ -4,6 +4,23 @@ import useMinerStore from "../useMinerStore";
 import type { AsicData as AsicTableData } from "@/shared/components/AsicTablePreview";
 import { getDurationMs } from "@/shared/components/DurationSelector";
 import type { ChartData } from "@/shared/components/LineChart";
+import { buildSmoothedLiveSeries } from "@/shared/components/LineChart/smoothing";
+import { useSegmentDrawProgress } from "@/shared/hooks/useSegmentDrawProgress";
+
+// How long the leading "1m" segment takes to draw from the previous point to
+// the newest one. Matched to the ~1s sample cadence so the pen reaches the new
+// value as the next sample lands — continuous draw, no settle pause. (Dropping
+// this slightly below the cadence, e.g. 950, trades a tiny settle pause for
+// removing the ~1-frame sub-pixel snap at the boundary if that ever shows.)
+const SEGMENT_DRAW_MS = 1000;
+// Keep extra committed samples beyond the visible window's left edge so old
+// points scroll off and get clipped cleanly, and are only dropped from the data
+// well off-screen. Too small a pad drops the oldest point while the smoothing's
+// new leftmost segment is still at the visible edge — dropping it re-bends that
+// segment (Catmull-Rom depends on neighbours), which looks like a point popping
+// out. Must comfortably exceed the tip's animation lag (~1s) plus the smoothing
+// reach (~1 segment).
+const WINDOW_LEFT_PAD_MS = 5000;
 
 // =============================================================================
 // Miner Convenience Hooks (combining hardware + telemetry slices)
@@ -202,11 +219,21 @@ export const useChartDataForMetric = (
   const intervalMs = useMinerStore((state) => state.telemetry.intervalMs);
   const duration = useMinerStore((state) => state.ui.duration);
 
+  // Newest live sample time for this metric — changes once per sample (~1Hz) and
+  // (re)triggers the leading-segment draw animation for the "1m" view only.
+  const liveTipTime = useMinerStore((state) => {
+    const tail = state.telemetry.miner?.[metricName]?.timeSeries?.liveTail;
+    return tail && tail.length ? tail[tail.length - 1].datetime : undefined;
+  });
+  const drawProgress = useSegmentDrawProgress(liveTipTime, SEGMENT_DRAW_MS, duration === "1m");
+
   return useMemo(() => {
     if (!miner) return { chartData: [], chartLines: [] };
 
     const minerMetric = miner[metricName]?.timeSeries;
-    if (!minerMetric?.values.length) return { chartData: [], chartLines: [] };
+    const hasHistorical = !!minerMetric?.values.length;
+    const hasLiveTail = !!minerMetric?.liveTail?.length;
+    if (!hasHistorical && !hasLiveTail) return { chartData: [], chartLines: [] };
 
     // Get hashboards associated with this miner
     const minerHashboards = miner.hashboards
@@ -223,16 +250,57 @@ export const useChartDataForMetric = (
     // Generate chart lines (keys that will be in the data)
     const chartLines = ["miner", ...sortedMinerHashboards.map((hb) => hb.serial)];
 
-    // Create chart data points
-    const chartData = minerMetric.values.map((minerValue, index) => {
-      const datetime = minerMetric.startTime + index * intervalMs;
+    const durationMs = getDurationMs(duration);
+
+    // "1m" is a sliding 60s window of live-tail-only data. Hashboard tails are
+    // joined to miner samples by datetime (positional indexing is unsafe once
+    // we filter the array).
+    if (duration === "1m") {
+      const minerTail = minerMetric!.liveTail ?? [];
+      if (!minerTail.length) return { chartData: [], chartLines };
+
+      const realEnd = minerTail[minerTail.length - 1].datetime;
+      const filterStart = realEnd - durationMs - WINDOW_LEFT_PAD_MS;
+
+      const hashboardTailMaps = new Map<string, Map<number, number>>();
+      sortedMinerHashboards.forEach((hb) => {
+        const tail = hb[metricName]?.timeSeries?.liveTail;
+        if (!tail?.length) return;
+        const lookup = new Map<number, number>();
+        for (const p of tail) lookup.set(p.datetime, p.value);
+        hashboardTailMaps.set(hb.serial, lookup);
+      });
+
+      const controlRows: ChartData[] = [];
+      for (const p of minerTail) {
+        if (p.datetime < filterStart) continue;
+        const row: ChartData = { datetime: p.datetime, miner: p.value };
+        hashboardTailMaps.forEach((lookup, serial) => {
+          const v = lookup.get(p.datetime);
+          if (v !== undefined) row[serial] = v;
+        });
+        controlRows.push(row);
+      }
+
+      // Smooth the committed samples into a dense curve and reveal the newest
+      // segment by drawProgress, so the leading edge animates in. The curve is
+      // derived only from committed points, so the settled line stays put as the
+      // tip advances (no whole-section reshaping).
+      const chartData = buildSmoothedLiveSeries(controlRows, chartLines, drawProgress);
+      const windowEnd = chartData.length ? chartData[chartData.length - 1].datetime : realEnd;
+      const xAxisDomain: [number, number] = [windowEnd - durationMs, windowEnd];
+      return { chartData, chartLines, xAxisDomain };
+    }
+
+    // Historical points: uniformly spaced by intervalMs starting at startTime
+    const chartData: ChartData[] = minerMetric!.values.map((minerValue, index) => {
+      const datetime = minerMetric!.startTime + index * intervalMs;
 
       const dataPoint: ChartData = {
         datetime,
         miner: minerValue,
       };
 
-      // Add hashboard values for the same metric and timestamp
       sortedMinerHashboards.forEach((hashboard) => {
         const hashboardMetric = hashboard[metricName]?.timeSeries;
         if (hashboardMetric?.values && hashboardMetric?.values.length > index) {
@@ -243,13 +311,38 @@ export const useChartDataForMetric = (
       return dataPoint;
     });
 
+    // Live tail: NATS-driven samples with their own datetimes
+    if (minerMetric?.liveTail?.length) {
+      const hashboardTails = new Map<string, { datetime: number; value: number }[]>();
+      sortedMinerHashboards.forEach((hb) => {
+        const tail = hb[metricName]?.timeSeries?.liveTail;
+        if (tail?.length) hashboardTails.set(hb.serial, tail);
+      });
+
+      minerMetric.liveTail.forEach((p, i) => {
+        const dataPoint: ChartData = {
+          datetime: p.datetime,
+          miner: p.value,
+        };
+        hashboardTails.forEach((tail, serial) => {
+          if (tail[i]) dataPoint[serial] = tail[i].value;
+        });
+        chartData.push(dataPoint);
+      });
+    }
+
     // Anchor the X-axis to the data's startTime and extend by the exact
-    // selected duration so the chart always spans the full user-selected range
-    const durationMs = getDurationMs(duration);
-    const xAxisDomain: [number, number] = [minerMetric.startTime, minerMetric.startTime + durationMs];
+    // selected duration; if the live tail extends beyond that, expand the domain
+    // so the latest live points stay visible on the right edge.
+    // minerMetric is non-null here — the early return above guarantees that hasHistorical || hasLiveTail.
+    const ts = minerMetric!;
+    const historicalStart = ts.startTime;
+    const lastLive = ts.liveTail?.[ts.liveTail.length - 1]?.datetime;
+    const naturalEnd = historicalStart + durationMs;
+    const xAxisDomain: [number, number] = [historicalStart, Math.max(naturalEnd, lastLive ?? naturalEnd)];
 
     return { chartData, chartLines, xAxisDomain };
-  }, [miner, hashboardsTelemetry, hashboardsHardware, intervalMs, metricName, duration]);
+  }, [miner, hashboardsTelemetry, hashboardsHardware, intervalMs, metricName, duration, drawProgress]);
 };
 
 // =============================================================================

@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { NatsContext, type NatsContextValue } from "@/protoOS/features/devConsole/nats/NatsContext";
+import { NatsContext, type NatsContextValue } from "./NatsContext";
 
 export function useNatsConnection(): NatsContextValue {
   const context = useContext(NatsContext);

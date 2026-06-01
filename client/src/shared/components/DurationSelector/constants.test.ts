@@ -11,6 +11,7 @@ import {
 describe("DurationSelector constants", () => {
   describe("isDuration", () => {
     it("returns true for valid durations", () => {
+      expect(isDuration("1m")).toBe(true);
       expect(isDuration("1h")).toBe(true);
       expect(isDuration("5d")).toBe(true);
     });
@@ -45,6 +46,7 @@ describe("DurationSelector constants", () => {
 
   describe("getDurationMs (ProtoOS)", () => {
     it("returns mapped value for valid durations", () => {
+      expect(getDurationMs("1m")).toBe(durationToMs["1m"]);
       expect(getDurationMs("48h")).toBe(durationToMs["48h"]);
     });
   });

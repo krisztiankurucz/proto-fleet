@@ -3,6 +3,14 @@ import { type DescMessage, fromBinary, toJsonString } from "@bufbuild/protobuf";
 import { BayStatusSchema, MiningStatusSchema } from "@/protoOS/api/generated/nats/miner_data_api_pb";
 import { ErrorListSchema } from "@/protoOS/api/generated/nats/miner_error_code_pb";
 import {
+  AsicOperatingStatsSchema,
+  HashboardControlSchema,
+  HashboardOperatingStatsSchema,
+  HashboardSimControlSchema,
+  HashboardStatusSchema,
+  ShareSchema,
+} from "@/protoOS/api/generated/nats/miner_hb_api_pb";
+import {
   PsuErrorsSchema,
   PsuInfoMsgSchema,
   PsuMeasurementsSchema,
@@ -38,6 +46,28 @@ const PATTERN_SUBJECTS: SubjectPattern[] = [
   { match: (s) => /^psu\.\d+\.control$/.test(s), schema: PsuStatusMsgSchema, label: "PsuControl" },
   { match: (s) => /^psu\.\d+\.test$/.test(s), schema: PsuTestInjectSchema, label: "PsuTestInject" },
   { match: (s) => /^bay\.\d+\.status$/.test(s), schema: BayStatusSchema, label: "BayStatus" },
+  { match: (s) => /^hashboard\.\d+\.status$/.test(s), schema: HashboardStatusSchema, label: "HashboardStatus" },
+  { match: (s) => /^hashboard\.\d+\.share$/.test(s), schema: ShareSchema, label: "Share" },
+  {
+    match: (s) => /^hashboard\.\d+\.data\.board$/.test(s),
+    schema: HashboardOperatingStatsSchema,
+    label: "HashboardOperatingStats",
+  },
+  {
+    match: (s) => /^hashboard\.\d+\.data\.asic$/.test(s),
+    schema: AsicOperatingStatsSchema,
+    label: "AsicOperatingStats",
+  },
+  {
+    match: (s) => /^hashboard\.\d+\.control$/.test(s),
+    schema: HashboardControlSchema,
+    label: "HashboardControl",
+  },
+  {
+    match: (s) => /^hashboard\.\d+\.test$/.test(s),
+    schema: HashboardSimControlSchema,
+    label: "HashboardSimControl",
+  },
   { match: (s) => /\.error$/.test(s), schema: ErrorListSchema, label: "ErrorList" },
 ];
 

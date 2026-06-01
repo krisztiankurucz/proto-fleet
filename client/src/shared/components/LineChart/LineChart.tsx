@@ -125,6 +125,21 @@ export interface LineChartProps {
   xAxisLabelCount?: number;
   tooltipXOffset?: number;
   xAxisDomainOverride?: [number, number];
+  /**
+   * Treat `xAxisDomainOverride` as authoritative: clip data outside it instead
+   * of letting Recharts expand/fit the x-domain to the data extent. Needed for a
+   * fixed, smoothly-sliding time window (e.g. the live "1m" view) — otherwise an
+   * accumulating window compresses as more points arrive.
+   */
+  lockXAxisDomain?: boolean;
+  /**
+   * Draw straight segments between points instead of the default monotone
+   * spline. Splines are non-local — appending or moving a point re-bends
+   * neighbouring segments — which is visible as the whole section reshaping on a
+   * live, continuously-updating chart. Linear segments are local, so the
+   * committed line stays put as new points stream in.
+   */
+  straightLineSegments?: boolean;
   connectNulls?: boolean;
   referenceLines?: { value: number; color: string; strokeDasharray?: string }[];
   hideAggregateContextWhenSingleSeries?: boolean;
@@ -148,6 +163,8 @@ const LineChart = ({
   xAxisLabelCount,
   tooltipXOffset = TOOLTIP_OFFSET,
   xAxisDomainOverride,
+  lockXAxisDomain = false,
+  straightLineSegments = false,
   connectNulls = false,
   referenceLines,
   hideAggregateContextWhenSingleSeries = false,
@@ -574,6 +591,7 @@ const LineChart = ({
               tickMargin={28}
               padding={showDateOnXAxis ? X_AXIS_PADDING_WITH_DATE : X_AXIS_PADDING}
               domain={xAxisDomain}
+              allowDataOverflow={lockXAxisDomain}
               type="number"
               axisLine={X_AXIS_LINE_STYLE}
               dataKey="datetime"
@@ -597,7 +615,14 @@ const LineChart = ({
                 const strokeColor = colorMap?.[key] ? `var(${colorMap[key]})` : "var(--color-core-primary-fill)";
 
                 return (
-                  <Line {...lineProps} connectNulls={connectNulls} dataKey={key} key={index} stroke={strokeColor} />
+                  <Line
+                    {...lineProps}
+                    connectNulls={connectNulls}
+                    type={straightLineSegments ? "linear" : lineProps.type}
+                    dataKey={key}
+                    key={index}
+                    stroke={strokeColor}
+                  />
                 );
               },
             )}

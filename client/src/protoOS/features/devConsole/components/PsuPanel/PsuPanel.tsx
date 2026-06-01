@@ -62,13 +62,13 @@ function PsuPanel() {
           disabled={!api || updateState === "loading"}
           size="compact"
         />
-        {updateMessage && (
+        {updateMessage ? (
           <span
             className={`text-200 ${updateState === "error" ? "text-intent-critical-fill" : "text-intent-success-fill"}`}
           >
             {updateMessage}
           </span>
-        )}
+        ) : null}
       </div>
       <div className="grid grid-cols-1 gap-6 laptop:grid-cols-3">
         {psuData.map((data, i) => (

@@ -1,13 +1,14 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useTelemetry, useTimeSeries } from "@/protoOS/api";
 import { HashboardFieldType, MinerFieldType } from "@/protoOS/api/generatedApi";
 import NoPoolsCallout from "@/protoOS/components/NoPoolsCallout";
 import { getNoPoolsCalloutState } from "@/protoOS/components/NoPoolsCallout/utility";
 import TabMenu from "@/protoOS/features/kpis/components/TabMenu";
+import { useNatsAvailability } from "@/protoOS/nats";
 import { usePoolsInfo } from "@/protoOS/store";
 import { useDuration, useSetDuration } from "@/protoOS/store";
-import DurationSelector from "@/shared/components/DurationSelector";
+import DurationSelector, { durations } from "@/shared/components/DurationSelector";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
 
 const KpiLayout = () => {
@@ -16,8 +17,25 @@ const KpiLayout = () => {
   const setDuration = useSetDuration();
   const { pathname } = useLocation();
 
-  // Get latest miner level telemetry fo tabnav summary
-  useTelemetry({ level: ["miner"] });
+  const natsAvailability = useNatsAvailability();
+  const streamingActive = natsAvailability === "available";
+
+  // Only expose the live "1m" view when NATS can feed it.
+  const availableDurations = useMemo(
+    () => (streamingActive ? durations : durations.filter((d) => d !== "1m")),
+    [streamingActive],
+  );
+
+  // If NATS drops while the user is on "1m", fall back to a duration backed by REST history.
+  useEffect(() => {
+    if (!streamingActive && duration === "1m") {
+      setDuration("1h");
+    }
+  }, [streamingActive, duration, setDuration]);
+
+  // When NATS is feeding live data, skip the API poll loops — useTimeSeries
+  // still fires a one-shot fetch on mount and on duration change for history.
+  useTelemetry({ level: ["miner"], poll: !streamingActive });
 
   // Memoize levels to prevent recreating on every render
   const levels = useMemo(
@@ -44,7 +62,7 @@ const KpiLayout = () => {
   useTimeSeries({
     duration,
     levels,
-    poll: true,
+    poll: !streamingActive,
   });
 
   const { arePoolsConfigured, shouldShowNoPoolsCallout } = useMemo(
@@ -60,7 +78,12 @@ const KpiLayout = () => {
         <div className="relative flex h-[calc(100vh-theme(spacing.36))] min-h-[800px] flex-col phone:min-h-[1000px]">
           <div className="flex items-center pb-6">
             <div className="grow text-heading-300">Home</div>
-            <DurationSelector className="h-fit" duration={duration} onSelect={setDuration} />
+            <DurationSelector
+              className="h-fit"
+              duration={duration}
+              durations={availableDurations}
+              onSelect={setDuration}
+            />
           </div>
 
           <div className="pb-6">

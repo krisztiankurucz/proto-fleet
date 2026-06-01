@@ -3,11 +3,11 @@ import { useCallback, useMemo, useState } from "react";
 import LedIndicator from "./LedIndicator";
 import SevenSegmentDisplay from "./SevenSegmentDisplay";
 import { LedId, LedSeqName, type LedState } from "@/protoOS/api/generated/nats/miner_ui_api_pb";
-import { useNatsConnection } from "@/protoOS/features/devConsole/hooks/useNatsConnection";
 import { publishLedClear, publishLedPlay } from "@/protoOS/features/devConsole/nats/commands";
 import { useDevConsoleData } from "@/protoOS/features/devConsole/nats/DevConsoleDataContext";
 import Card from "@/protoOS/features/diagnostic/components/Card";
 import CardHeader from "@/protoOS/features/diagnostic/components/CardHeader";
+import { useNatsConnection } from "@/protoOS/nats";
 import Button, { variants } from "@/shared/components/Button";
 
 const LED_SEQ_OPTIONS: { value: LedSeqName; label: string }[] = [

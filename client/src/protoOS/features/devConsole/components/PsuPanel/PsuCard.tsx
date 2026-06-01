@@ -25,16 +25,14 @@ const CONTROLLER_STATE_LABELS: Record<number, string> = {
 const ERROR_STATES = new Set([PsuControllerState.ERROR_RECOVERABLE, PsuControllerState.ERROR_FATAL]);
 
 const ERROR_CODE_LABELS: Record<number, string> = {
-  [PsuErrorCode.PROBE_FAILURE]: "Probe Failure",
   [PsuErrorCode.OUTPUT_OVER_VOLTAGE]: "Output Over Voltage",
   [PsuErrorCode.OUTPUT_OVER_CURRENT]: "Output Over Current",
   [PsuErrorCode.OVER_TEMPERATURE]: "Over Temperature",
   [PsuErrorCode.OUTPUT_UNDER_VOLTAGE]: "Output Under Voltage",
-  [PsuErrorCode.FANS]: "Fans",
-  [PsuErrorCode.INPUT]: "Input",
-  [PsuErrorCode.UNKNOWN]: "Unknown",
+  [PsuErrorCode.INPUT_OVER_VOLTAGE]: "Input Over Voltage",
+  [PsuErrorCode.INPUT_UNDER_VOLTAGE]: "Input Under Voltage",
+  [PsuErrorCode.INPUT_OVER_CURRENT]: "Input Over Current",
   [PsuErrorCode.COMM_LOST]: "Comm Lost",
-  [PsuErrorCode.GPIO_FAILURE]: "GPIO Failure",
   [PsuErrorCode.OUTPUT_OVER_POWER]: "Output Over Power",
   [PsuErrorCode.FIRMWARE_MISMATCH]: "Firmware Mismatch",
 };
@@ -106,20 +104,19 @@ function ApiErrorRow({ error }: { error: NotificationError }) {
           &#x203A;
         </span>
       </button>
-      {expanded && (
+      {expanded ? (
         <div className="text-100 mt-1.5 flex flex-col gap-0.5 text-intent-critical-fill/80">
-          {error.error_code && <div>Code: {error.error_code}</div>}
-          {error.timestamp && <div>Time: {new Date(error.timestamp * 1000).toLocaleString()}</div>}
+          {error.error_code ? <div>Code: {error.error_code}</div> : null}
+          {error.timestamp ? <div>Time: {new Date(error.timestamp * 1000).toLocaleString()}</div> : null}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
 
 function getStateStyles(state: PsuControllerState): { dot: string; text: string } {
   if (ERROR_STATES.has(state)) return { dot: "bg-intent-critical-fill", text: "text-intent-critical-fill" };
-  if (state === PsuControllerState.ON_READY)
-    return { dot: "bg-intent-success-fill", text: "text-intent-success-fill" };
+  if (state === PsuControllerState.ON_READY) return { dot: "bg-intent-success-fill", text: "text-intent-success-fill" };
   if (state === PsuControllerState.RECOVERING)
     return { dot: "bg-intent-warning-fill", text: "text-intent-warning-fill" };
   if (state === PsuControllerState.DISCONNECTED) return { dot: "bg-text-primary-50", text: "text-text-primary-50" };
@@ -175,8 +172,8 @@ function PsuLimitsDisplay({ limits }: { limits: PsuLimit[] }) {
         <thead>
           <tr className="text-text-primary-50">
             <th className="w-16 pb-1 text-left font-medium" />
-            {pairs.length > 0 && <th className="pr-4 pb-1 text-left font-medium">Output</th>}
-            {pairs.length > 0 && <th className="pb-1 text-left font-medium">Input</th>}
+            {pairs.length > 0 ? <th className="pr-4 pb-1 text-left font-medium">Output</th> : null}
+            {pairs.length > 0 ? <th className="pb-1 text-left font-medium">Input</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -187,7 +184,7 @@ function PsuLimitsDisplay({ limits }: { limits: PsuLimit[] }) {
               <td className="py-0.5 text-text-primary">{formatLimit(p.input, p.displayUnit)}</td>
             </tr>
           ))}
-          {temps.length > 0 && (
+          {temps.length > 0 ? (
             <>
               <tr>
                 <td colSpan={3} className="pt-2 pb-1 font-medium text-text-primary-50">
@@ -203,7 +200,7 @@ function PsuLimitsDisplay({ limits }: { limits: PsuLimit[] }) {
                 </tr>
               ))}
             </>
-          )}
+          ) : null}
         </tbody>
       </table>
     </div>
@@ -251,7 +248,7 @@ function PsuCard({ psuId, data, hwInfo, apiErrors }: PsuCardProps) {
         }
       />
 
-      {hwBadges.length > 0 && (
+      {hwBadges.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {hwBadges.map((b) => (
             <span
@@ -263,13 +260,13 @@ function PsuCard({ psuId, data, hwInfo, apiErrors }: PsuCardProps) {
             </span>
           ))}
         </div>
-      )}
+      ) : null}
 
       <div className="flex flex-col gap-4">
         <PsuMeasurementsDisplay measurements={measurements} />
         <PsuControls psuId={psuId} status={status} />
 
-        {hasDetails && (
+        {hasDetails ? (
           <div className="border-t border-core-primary-10 pt-2">
             <button
               onClick={() => setShowDetails((prev) => !prev)}
@@ -277,16 +274,16 @@ function PsuCard({ psuId, data, hwInfo, apiErrors }: PsuCardProps) {
             >
               {showDetails ? "Hide" : "Show"} Info & Limits
             </button>
-            {showDetails && (
+            {showDetails ? (
               <div className="mt-2 flex divide-x divide-core-primary-20 [&>*]:px-6 [&>*:first-child]:pl-0 [&>*:last-child]:pr-0">
-                {info && <PsuInfoDisplay info={info} />}
-                {info && info.limits.length > 0 && <PsuLimitsDisplay limits={info.limits} />}
+                {info ? <PsuInfoDisplay info={info} /> : null}
+                {info && info.limits.length > 0 ? <PsuLimitsDisplay limits={info.limits} /> : null}
               </div>
-            )}
+            ) : null}
           </div>
-        )}
+        ) : null}
 
-        {hasErrors && (
+        {hasErrors ? (
           <div className="rounded-lg bg-intent-critical-fill/10 p-3">
             <div className="text-300 font-medium text-intent-critical-fill">
               {errorCount} error{errorCount > 1 ? "s" : ""} active
@@ -304,7 +301,7 @@ function PsuCard({ psuId, data, hwInfo, apiErrors }: PsuCardProps) {
                   })}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </Card>
   );

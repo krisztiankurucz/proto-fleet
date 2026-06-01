@@ -1,5 +1,5 @@
 // ProtoOS durations (used by single miner dashboard)
-export const durations = ["1h", "12h", "24h", "48h", "5d"] as const;
+export const durations = ["1m", "1h", "12h", "24h", "48h", "5d"] as const;
 
 export type Duration = (typeof durations)[number];
 
@@ -9,6 +9,7 @@ export const fleetDurations = ["1h", "24h", "7d", "30d", "90d", "1y"] as const;
 export type FleetDuration = (typeof fleetDurations)[number];
 
 export const durationToMs: Record<Duration, number> = {
+  "1m": 60 * 1000,
   "1h": 60 * 60 * 1000,
   "12h": 12 * 60 * 60 * 1000,
   "24h": 24 * 60 * 60 * 1000,

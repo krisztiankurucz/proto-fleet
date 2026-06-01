@@ -47,6 +47,9 @@ export interface MetricTimeSeries {
   values: Value[];
   startTime: number;
   endTime: number;
+  // Streaming tail: live samples appended after the historical window.
+  // Populated by appendStreamingPoint when NATS is connected.
+  liveTail?: { datetime: number; value: number }[];
 }
 
 export type Measurement = {

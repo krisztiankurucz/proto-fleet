@@ -49,6 +49,7 @@ function NatsProvider({ children }: NatsProviderProps) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- connect() is async and is the entry point for external WebSocket subscription
     connect();
 
     return () => {

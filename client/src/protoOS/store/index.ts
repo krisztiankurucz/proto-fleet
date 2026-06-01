@@ -28,6 +28,16 @@ export { convertValueUnits, formatValue, convertAndFormatMeasurement } from "./u
 export { getAsicId } from "./utils/getAsicId";
 export { getAsicName } from "./utils/getAsicName";
 
+export type { StreamingMetricValues, StreamingPointPayload, StreamableMetric } from "./slices/streamingTelemetry";
+export { DEFAULT_STREAMING_UNITS, LIVE_TAIL_MAX_ENTRIES, STREAMABLE_METRICS } from "./slices/streamingTelemetry";
+
+export type {
+  DiagnosticsStreamFan,
+  DiagnosticsStreamHashboard,
+  DiagnosticsStreamPayload,
+  DiagnosticsStreamPsu,
+} from "./slices/diagnosticsStream";
+
 export {
   useMiner,
   useMinerHashboard,

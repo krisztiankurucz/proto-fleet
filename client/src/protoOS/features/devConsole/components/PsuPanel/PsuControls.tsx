@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 import type { PsuStatusMsg } from "@/protoOS/api/generated/nats/miner_psu_api_pb";
 import { VOLTAGE_STEP_MV } from "@/protoOS/features/devConsole/constants";
-import { useNatsConnection } from "@/protoOS/features/devConsole/hooks/useNatsConnection";
 import {
   publishPsuClearError,
   publishPsuEnable,
@@ -10,6 +9,7 @@ import {
   publishPsuResetRecoveryLimits,
   publishPsuSetVoltage,
 } from "@/protoOS/features/devConsole/nats/commands";
+import { useNatsConnection } from "@/protoOS/nats";
 import Button from "@/shared/components/Button";
 import { variants } from "@/shared/components/Button";
 import Switch from "@/shared/components/Switch";

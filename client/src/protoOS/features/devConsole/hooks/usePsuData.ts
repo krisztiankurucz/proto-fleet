@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { useNatsConnection } from "./useNatsConnection";
 import type {
   PsuErrors,
   PsuInfoMsg,
@@ -12,7 +11,8 @@ import {
   subscribePsuInfo,
   subscribePsuMeasurements,
   subscribePsuStatus,
-} from "@/protoOS/features/devConsole/nats/subscriptions";
+  useNatsConnection,
+} from "@/protoOS/nats";
 
 export interface PsuData {
   measurements: PsuMeasurements | null;

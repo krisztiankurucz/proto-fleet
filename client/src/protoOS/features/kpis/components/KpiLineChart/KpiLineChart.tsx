@@ -47,6 +47,10 @@ const KpiLineChart = ({
   const activeChartLines = useActiveChartLines() || [];
   const setActiveChartLines = useSetActiveChartLines();
 
+  // The live "1m" view needs a fixed, smoothly-sliding window; every other
+  // duration keeps Recharts' default fit-to-data x-axis behavior.
+  const isLiveWindow = useMinerStore((state) => state.ui.duration) === "1m";
+
   // Track previous chartLines to detect actual content changes (not just reference changes)
   const prevChartLinesRef = useRef<string[]>([]);
 
@@ -126,6 +130,8 @@ const KpiLineChart = ({
         segmentsLabel={segmentsLabel}
         tooltipXOffset={60}
         xAxisDomainOverride={xAxisDomainOverride}
+        lockXAxisDomain={isLiveWindow}
+        straightLineSegments={isLiveWindow}
       />
     </>
   );

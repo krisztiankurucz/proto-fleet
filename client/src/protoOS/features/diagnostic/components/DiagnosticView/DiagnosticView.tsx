@@ -8,6 +8,8 @@ import FanStatusCard from "../FanStatusCard";
 import HashboardStatusCard from "../HashboardStatusCard";
 import PsuStatusCard from "../PsuStatusCard";
 import { TOTAL_FAN_SLOTS, TOTAL_PSU_SLOTS, useCoolingStatus, useTelemetry } from "@/protoOS/api";
+import { useStreamingDiagnostics } from "@/protoOS/features/diagnostic/streaming";
+import { useNatsAvailability } from "@/protoOS/nats";
 import {
   useBayCount,
   useControlBoard,
@@ -141,7 +143,12 @@ const ControlBoardSection = () => {
 ControlBoardSection.displayName = "ControlBoardSection";
 
 function DiagnosticView({ className }: DiagnosticViewProps) {
-  useTelemetry({ level: ["hashboard", "asic", "psu"] });
+  const natsAvailability = useNatsAvailability();
+  const streamingActive = natsAvailability === "available";
+
+  useTelemetry({ level: ["hashboard", "asic", "psu"], poll: !streamingActive });
+  useStreamingDiagnostics();
+
   const [selectedComponent, setSelectedComponent] = useState<ComponentFilterType>("all");
 
   const shouldShowComponent = (component: ComponentFilterType) => {

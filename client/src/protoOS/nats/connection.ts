@@ -1,6 +1,6 @@
 import { type NatsConnection, wsconnect } from "@nats-io/nats-core";
 
-import { NATS_WS_URL } from "@/protoOS/features/devConsole/constants";
+import { NATS_WS_URL } from "./constants";
 
 export type ConnectionState = "connecting" | "connected" | "disconnected" | "error";
 

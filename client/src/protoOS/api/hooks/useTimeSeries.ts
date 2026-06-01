@@ -50,6 +50,13 @@ const useTimeSeries = ({ duration, levels, poll = true, pollIntervalMs = 30 * 10
       return;
     }
 
+    // 1m window is sourced entirely from the NATS live tail; no REST fetch needed.
+    if (duration === "1m") {
+      setPending(false);
+      setError(undefined);
+      return;
+    }
+
     const currentHashboards = Array.from(useMinerStore.getState().hardware.hashboards.keys());
 
     if (currentHashboards.length === 0) {

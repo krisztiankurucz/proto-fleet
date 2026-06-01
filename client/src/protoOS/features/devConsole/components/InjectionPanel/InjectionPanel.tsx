@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 import { PsuErrorCode, PsuMeasurementType } from "@/protoOS/api/generated/nats/miner_psu_api_pb";
 import { PSU_COUNT } from "@/protoOS/features/devConsole/constants";
-import { useNatsConnection } from "@/protoOS/features/devConsole/hooks/useNatsConnection";
 import {
   publishClearInjections,
   publishInjectError,
@@ -10,6 +9,7 @@ import {
 } from "@/protoOS/features/devConsole/nats/commands";
 import Card from "@/protoOS/features/diagnostic/components/Card";
 import CardHeader from "@/protoOS/features/diagnostic/components/CardHeader";
+import { useNatsConnection } from "@/protoOS/nats";
 import Button from "@/shared/components/Button";
 import { variants } from "@/shared/components/Button";
 import Callout from "@/shared/components/Callout";
@@ -18,16 +18,14 @@ import Switch from "@/shared/components/Switch";
 const ALL_PSU_IDS = Array.from({ length: PSU_COUNT }, (_, i) => i + 1);
 
 const ERROR_CODE_OPTIONS: { value: PsuErrorCode; label: string }[] = [
-  { value: PsuErrorCode.PROBE_FAILURE, label: "Probe Failure" },
   { value: PsuErrorCode.OUTPUT_OVER_VOLTAGE, label: "Output Over Voltage" },
   { value: PsuErrorCode.OUTPUT_OVER_CURRENT, label: "Output Over Current" },
   { value: PsuErrorCode.OVER_TEMPERATURE, label: "Over Temperature" },
   { value: PsuErrorCode.OUTPUT_UNDER_VOLTAGE, label: "Output Under Voltage" },
-  { value: PsuErrorCode.FANS, label: "Fans" },
-  { value: PsuErrorCode.INPUT, label: "Input" },
-  { value: PsuErrorCode.UNKNOWN, label: "Unknown" },
+  { value: PsuErrorCode.INPUT_OVER_VOLTAGE, label: "Input Over Voltage" },
+  { value: PsuErrorCode.INPUT_UNDER_VOLTAGE, label: "Input Under Voltage" },
+  { value: PsuErrorCode.INPUT_OVER_CURRENT, label: "Input Over Current" },
   { value: PsuErrorCode.COMM_LOST, label: "Comm Lost" },
-  { value: PsuErrorCode.GPIO_FAILURE, label: "GPIO Failure" },
   { value: PsuErrorCode.OUTPUT_OVER_POWER, label: "Output Over Power" },
   { value: PsuErrorCode.FIRMWARE_MISMATCH, label: "Firmware Mismatch" },
 ];
