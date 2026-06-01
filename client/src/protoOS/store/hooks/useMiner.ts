@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { AsicData, FanData, HashboardData, HashboardTelemetryData, MinerData, PsuData } from "../types";
 import useMinerStore from "../useMinerStore";
+import { aggregateLiveTail } from "./aggregateLiveTail";
 import type { AsicData as AsicTableData } from "@/shared/components/AsicTablePreview";
 import { getDurationMs } from "@/shared/components/DurationSelector";
 import type { ChartData } from "@/shared/components/LineChart";
@@ -292,26 +293,41 @@ export const useChartDataForMetric = (
       return { chartData, chartLines, xAxisDomain };
     }
 
-    // Historical points: uniformly spaced by intervalMs starting at startTime
-    const chartData: ChartData[] = minerMetric!.values.map((minerValue, index) => {
-      const datetime = minerMetric!.startTime + index * intervalMs;
+    // The server's most recent bucket(s) often come back null (the current
+    // interval isn't aggregated yet). Find the last real sample so we can drop
+    // those trailing nulls and let the live tail fill right up to it — otherwise
+    // the null region between real history and the live data renders as a gap.
+    let lastRealIndex = -1;
+    for (let i = minerMetric!.values.length - 1; i >= 0; i--) {
+      if (typeof minerMetric!.values[i] === "number") {
+        lastRealIndex = i;
+        break;
+      }
+    }
 
+    // Historical points: uniformly spaced by intervalMs starting at startTime,
+    // up to the last real sample (trailing nulls dropped).
+    const chartData: ChartData[] = [];
+    for (let index = 0; index <= lastRealIndex; index++) {
       const dataPoint: ChartData = {
-        datetime,
-        miner: minerValue,
+        datetime: minerMetric!.startTime + index * intervalMs,
+        miner: minerMetric!.values[index],
       };
 
       sortedMinerHashboards.forEach((hashboard) => {
-        const hashboardMetric = hashboard[metricName]?.timeSeries;
-        if (hashboardMetric?.values && hashboardMetric?.values.length > index) {
-          dataPoint[hashboard.serial] = hashboardMetric?.values[index];
+        const hashboardValues = hashboard[metricName]?.timeSeries?.values;
+        if (hashboardValues && hashboardValues.length > index) {
+          dataPoint[hashboard.serial] = hashboardValues[index];
         }
       });
 
-      return dataPoint;
-    });
+      chartData.push(dataPoint);
+    }
 
-    // Live tail: NATS-driven samples with their own datetimes
+    // Live tail: aggregate NATS samples to the view's interval (mean), matching
+    // the historical series, so the live tip is as smooth as the rest of the line
+    // instead of jittery raw 1s samples. Anchored to the last real historical
+    // point so it fills the gap left by trailing nulls / server aggregation lag.
     if (minerMetric?.liveTail?.length) {
       const hashboardTails = new Map<string, { datetime: number; value: number }[]>();
       sortedMinerHashboards.forEach((hb) => {
@@ -319,16 +335,15 @@ export const useChartDataForMetric = (
         if (tail?.length) hashboardTails.set(hb.serial, tail);
       });
 
-      minerMetric.liveTail.forEach((p, i) => {
-        const dataPoint: ChartData = {
-          datetime: p.datetime,
-          miner: p.value,
-        };
-        hashboardTails.forEach((tail, serial) => {
-          if (tail[i]) dataPoint[serial] = tail[i].value;
-        });
-        chartData.push(dataPoint);
-      });
+      const afterTime = lastRealIndex >= 0 ? minerMetric.startTime + lastRealIndex * intervalMs : -Infinity;
+      const aggregated = aggregateLiveTail(
+        minerMetric.liveTail,
+        hashboardTails,
+        minerMetric.startTime,
+        intervalMs,
+        afterTime,
+      );
+      for (const row of aggregated) chartData.push(row);
     }
 
     // Anchor the X-axis to the data's startTime and extend by the exact
