@@ -37,10 +37,18 @@ type Service struct {
 	store           Store
 	enrollmentStore enrollment.AgentStore
 	transactor      stores.Transactor
+	invalidateMiner func(context.Context, int64)
 }
 
 func NewService(store Store, enrollmentStore enrollment.AgentStore, transactor stores.Transactor) *Service {
 	return &Service{store: store, enrollmentStore: enrollmentStore, transactor: transactor}
+}
+
+// WithMinerInvalidator wires the miner-cache invalidator so pair/unpair evicts a stale
+// direct handle. Without it a newly-bound device keeps direct-dialing until the cache TTL,
+// since the cache lookup short-circuits before the fleet-node check.
+func (s *Service) WithMinerInvalidator(invalidate func(context.Context, int64)) {
+	s.invalidateMiner = invalidate
 }
 
 func (s *Service) PairDevice(ctx context.Context, fleetNodeID, deviceID, orgID int64, assignedBy *int64) error {
@@ -51,7 +59,7 @@ func (s *Service) PairDevice(ctx context.Context, fleetNodeID, deviceID, orgID i
 	if !exists {
 		return fleeterror.NewNotFoundError("device not found")
 	}
-	return s.transactor.RunInTx(ctx, func(ctx context.Context) error {
+	if err := s.transactor.RunInTx(ctx, func(ctx context.Context) error {
 		// Lock-and-recheck inside the TX so a concurrent revoke
 		// can't soft-delete the node between the status check and
 		// the INSERT. Matches the lock order Confirm/Revoke use.
@@ -89,12 +97,22 @@ func (s *Service) PairDevice(ctx context.Context, fleetNodeID, deviceID, orgID i
 			return fleeterror.LogInternal(component, "transfer discovery attribution", clientErrPair, attrErr)
 		}
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+	// Evict any stale direct handle so the next command re-resolves over the ControlStream.
+	if s.invalidateMiner != nil {
+		s.invalidateMiner(ctx, deviceID)
+	}
+	return nil
 }
 
 func (s *Service) UnpairDevice(ctx context.Context, deviceID, orgID int64) error {
 	if _, err := s.store.UnpairDevice(ctx, deviceID, orgID); err != nil {
 		return fleeterror.LogInternal(component, "unpair device", clientErrUnpair, err)
+	}
+	if s.invalidateMiner != nil {
+		s.invalidateMiner(ctx, deviceID)
 	}
 	return nil
 }
