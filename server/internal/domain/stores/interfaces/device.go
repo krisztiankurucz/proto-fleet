@@ -148,6 +148,10 @@ type DeviceStore interface {
 	InsertDevice(ctx context.Context, device *pb.Device, orgID int64, discoveredDeviceIdentifier string) error
 	UpsertMinerCredentials(ctx context.Context, device *pb.Device, orgID int64, usernameEnc string, passwordEnc *secrets.Text) error
 	UpsertDevicePairing(ctx context.Context, device *pb.Device, orgID int64, pairingStatus string) error
+	// SetDevicePairingAuthNeededIfNotPaired marks the device AUTHENTICATION_NEEDED
+	// unless it is already PAIRED. Returns false when an existing PAIRED row blocked
+	// the write, so a caller racing a concurrent pair can keep reporting PAIRED.
+	SetDevicePairingAuthNeededIfNotPaired(ctx context.Context, device *pb.Device, orgID int64) (bool, error)
 	UpdateDevicePairingStatusByIdentifier(ctx context.Context, deviceIdentifier string, pairingStatus string) error
 	GetMinerCredentials(ctx context.Context, device *pb.Device, orgID int64) (*pb.Credentials, error)
 	GetDeviceByDeviceIdentifier(ctx context.Context, identifier string, orgID int64) (*pb.Device, error)

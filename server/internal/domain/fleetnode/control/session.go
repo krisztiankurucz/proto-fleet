@@ -31,14 +31,24 @@ func (s *Session) Close() {
 
 // Send dispatches a report-bearing command and returns a Session for its batches +
 // terminal ack. scope bounds which reported devices the report path will admit for
-// this command (nil = unconstrained). Many commands may be in flight per node
-// concurrently.
-func (r *Registry) Send(ctx context.Context, fleetNodeID int64, cmd *gatewaypb.ControlCommand, scope ReportScope) (*Session, error) {
+// this command (nil = unconstrained). kind tags which gateway report RPC may admit
+// reports for this command. pair is non-nil only for pairing: it carries the
+// operator context the gateway uses to persist results and the dispatched target
+// set, which also caps the per-command report quota. Many commands may be in
+// flight per node concurrently.
+func (r *Registry) Send(ctx context.Context, fleetNodeID int64, cmd *gatewaypb.ControlCommand, scope ReportScope, kind ReportKind, pair *PairMeta) (*Session, error) {
+	maxReports := maxReportsPerCommand
+	if pair != nil {
+		maxReports = len(pair.Targets)
+	}
 	c := &inflightCommand{
-		id:     cmd.GetCommandId(),
-		scope:  scope,
-		events: make(chan CommandEvent, commandEventBuffer),
-		done:   make(chan struct{}),
+		id:         cmd.GetCommandId(),
+		kind:       kind,
+		scope:      scope,
+		events:     make(chan CommandEvent, commandEventBuffer),
+		maxReports: maxReports,
+		pair:       pair,
+		done:       make(chan struct{}),
 	}
 	outgoing, connDone, err := r.addCmd(fleetNodeID, c)
 	if err != nil {

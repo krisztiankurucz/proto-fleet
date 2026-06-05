@@ -62,21 +62,75 @@ func (r *Registry) PublishBatch(fleetNodeID int64, commandID string, batch *pair
 	r.deliverEvent(fleetNodeID, commandID, CommandEvent{Batch: batch})
 }
 
+// PublishPairResults routes an agent pairing batch to the in-flight command.
+func (r *Registry) PublishPairResults(fleetNodeID int64, commandID string, results []*gatewaypb.FleetNodePairResult) {
+	r.deliverEvent(fleetNodeID, commandID, CommandEvent{PairResults: results})
+}
+
 // AdmitReport reserves quota for deviceCount devices against the in-flight
-// report-bearing command. Returns errNoInFlightCommand if commandID isn't an
-// in-flight report-bearing command, or ErrReportQuotaExceeded past maxReportsPerCommand.
-func (r *Registry) AdmitReport(fleetNodeID int64, commandID string, deviceCount int) error {
+// report-bearing command of the given kind. Returns errNoInFlightCommand if
+// commandID isn't an in-flight report-bearing command of that kind (so a
+// discovery command_id can't admit pair results or vice versa), or
+// ErrReportQuotaExceeded past the command's report quota (the scan ceiling for
+// discovery, the dispatched target count for pairing).
+func (r *Registry) AdmitReport(fleetNodeID int64, commandID string, deviceCount int, want ReportKind) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	cmd := r.inflightFor(fleetNodeID, commandID)
-	if cmd == nil || !cmd.reportBearing() {
+	if cmd == nil || !cmd.reportBearing() || cmd.kind != want {
 		return errNoInFlightCommand
 	}
-	if cmd.reported+deviceCount > maxReportsPerCommand {
+	if cmd.reported+deviceCount > cmd.maxReports {
 		return ErrReportQuotaExceeded
 	}
 	cmd.reported += deviceCount
 	return nil
+}
+
+// PairPersistMeta is the operator context the gateway needs to persist a pair
+// result authoritatively, returned by AdmitAndScopePairResults.
+type PairPersistMeta struct {
+	OrgID      int64
+	AssignedBy *int64
+}
+
+// AdmitAndScopePairResults admits a pairing report against the in-flight pair
+// command and returns only the results whose device_identifier was in the
+// dispatched target set, consuming each matched identifier so a node can't replay
+// the same one (across reports, up to quota) into repeated heavy persists. It is
+// the single atomic gate for the gateway's authoritative persistence: the operator
+// stream no longer scopes or persists. Returns errEmptyReport for an empty batch
+// (which would otherwise consume no quota), errNoInFlightCommand if the command_id
+// isn't an in-flight pair command, or ErrReportQuotaExceeded past the target count.
+func (r *Registry) AdmitAndScopePairResults(fleetNodeID int64, commandID string, results []*gatewaypb.FleetNodePairResult) ([]*gatewaypb.FleetNodePairResult, PairPersistMeta, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	cmd := r.inflightFor(fleetNodeID, commandID)
+	if cmd == nil || !cmd.reportBearing() || cmd.kind != ReportKindPair || cmd.pair == nil {
+		return nil, PairPersistMeta{}, errNoInFlightCommand
+	}
+	if len(results) == 0 {
+		return nil, PairPersistMeta{}, ErrEmptyReport
+	}
+	if cmd.reported+len(results) > cmd.maxReports {
+		return nil, PairPersistMeta{}, ErrReportQuotaExceeded
+	}
+	cmd.reported += len(results)
+
+	kept := make([]*gatewaypb.FleetNodePairResult, 0, len(results))
+	for _, res := range results {
+		id := res.GetDeviceIdentifier()
+		if _, ok := cmd.pair.Targets[id]; !ok {
+			// Outside the dispatched targets, or an identifier already consumed by
+			// an earlier report. A node reporting outside its command is anomalous.
+			slog.Warn("dropping fleet node pair result outside the requested targets or already seen",
+				"fleet_node_id", fleetNodeID, "device_identifier", id)
+			continue
+		}
+		delete(cmd.pair.Targets, id)
+		kept = append(kept, res)
+	}
+	return kept, PairPersistMeta{OrgID: cmd.pair.OrgID, AssignedBy: cmd.pair.AssignedBy}, nil
 }
 
 // ReportScopeFor returns the scan-scope matcher for the in-flight report-bearing

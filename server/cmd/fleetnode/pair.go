@@ -33,6 +33,7 @@ const pairConcurrency = 16
 const (
 	maxPairIdentityBytes = 255
 	maxPairMACBytes      = 64
+	maxUsedPasswordBytes = 1024
 )
 
 // perPairTimeout bounds one device's auth handshake. var so tests can shrink it.
@@ -88,12 +89,27 @@ func (p *pluginPairer) Pair(ctx context.Context, target *pairingpb.FleetNodePair
 	// Asymmetric-auth drivers (Proto) pair with the node's own miner-signing key;
 	// operator-supplied username/password covers basic-auth drivers.
 	if bundle, ok := secretBundleFor(plugin.Caps, p.minerSigningPubKey, creds); ok {
+		basicAuth := !plugin.Caps[sdk.CapabilityAsymmetricAuth]
+		// For basic-auth, refuse to authenticate with a credential we can't report
+		// back within the caps: pairing would succeed but the cloud could not
+		// persist the auth material, leaving the device PAIRED but unusable.
+		if basicAuth && (len(creds.GetUsername()) > maxPairIdentityBytes || len(creds.GetPassword()) > maxUsedPasswordBytes) {
+			res.Outcome = pb.PairOutcome_PAIR_OUTCOME_ERROR
+			res.ErrorMessage = "supplied credentials exceed the maximum reportable size"
+			return res
+		}
 		updated, pairErr := plugin.Driver.PairDevice(ctx, deviceInfo, bundle)
 		if pairErr != nil {
 			classifyNodePairError(pairErr, res)
 			return res
 		}
 		setPaired(res, updated)
+		// Report the credentials the node authenticated with so the cloud persists
+		// them for basic-auth devices. Asymmetric drivers pair with the node key and
+		// carry no credentials (used_credentials stays nil -> cloud stores nothing).
+		if basicAuth {
+			res.UsedCredentials = &pb.UsedCredentials{Username: creds.GetUsername(), Password: creds.GetPassword()}
+		}
 		return res
 	}
 
@@ -101,6 +117,12 @@ func (p *pluginPairer) Pair(ctx context.Context, target *pairingpb.FleetNodePair
 	if provider, ok := plugin.Driver.(sdk.DefaultCredentialsProvider); ok {
 		defaults := provider.GetDefaultCredentials(ctx, target.GetManufacturer(), target.GetFirmwareVersion())
 		for _, c := range defaults {
+			// Skip a default we couldn't report within the proto caps: truncating
+			// would persist an unusable secret, and an oversized field would fail
+			// ReportPairedDevices validation for the whole batch.
+			if len(c.Username) > maxPairIdentityBytes || len(c.Password) > maxUsedPasswordBytes {
+				continue
+			}
 			bundle := sdk.SecretBundle{Version: "v1", Kind: sdk.UsernamePassword{Username: c.Username, Password: c.Password}}
 			updated, pairErr := plugin.Driver.PairDevice(ctx, deviceInfo, bundle)
 			if pairErr != nil {
@@ -111,6 +133,9 @@ func (p *pluginPairer) Pair(ctx context.Context, target *pairingpb.FleetNodePair
 				return res
 			}
 			setPaired(res, updated)
+			// Report the default credentials that worked so the server stores
+			// them; otherwise the device is PAIRED with no auth material.
+			res.UsedCredentials = &pb.UsedCredentials{Username: c.Username, Password: c.Password}
 			return res
 		}
 	}
@@ -212,7 +237,8 @@ func (r *RunCmd) handlePairCommand(ctx context.Context, client gatewayClient, st
 
 	// Stream on the parent ctx, not cmdCtx: a deadline-hit cmdCtx must not
 	// suppress upload of the results already collected.
-	if err := r.streamPairResults(ctx, client, commandID, results, logger); err != nil {
+	rejected, err := r.streamPairResults(ctx, client, commandID, results, logger)
+	if err != nil {
 		r.sendAck(stream, commandID, pb.AckCode_ACK_CODE_REPORT_FAILED, err.Error(), logger)
 		return
 	}
@@ -224,24 +250,36 @@ func (r *RunCmd) handlePairCommand(ctx context.Context, client gatewayClient, st
 		r.sendAck(stream, commandID, pb.AckCode_ACK_CODE_PARTIAL, fmt.Sprintf("pair supervisor budget exceeded; %d of %d result(s) uploaded", len(results), len(targets)), logger)
 		return
 	}
+	// The gateway persists authoritatively and reports drops via RejectedCount. A
+	// rejected result means the cloud didn't store/bind a miner the node paired, so
+	// ack PARTIAL (not OK) and let the operator re-list and re-issue the remainder.
+	if rejected > 0 {
+		r.sendAck(stream, commandID, pb.AckCode_ACK_CODE_PARTIAL, fmt.Sprintf("cloud did not persist %d of %d reported result(s); re-list and retry", rejected, len(results)), logger)
+		return
+	}
 	r.sendAck(stream, commandID, pb.AckCode_ACK_CODE_OK, "", logger)
 }
 
-func (r *RunCmd) streamPairResults(ctx context.Context, client gatewayClient, commandID string, results []*pb.FleetNodePairResult, logger *slog.Logger) error {
+// streamPairResults uploads the results in chunks and returns the total count the
+// gateway rejected (failed to persist), so the caller can ack PARTIAL rather than
+// claim full success for a miner the cloud didn't store.
+func (r *RunCmd) streamPairResults(ctx context.Context, client gatewayClient, commandID string, results []*pb.FleetNodePairResult, logger *slog.Logger) (int64, error) {
+	var rejected int64
 	for chunk := range slices.Chunk(results, maxDevicesPerReport) {
 		callCtx, cancel := context.WithTimeout(ctx, discoveryReportTimeout)
-		_, err := client.ReportPairedDevices(callCtx, connect.NewRequest(&pb.ReportPairedDevicesRequest{
+		resp, err := client.ReportPairedDevices(callCtx, connect.NewRequest(&pb.ReportPairedDevicesRequest{
 			CommandId: commandID,
 			Results:   chunk,
 		}))
 		cancel()
 		if err != nil {
 			logger.Error("pair report failed", "command_id", commandID, "err", err)
-			return fmt.Errorf("report paired devices: %w", err)
+			return rejected, fmt.Errorf("report paired devices: %w", err)
 		}
-		logger.Info("pair report accepted", "command_id", commandID, "batch_size", len(chunk))
+		rejected += resp.Msg.GetRejectedCount()
+		logger.Info("pair report accepted", "command_id", commandID, "batch_size", len(chunk), "rejected", resp.Msg.GetRejectedCount())
 	}
-	return nil
+	return rejected, nil
 }
 
 // fanOutPairs pairs targets with bounded concurrency, returning collected

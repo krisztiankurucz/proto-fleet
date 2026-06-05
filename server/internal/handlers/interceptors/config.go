@@ -146,11 +146,9 @@ var SensitiveBodyProcedures = map[string]bool{
 	fleetnodegatewayv1connect.FleetNodeGatewayServiceUploadTelemetryProcedure:         true,
 	fleetnodegatewayv1connect.FleetNodeGatewayServiceUploadEventsProcedure:            true,
 	fleetnodegatewayv1connect.FleetNodeGatewayServiceReportDiscoveredDevicesProcedure: true,
-	// ReportPairedDevices carries pair result error strings that can echo credential
-	// fragments from plugin/miner error responses.
-	fleetnodegatewayv1connect.FleetNodeGatewayServiceReportPairedDevicesProcedure: true,
-	fleetnodeadminv1connect.FleetNodeAdminServiceDiscoverOnFleetNodeProcedure:     true,
-	// PairDiscoveredDevicesOnFleetNode carries credentials in the request; response
-	// error strings from plugins/nodes can also echo secrets.
+	fleetnodegatewayv1connect.FleetNodeGatewayServiceReportPairedDevicesProcedure:     true,
+	fleetnodeadminv1connect.FleetNodeAdminServiceDiscoverOnFleetNodeProcedure:         true,
+	// PairDiscoveredDevicesOnFleetNode carries credentials in the request and
+	// plugin/node error strings in responses that can accidentally echo secrets.
 	fleetnodeadminv1connect.FleetNodeAdminServicePairDiscoveredDevicesOnFleetNodeProcedure: true,
 }
