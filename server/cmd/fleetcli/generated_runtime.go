@@ -334,6 +334,31 @@ func generatedResolveCollectionIDsByLabel(
 	return dedupeInt64s(result), nil
 }
 
+func generatedRequireCollectionType(
+	ctx context.Context,
+	client *Client,
+	collectionID int64,
+	want collectionv1.CollectionType,
+) error {
+	if collectionID == 0 {
+		return fmt.Errorf("collection-id is required")
+	}
+	req := &collectionv1.GetCollectionRequest{CollectionId: collectionID}
+	resp := &collectionv1.GetCollectionResponse{}
+	if err := client.CallBearer(ctx, "/collection.v1.DeviceCollectionService/GetCollection", req, resp); err != nil {
+		return fmt.Errorf("verify %s %d: %w", generatedCollectionTypeName(want), collectionID, err)
+	}
+	collection := resp.GetCollection()
+	if collection == nil {
+		return fmt.Errorf("verify %s %d: response did not include collection", generatedCollectionTypeName(want), collectionID)
+	}
+	got := collection.GetType()
+	if got != want {
+		return fmt.Errorf("collection %d is a %s, not a %s", collectionID, generatedCollectionTypeName(got), generatedCollectionTypeName(want))
+	}
+	return nil
+}
+
 func generatedCollectionTypeName(collectionType collectionv1.CollectionType) string {
 	switch collectionType {
 	case collectionv1.CollectionType_COLLECTION_TYPE_GROUP:

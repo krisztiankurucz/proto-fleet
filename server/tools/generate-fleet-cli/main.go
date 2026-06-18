@@ -51,14 +51,15 @@ type methodOverride struct {
 }
 
 type commandOverride struct {
-	Method       string            `json:"method"`
-	Group        string            `json:"group"`
-	Command      string            `json:"command"`
-	Usage        string            `json:"usage,omitempty"`
-	Auth         string            `json:"auth,omitempty"`
-	IgnoreFields []string          `json:"ignore_fields,omitempty"`
-	FixedFields  map[string]string `json:"fixed_fields,omitempty"`
-	JSONOnly     bool              `json:"json_only,omitempty"`
+	Method                string            `json:"method"`
+	Group                 string            `json:"group"`
+	Command               string            `json:"command"`
+	Usage                 string            `json:"usage,omitempty"`
+	Auth                  string            `json:"auth,omitempty"`
+	IgnoreFields          []string          `json:"ignore_fields,omitempty"`
+	FixedFields           map[string]string `json:"fixed_fields,omitempty"`
+	RequireCollectionType string            `json:"require_collection_type,omitempty"`
+	JSONOnly              bool              `json:"json_only,omitempty"`
 }
 
 type importSpec struct {
@@ -94,12 +95,13 @@ type methodRef struct {
 }
 
 type renderOptions struct {
-	CommandName  string
-	Usage        string
-	Auth         string
-	JSONOnly     bool
-	IgnoreFields map[string]bool
-	FixedFields  map[string]string
+	CommandName           string
+	Usage                 string
+	Auth                  string
+	JSONOnly              bool
+	IgnoreFields          map[string]bool
+	FixedFields           map[string]string
+	RequireCollectionType string
 }
 
 type messageInfo struct {
@@ -383,12 +385,13 @@ func buildGroups(
 			return nil, generationReport{}, fmt.Errorf("unknown override method %q", override.Method)
 		}
 		options := renderOptions{
-			CommandName:  override.Command,
-			Usage:        override.Usage,
-			Auth:         chooseOverrideAuth(ref.ServiceOverride, override.Auth),
-			JSONOnly:     override.JSONOnly,
-			IgnoreFields: sliceToSet(override.IgnoreFields),
-			FixedFields:  override.FixedFields,
+			CommandName:           override.Command,
+			Usage:                 override.Usage,
+			Auth:                  chooseOverrideAuth(ref.ServiceOverride, override.Auth),
+			JSONOnly:              override.JSONOnly,
+			IgnoreFields:          sliceToSet(override.IgnoreFields),
+			FixedFields:           override.FixedFields,
+			RequireCollectionType: override.RequireCollectionType,
 		}
 		if options.Usage == "" {
 			options.Usage = humanizeMethod(string(ref.Method.Name()))
@@ -567,7 +570,10 @@ func renderMethodExpr(
 		if analysis.needsFmt {
 			imports["fmt"] = ""
 		}
-		expr = renderSimpleExpr(options.CommandName, options.Usage, "/"+ref.ServiceKey+"/"+string(ref.Method.Name()), options.Auth, request, response, analysis)
+		expr, err = renderSimpleExpr(options.CommandName, options.Usage, "/"+ref.ServiceKey+"/"+string(ref.Method.Name()), options.Auth, request, response, analysis, options)
+		if err != nil {
+			return renderResult{}, err
+		}
 		if analysis.jsonFallback {
 			status = "generated_json_fallback"
 			reason = analysis.Reason
@@ -1085,7 +1091,8 @@ func renderSimpleExpr(
 	request messageInfo,
 	response messageInfo,
 	analysis requestAnalysis,
-) string {
+	options renderOptions,
+) (string, error) {
 	var buf bytes.Buffer
 	buf.WriteString("generatedRequestCommand(\n")
 	buf.WriteString(fmt.Sprintf("\t%q,\n", commandName))
@@ -1130,11 +1137,31 @@ func renderSimpleExpr(
 	for _, line := range analysis.lines {
 		buf.WriteString("\t\t" + line + "\n")
 	}
+	if options.RequireCollectionType != "" {
+		typeExpr, err := requiredCollectionTypeExpr(options.RequireCollectionType)
+		if err != nil {
+			return "", err
+		}
+		buf.WriteString(fmt.Sprintf("\t\tif err := generatedRequireCollectionType(ctx, client, req.CollectionId, %s); err != nil {\n", typeExpr))
+		buf.WriteString("\t\t\treturn nil, err\n")
+		buf.WriteString("\t\t}\n")
+	}
 	buf.WriteString("\t\treturn req, nil\n")
 	buf.WriteString("\t},\n")
 	buf.WriteString(fmt.Sprintf("\tfunc() proto.Message { return &%s.%s{} },\n", response.GoAlias, response.GoIdent))
 	buf.WriteString(")")
-	return strings.TrimSpace(buf.String())
+	return strings.TrimSpace(buf.String()), nil
+}
+
+func requiredCollectionTypeExpr(value string) (string, error) {
+	switch normalizeInput(value) {
+	case "group":
+		return "collectionv1.CollectionType_COLLECTION_TYPE_GROUP", nil
+	case "rack":
+		return "collectionv1.CollectionType_COLLECTION_TYPE_RACK", nil
+	default:
+		return "", fmt.Errorf("unsupported require_collection_type %q", value)
+	}
 }
 
 // writeSelectorAssignment emits the code that builds a device selector and

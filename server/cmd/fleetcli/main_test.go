@@ -210,6 +210,72 @@ func TestPerformanceGetRejectsUnknownMetricBeforeRequest(t *testing.T) {
 	}
 }
 
+func TestCollectionDeleteVerifiesCollectionType(t *testing.T) {
+	t.Run("groups delete rejects rack id before delete", func(t *testing.T) {
+		pinFleetAuthEnv(t, nil)
+
+		var getAuth string
+		deleteCount := 0
+		mux := http.NewServeMux()
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, r *http.Request) {
+			getAuth = r.Header.Get("Authorization")
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"COLLECTION_TYPE_RACK","label":"rack-42"}}`))
+		})
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/DeleteCollection", func(w http.ResponseWriter, r *http.Request) {
+			deleteCount++
+			http.Error(w, "delete should not be called", http.StatusTeapot)
+		})
+		srv := httptest.NewServer(mux)
+		t.Cleanup(srv.Close)
+
+		err := newRootCommand().Run(context.Background(), []string{
+			"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			"groups", "delete", "--collection-id", "42",
+		})
+		if err == nil || !strings.Contains(err.Error(), "collection 42 is a rack, not a group") {
+			t.Fatalf("groups delete error = %v, want collection type mismatch", err)
+		}
+		if getAuth != "Bearer test-key" {
+			t.Errorf("GetCollection Authorization = %q, want %q", getAuth, "Bearer test-key")
+		}
+		if deleteCount != 0 {
+			t.Fatalf("delete count = %d, want 0", deleteCount)
+		}
+	})
+
+	t.Run("racks delete proceeds for rack id", func(t *testing.T) {
+		pinFleetAuthEnv(t, nil)
+
+		var calls []string
+		mux := http.NewServeMux()
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, r *http.Request) {
+			calls = append(calls, "get")
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"COLLECTION_TYPE_RACK","label":"rack-42"}}`))
+		})
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/DeleteCollection", func(w http.ResponseWriter, r *http.Request) {
+			calls = append(calls, "delete")
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte("{}"))
+		})
+		srv := httptest.NewServer(mux)
+		t.Cleanup(srv.Close)
+
+		err := newRootCommand().Run(context.Background(), []string{
+			"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			"racks", "delete", "--collection-id", "42",
+		})
+		if err != nil {
+			t.Fatalf("racks delete error = %v, want success", err)
+		}
+		want := []string{"get", "delete"}
+		if strings.Join(calls, ",") != strings.Join(want, ",") {
+			t.Fatalf("calls = %v, want %v", calls, want)
+		}
+	})
+}
+
 func TestResolvedAuthInputs(t *testing.T) {
 	authLogin := []string{"auth", "login"}
 	tests := []struct {

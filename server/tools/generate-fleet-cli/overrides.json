@@ -71,7 +71,8 @@
       "method": "/collection.v1.DeviceCollectionService/DeleteCollection",
       "group": "groups",
       "command": "delete",
-      "usage": "Delete a group"
+      "usage": "Delete a group",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/ListCollectionMembers",
@@ -133,7 +134,8 @@
       "method": "/collection.v1.DeviceCollectionService/DeleteCollection",
       "group": "racks",
       "command": "delete",
-      "usage": "Delete a rack"
+      "usage": "Delete a rack",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/ListCollectionMembers",
