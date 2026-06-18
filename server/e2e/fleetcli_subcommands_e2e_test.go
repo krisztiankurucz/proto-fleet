@@ -312,14 +312,26 @@ func TestFleetCLILeafCommandCoverage(t *testing.T) {
 func ensureFleetCLIAdmin(t *testing.T, ctx context.Context, env []string) {
 	t.Helper()
 
-	if _, err := runFleetCLI(ctx, env,
+	output, err := runFleetCLI(ctx, env,
 		"onboarding", "create-admin",
 		"--username", testUsername,
 		"--password", testPassword,
-	); err != nil {
-		require.Truef(t, isAlreadyOnboardedError(err),
-			"create-admin failed for a reason other than existing onboarding: %v", err)
+	)
+	if err == nil {
+		assert.Contains(t, output, "user_id", "create-admin output should include the new user id")
+		t.Log("✓ Admin user created")
+		return
 	}
+
+	require.Truef(t, isAlreadyOnboardedError(err),
+		"create-admin failed for a reason other than existing onboarding: %v", err)
+
+	if _, loginErr := runFleetCLI(ctx, env, "auth", "login"); loginErr != nil {
+		require.NoErrorf(t, loginErr,
+			"Fleet is already onboarded, but fleetcli cannot authenticate with the e2e credentials %s/%s. Reset the stack or run these tests with matching FLEET_USERNAME/FLEET_PASSWORD.",
+			testUsername, testPassword)
+	}
+	t.Log("Fleet already onboarded and e2e credentials are valid")
 }
 
 func runFleetCLIJSON(t *testing.T, ctx context.Context, env []string, args ...string) map[string]any {

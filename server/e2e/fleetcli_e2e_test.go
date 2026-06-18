@@ -50,23 +50,7 @@ func TestFleetCLIWorkflow(t *testing.T) {
 		"NO_COLOR=1",
 	}
 
-	t.Run("OnboardingCreateAdmin", func(t *testing.T) {
-		// create-admin is anonymous and only succeeds on a fresh fleet; accept
-		// already-onboarded failures so the test is rerunnable.
-		output, err := runFleetCLI(ctx, env,
-			"onboarding", "create-admin",
-			"--username", testUsername,
-			"--password", testPassword,
-		)
-		if err != nil {
-			require.Truef(t, isAlreadyOnboardedError(err),
-				"create-admin failed for a reason other than existing onboarding: %v", err)
-			t.Log("Fleet already onboarded (expected on re-runs)")
-			return
-		}
-		assert.Contains(t, output, "user_id", "create-admin output should include the new user id")
-		t.Log("✓ Admin user created")
-	})
+	ensureFleetCLIAdmin(t, ctx, env)
 
 	var deviceIdentifier string
 

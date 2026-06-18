@@ -173,6 +173,16 @@ func TestBuildCombinedMetricsRequestMetrics(t *testing.T) {
 			t.Fatalf("buildCombinedMetricsRequest() error = %v, want invalid metric error", err)
 		}
 	})
+
+	t.Run("page token", func(t *testing.T) {
+		req, err := buildCombinedMetricsRequestFromArgs(t, "--page-token", "next-page-1")
+		if err != nil {
+			t.Fatalf("buildCombinedMetricsRequest() error = %v", err)
+		}
+		if req.GetPageToken() != "next-page-1" {
+			t.Fatalf("page token = %q, want next-page-1", req.GetPageToken())
+		}
+	})
 }
 
 func TestPerformanceGetRejectsUnknownMetricBeforeRequest(t *testing.T) {
