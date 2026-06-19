@@ -147,6 +147,9 @@ func generatedRacksCommand() *cli.Command {
 					if cmd.IsSet("page-token") {
 						req.PageToken = cmd.String("page-token")
 					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.ListCollectionMembersResponse{} },

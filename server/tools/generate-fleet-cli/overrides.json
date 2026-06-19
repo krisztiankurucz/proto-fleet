@@ -81,7 +81,8 @@
       "method": "/collection.v1.DeviceCollectionService/ListCollectionMembers",
       "group": "groups",
       "command": "members",
-      "usage": "List group members"
+      "usage": "List group members",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/GetDeviceCollections",
@@ -148,7 +149,8 @@
       "method": "/collection.v1.DeviceCollectionService/ListCollectionMembers",
       "group": "racks",
       "command": "members",
-      "usage": "List rack members"
+      "usage": "List rack members",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/GetRackSlots",
