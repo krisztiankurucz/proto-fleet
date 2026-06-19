@@ -1158,9 +1158,19 @@ func requireCollectionTypeLines(message protoreflect.MessageDescriptor, collecti
 	if err != nil {
 		return nil, err
 	}
+
+	if field := message.Fields().ByName("collection_ids"); field != nil && field.IsList() {
+		goFieldName := toGoFieldName(field.Name())
+		return []string{
+			fmt.Sprintf("if err := generatedRequireCollectionTypes(ctx, client, req.%s, %s); err != nil {", goFieldName, typeExpr),
+			"\treturn nil, err",
+			"}",
+		}, nil
+	}
+
 	field := message.Fields().ByName("collection_id")
 	if field == nil {
-		return nil, fmt.Errorf("require_collection_type needs collection_id field on %s", message.FullName())
+		return nil, fmt.Errorf("require_collection_type needs collection_id or collection_ids field on %s", message.FullName())
 	}
 	goFieldName := toGoFieldName(field.Name())
 	if fieldNeedsPointer(field) {

@@ -224,6 +224,9 @@ func generatedGroupsCommand() *cli.Command {
 						}
 						req.CollectionIds = values
 					}
+					if err := generatedRequireCollectionTypes(ctx, client, req.CollectionIds, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.GetCollectionStatsResponse{} },

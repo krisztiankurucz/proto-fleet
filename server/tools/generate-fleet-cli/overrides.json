@@ -97,7 +97,8 @@
       "method": "/collection.v1.DeviceCollectionService/GetCollectionStats",
       "group": "groups",
       "command": "stats",
-      "usage": "Get aggregated stats for one or more groups"
+      "usage": "Get aggregated stats for one or more groups",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/ListCollections",
@@ -181,7 +182,8 @@
       "method": "/collection.v1.DeviceCollectionService/GetCollectionStats",
       "group": "racks",
       "command": "stats",
-      "usage": "Get aggregated stats for one or more racks"
+      "usage": "Get aggregated stats for one or more racks",
+      "require_collection_type": "rack"
     }
   ]
 }

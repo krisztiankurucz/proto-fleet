@@ -516,6 +516,89 @@ func TestBoundedMinerSelectorVerifiesCollectionIDs(t *testing.T) {
 	})
 }
 
+func TestCollectionStatsVerifyCollectionType(t *testing.T) {
+	tests := []struct {
+		name       string
+		args       []string
+		actualType string
+		wantError  string
+	}{
+		{
+			name:       "groups stats rejects rack id",
+			args:       []string{"groups", "stats", "--collection-ids", "42"},
+			actualType: "COLLECTION_TYPE_RACK",
+			wantError:  "collection 42 is a rack, not a group",
+		},
+		{
+			name:       "racks stats rejects group id",
+			args:       []string{"racks", "stats", "--collection-ids", "42"},
+			actualType: "COLLECTION_TYPE_GROUP",
+			wantError:  "collection 42 is a group, not a rack",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pinFleetAuthEnv(t, nil)
+
+			statsCount := 0
+			mux := http.NewServeMux()
+			mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", contentTypeJSON)
+				_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"` + tt.actualType + `","label":"wrong-type"}}`))
+			})
+			mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollectionStats", func(w http.ResponseWriter, r *http.Request) {
+				statsCount++
+				t.Errorf("unexpected stats request: %s %s", r.Method, r.URL.Path)
+				http.Error(w, "stats should not be called", http.StatusTeapot)
+			})
+			srv := httptest.NewServer(mux)
+			t.Cleanup(srv.Close)
+
+			err := newRootCommand().Run(context.Background(), append([]string{
+				"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			}, tt.args...))
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("fleetcli %s error = %v, want %q", strings.Join(tt.args, " "), err, tt.wantError)
+			}
+			if statsCount != 0 {
+				t.Fatalf("stats count = %d, want 0", statsCount)
+			}
+		})
+	}
+
+	t.Run("matching group id proceeds", func(t *testing.T) {
+		pinFleetAuthEnv(t, nil)
+
+		var calls []string
+		mux := http.NewServeMux()
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, _ *http.Request) {
+			calls = append(calls, "get")
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"COLLECTION_TYPE_GROUP","label":"group-42"}}`))
+		})
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollectionStats", func(w http.ResponseWriter, _ *http.Request) {
+			calls = append(calls, "stats")
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte(`{"stats":[]}`))
+		})
+		srv := httptest.NewServer(mux)
+		t.Cleanup(srv.Close)
+
+		err := newRootCommand().Run(context.Background(), []string{
+			"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			"groups", "stats", "--collection-ids", "42",
+		})
+		if err != nil {
+			t.Fatalf("groups stats error = %v, want success", err)
+		}
+		want := []string{"get", "stats"}
+		if strings.Join(calls, ",") != strings.Join(want, ",") {
+			t.Fatalf("calls = %v, want %v", calls, want)
+		}
+	})
+}
+
 func TestResolvedAuthInputs(t *testing.T) {
 	authLogin := []string{"auth", "login"}
 	tests := []struct {
