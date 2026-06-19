@@ -53,19 +53,22 @@
       "method": "/collection.v1.DeviceCollectionService/AddDevicesToCollection",
       "group": "groups",
       "command": "add-devices",
-      "usage": "Add devices to a group"
+      "usage": "Add devices to a group",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
       "group": "groups",
       "command": "remove-devices",
-      "usage": "Remove devices from a group"
+      "usage": "Remove devices from a group",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/UpdateCollection",
       "group": "groups",
       "command": "update",
-      "usage": "Update a group"
+      "usage": "Update a group",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/DeleteCollection",
@@ -116,19 +119,22 @@
       "method": "/collection.v1.DeviceCollectionService/SaveRack",
       "group": "racks",
       "command": "save",
-      "usage": "Create or update a rack"
+      "usage": "Create or update a rack",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/AddDevicesToCollection",
       "group": "racks",
       "command": "add-devices",
-      "usage": "Add devices to a rack"
+      "usage": "Add devices to a rack",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
       "group": "racks",
       "command": "remove-devices",
-      "usage": "Remove devices from a rack"
+      "usage": "Remove devices from a rack",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/DeleteCollection",

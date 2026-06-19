@@ -32,6 +32,9 @@ func generatedGroupsCommand() *cli.Command {
 					if cmd.IsSet("collection-id") {
 						req.CollectionId = cmd.Int64("collection-id")
 					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.AddDevicesToCollectionResponse{} },
@@ -197,6 +200,9 @@ func generatedGroupsCommand() *cli.Command {
 					if cmd.IsSet("collection-id") {
 						req.CollectionId = cmd.Int64("collection-id")
 					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.RemoveDevicesFromCollectionResponse{} },
@@ -257,6 +263,9 @@ func generatedGroupsCommand() *cli.Command {
 					if cmd.IsSet("description") {
 						value := cmd.String("description")
 						req.Description = &value
+					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+						return nil, err
 					}
 					return req, nil
 				},

@@ -32,6 +32,9 @@ func generatedRacksCommand() *cli.Command {
 					if cmd.IsSet("collection-id") {
 						req.CollectionId = cmd.Int64("collection-id")
 					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.AddDevicesToCollectionResponse{} },
@@ -166,6 +169,9 @@ func generatedRacksCommand() *cli.Command {
 					if cmd.IsSet("collection-id") {
 						req.CollectionId = cmd.Int64("collection-id")
 					}
+					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+						return nil, err
+					}
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.RemoveDevicesFromCollectionResponse{} },
@@ -200,6 +206,11 @@ func generatedRacksCommand() *cli.Command {
 					}
 					if cmd.IsSet("label") {
 						req.Label = cmd.String("label")
+					}
+					if req.CollectionId != nil {
+						if err := generatedRequireCollectionType(ctx, client, *req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+							return nil, err
+						}
 					}
 					return req, nil
 				},

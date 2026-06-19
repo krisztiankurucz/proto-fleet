@@ -214,7 +214,11 @@ func generatedBuildBoundedMinerSelector(ctx context.Context, cmd *cli.Command, c
 		}
 		groupIDs = append(groupIDs, labelIDs...)
 	}
+	groupIDs = dedupeInt64s(groupIDs)
 	if len(groupIDs) > 0 {
+		if err := generatedRequireCollectionTypes(ctx, client, groupIDs, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+			return nil, fmt.Errorf("verify group ids: %w", err)
+		}
 		memberIDs, err := generatedCollectionMemberDeviceIDs(ctx, client, groupIDs)
 		if err != nil {
 			return nil, fmt.Errorf("resolve group members: %w", err)
@@ -228,7 +232,11 @@ func generatedBuildBoundedMinerSelector(ctx context.Context, cmd *cli.Command, c
 		}
 		rackIDs = append(rackIDs, labelIDs...)
 	}
+	rackIDs = dedupeInt64s(rackIDs)
 	if len(rackIDs) > 0 {
+		if err := generatedRequireCollectionTypes(ctx, client, rackIDs, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+			return nil, fmt.Errorf("verify rack ids: %w", err)
+		}
 		memberIDs, err := generatedCollectionMemberDeviceIDs(ctx, client, rackIDs)
 		if err != nil {
 			return nil, fmt.Errorf("resolve rack members: %w", err)
@@ -355,6 +363,20 @@ func generatedRequireCollectionType(
 	got := collection.GetType()
 	if got != want {
 		return fmt.Errorf("collection %d is a %s, not a %s", collectionID, generatedCollectionTypeName(got), generatedCollectionTypeName(want))
+	}
+	return nil
+}
+
+func generatedRequireCollectionTypes(
+	ctx context.Context,
+	client *Client,
+	collectionIDs []int64,
+	want collectionv1.CollectionType,
+) error {
+	for _, collectionID := range dedupeInt64s(collectionIDs) {
+		if err := generatedRequireCollectionType(ctx, client, collectionID, want); err != nil {
+			return err
+		}
 	}
 	return nil
 }

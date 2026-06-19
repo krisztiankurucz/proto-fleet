@@ -1138,19 +1138,45 @@ func renderSimpleExpr(
 		buf.WriteString("\t\t" + line + "\n")
 	}
 	if options.RequireCollectionType != "" {
-		typeExpr, err := requiredCollectionTypeExpr(options.RequireCollectionType)
+		lines, err := requireCollectionTypeLines(request.Descriptor, options.RequireCollectionType)
 		if err != nil {
 			return "", err
 		}
-		buf.WriteString(fmt.Sprintf("\t\tif err := generatedRequireCollectionType(ctx, client, req.CollectionId, %s); err != nil {\n", typeExpr))
-		buf.WriteString("\t\t\treturn nil, err\n")
-		buf.WriteString("\t\t}\n")
+		for _, line := range lines {
+			buf.WriteString("\t\t" + line + "\n")
+		}
 	}
 	buf.WriteString("\t\treturn req, nil\n")
 	buf.WriteString("\t},\n")
 	buf.WriteString(fmt.Sprintf("\tfunc() proto.Message { return &%s.%s{} },\n", response.GoAlias, response.GoIdent))
 	buf.WriteString(")")
 	return strings.TrimSpace(buf.String()), nil
+}
+
+func requireCollectionTypeLines(message protoreflect.MessageDescriptor, collectionType string) ([]string, error) {
+	typeExpr, err := requiredCollectionTypeExpr(collectionType)
+	if err != nil {
+		return nil, err
+	}
+	field := message.Fields().ByName("collection_id")
+	if field == nil {
+		return nil, fmt.Errorf("require_collection_type needs collection_id field on %s", message.FullName())
+	}
+	goFieldName := toGoFieldName(field.Name())
+	if fieldNeedsPointer(field) {
+		return []string{
+			fmt.Sprintf("if req.%s != nil {", goFieldName),
+			fmt.Sprintf("\tif err := generatedRequireCollectionType(ctx, client, *req.%s, %s); err != nil {", goFieldName, typeExpr),
+			"\t\treturn nil, err",
+			"\t}",
+			"}",
+		}, nil
+	}
+	return []string{
+		fmt.Sprintf("if err := generatedRequireCollectionType(ctx, client, req.%s, %s); err != nil {", goFieldName, typeExpr),
+		"\treturn nil, err",
+		"}",
+	}, nil
 }
 
 func requiredCollectionTypeExpr(value string) (string, error) {
