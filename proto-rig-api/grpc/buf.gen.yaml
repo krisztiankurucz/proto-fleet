@@ -1,0 +1,5 @@
+version: v2
+plugins:
+  - local: protoc-gen-es
+    out: ../../client/src/protoOS/api/generated/nats
+    opt: target=ts
