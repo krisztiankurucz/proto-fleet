@@ -37,7 +37,8 @@
       "method": "/collection.v1.DeviceCollectionService/GetCollection",
       "group": "groups",
       "command": "get",
-      "usage": "Get a group by id"
+      "usage": "Get a group by id",
+      "require_collection_type": "group"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/CreateCollection",
@@ -115,7 +116,8 @@
       "method": "/collection.v1.DeviceCollectionService/GetCollection",
       "group": "racks",
       "command": "get",
-      "usage": "Get a rack by id"
+      "usage": "Get a rack by id",
+      "require_collection_type": "rack"
     },
     {
       "method": "/collection.v1.DeviceCollectionService/SaveRack",

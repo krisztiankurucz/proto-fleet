@@ -276,6 +276,79 @@ func TestCollectionDeleteVerifiesCollectionType(t *testing.T) {
 	})
 }
 
+func TestCollectionGetVerifiesCollectionType(t *testing.T) {
+	tests := []struct {
+		name       string
+		args       []string
+		actualType string
+		wantError  string
+	}{
+		{
+			name:       "groups get rejects rack id",
+			args:       []string{"groups", "get", "--collection-id", "42"},
+			actualType: "COLLECTION_TYPE_RACK",
+			wantError:  "collection 42 is a rack, not a group",
+		},
+		{
+			name:       "racks get rejects group id",
+			args:       []string{"racks", "get", "--collection-id", "42"},
+			actualType: "COLLECTION_TYPE_GROUP",
+			wantError:  "collection 42 is a group, not a rack",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pinFleetAuthEnv(t, nil)
+
+			getCount := 0
+			mux := http.NewServeMux()
+			mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, _ *http.Request) {
+				getCount++
+				w.Header().Set("Content-Type", contentTypeJSON)
+				_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"` + tt.actualType + `","label":"wrong-type"}}`))
+			})
+			srv := httptest.NewServer(mux)
+			t.Cleanup(srv.Close)
+
+			err := newRootCommand().Run(context.Background(), append([]string{
+				"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			}, tt.args...))
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("fleetcli %s error = %v, want %q", strings.Join(tt.args, " "), err, tt.wantError)
+			}
+			if getCount != 1 {
+				t.Fatalf("get count = %d, want 1", getCount)
+			}
+		})
+	}
+
+	t.Run("matching group id proceeds to command get", func(t *testing.T) {
+		pinFleetAuthEnv(t, nil)
+
+		getCount := 0
+		mux := http.NewServeMux()
+		mux.HandleFunc("POST /collection.v1.DeviceCollectionService/GetCollection", func(w http.ResponseWriter, _ *http.Request) {
+			getCount++
+			w.Header().Set("Content-Type", contentTypeJSON)
+			_, _ = w.Write([]byte(`{"collection":{"id":"42","type":"COLLECTION_TYPE_GROUP","label":"group-42"}}`))
+		})
+		srv := httptest.NewServer(mux)
+		t.Cleanup(srv.Close)
+
+		err := newRootCommand().Run(context.Background(), []string{
+			"fleetcli", "--server", srv.URL + "/", "--api-key", "test-key",
+			"groups", "get", "--collection-id", "42",
+		})
+		if err != nil {
+			t.Fatalf("groups get error = %v, want success", err)
+		}
+		if getCount != 2 {
+			t.Fatalf("get count = %d, want 2", getCount)
+		}
+	})
+}
+
 func TestCollectionMutationsVerifyCollectionType(t *testing.T) {
 	tests := []struct {
 		name          string
