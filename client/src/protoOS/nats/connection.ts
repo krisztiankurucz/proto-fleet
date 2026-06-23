@@ -4,11 +4,6 @@ import { NATS_WS_URL } from "./constants";
 
 export type ConnectionState = "connecting" | "connected" | "disconnected" | "error";
 
-export interface NatsConnectionManager {
-  connection: NatsConnection | null;
-  state: ConnectionState;
-}
-
 export async function connectToNats(): Promise<NatsConnection> {
   return wsconnect({ servers: NATS_WS_URL });
 }

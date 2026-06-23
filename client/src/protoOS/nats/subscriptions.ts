@@ -35,11 +35,17 @@ export function processSubscription<T>(
   (async () => {
     for await (const msg of sub) {
       if (!msg.data) continue;
+      let decoded: T;
       try {
-        const decoded = fromBinary(schema, msg.data) as T;
+        decoded = fromBinary(schema, msg.data) as T;
+      } catch (error) {
+        console.warn(`Failed to decode ${schema.typeName} message`, error);
+        continue;
+      }
+      try {
         onMessage(decoded);
-      } catch {
-        console.warn(`Failed to decode ${schema.typeName} message`);
+      } catch (error) {
+        console.error(`Error handling ${schema.typeName} message`, error);
       }
     }
   })();
