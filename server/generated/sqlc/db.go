@@ -201,6 +201,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createCustomRoleStmt, err = db.PrepareContext(ctx, createCustomRole); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateCustomRole: %w", err)
 	}
+	if q.createDefaultCohortStmt, err = db.PrepareContext(ctx, createDefaultCohort); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateDefaultCohort: %w", err)
+	}
 	if q.createDeviceSetStmt, err = db.PrepareContext(ctx, createDeviceSet); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateDeviceSet: %w", err)
 	}
@@ -1684,6 +1687,11 @@ func (q *Queries) Close() error {
 	if q.createCustomRoleStmt != nil {
 		if cerr := q.createCustomRoleStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing createCustomRoleStmt: %w", cerr)
+		}
+	}
+	if q.createDefaultCohortStmt != nil {
+		if cerr := q.createDefaultCohortStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createDefaultCohortStmt: %w", cerr)
 		}
 	}
 	if q.createDeviceSetStmt != nil {
@@ -3759,6 +3767,7 @@ type Queries struct {
 	createCohortStmt                                           *sql.Stmt
 	createCommandBatchLogStmt                                  *sql.Stmt
 	createCustomRoleStmt                                       *sql.Stmt
+	createDefaultCohortStmt                                    *sql.Stmt
 	createDeviceSetStmt                                        *sql.Stmt
 	createFleetNodeStmt                                        *sql.Stmt
 	createFleetNodeApiKeyStmt                                  *sql.Stmt
@@ -4219,6 +4228,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createCohortStmt:                                           q.createCohortStmt,
 		createCommandBatchLogStmt:                                  q.createCommandBatchLogStmt,
 		createCustomRoleStmt:                                       q.createCustomRoleStmt,
+		createDefaultCohortStmt:                                    q.createDefaultCohortStmt,
 		createDeviceSetStmt:                                        q.createDeviceSetStmt,
 		createFleetNodeStmt:                                        q.createFleetNodeStmt,
 		createFleetNodeApiKeyStmt:                                  q.createFleetNodeApiKeyStmt,
