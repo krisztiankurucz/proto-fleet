@@ -1,4 +1,4 @@
-export { NATS_WS_PORT, NATS_WS_URL, PSU_COUNT } from "./constants";
+export { NATS_WS_PORT, NATS_WS_URL } from "./constants";
 export { type ConnectionState, type NatsConnectionManager, connectToNats, disconnectFromNats } from "./connection";
 export { NatsContext, type NatsContextValue } from "./NatsContext";
 export { default as NatsProvider } from "./NatsProvider";
