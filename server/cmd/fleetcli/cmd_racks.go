@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
+	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"
 	proto "google.golang.org/protobuf/proto"
 )
@@ -17,27 +18,35 @@ func generatedRacksCommand() *cli.Command {
 			generatedRequestCommand(
 				"add-devices",
 				"Add devices to a rack",
-				"/collection.v1.DeviceCollectionService/AddDevicesToCollection",
+				"/device_set.v1.DeviceSetService/AssignDevicesToRack",
 				generatedAuthBearer,
 				append([]cli.Flag{
-					&cli.Int64Flag{Name: "collection-id", Usage: "collection id"},
+					&cli.Int64Flag{Name: "target-rack-id", Usage: "target rack id"},
+					&cli.BoolFlag{Name: "force-clear-conflicting-site", Usage: "force clear conflicting site"},
 				}, generatedCommonSelectorFlags()...),
 				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
-					req := &collectionv1.AddDevicesToCollectionRequest{}
+					req := &devicesetv1.AssignDevicesToRackRequest{}
 					selector, err := generatedBuildCommonSelector(cmd)
 					if err != nil {
 						return nil, err
 					}
 					req.DeviceSelector = selector
-					if cmd.IsSet("collection-id") {
-						req.CollectionId = cmd.Int64("collection-id")
+					if cmd.IsSet("target-rack-id") {
+						value := cmd.Int64("target-rack-id")
+						req.TargetRackId = &value
 					}
-					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
-						return nil, err
+					if cmd.IsSet("force-clear-conflicting-site") {
+						value := cmd.Bool("force-clear-conflicting-site")
+						req.ForceClearConflictingSite = &value
+					}
+					if req.TargetRackId != nil {
+						if err := generatedRequireCollectionType(ctx, client, *req.TargetRackId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
+							return nil, err
+						}
 					}
 					return req, nil
 				},
-				func() proto.Message { return &collectionv1.AddDevicesToCollectionResponse{} },
+				func() proto.Message { return &devicesetv1.AssignDevicesToRackResponse{} },
 			),
 			generatedRequestCommand(
 				"delete",
@@ -156,31 +165,6 @@ func generatedRacksCommand() *cli.Command {
 					return req, nil
 				},
 				func() proto.Message { return &collectionv1.ListCollectionMembersResponse{} },
-			),
-			generatedRequestCommand(
-				"remove-devices",
-				"Remove devices from a rack",
-				"/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
-				generatedAuthBearer,
-				append([]cli.Flag{
-					&cli.Int64Flag{Name: "collection-id", Usage: "collection id"},
-				}, generatedCommonSelectorFlags()...),
-				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
-					req := &collectionv1.RemoveDevicesFromCollectionRequest{}
-					selector, err := generatedBuildCommonSelector(cmd)
-					if err != nil {
-						return nil, err
-					}
-					req.DeviceSelector = selector
-					if cmd.IsSet("collection-id") {
-						req.CollectionId = cmd.Int64("collection-id")
-					}
-					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_RACK); err != nil {
-						return nil, err
-					}
-					return req, nil
-				},
-				func() proto.Message { return &collectionv1.RemoveDevicesFromCollectionResponse{} },
 			),
 			generatedRequestCommand(
 				"save",

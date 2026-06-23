@@ -51,8 +51,7 @@ func TestFleetCLIWorkflow(t *testing.T) {
 	}
 
 	ensureFleetCLIAdmin(t, ctx, env)
-
-	var deviceIdentifier string
+	deviceIdentifier := ensureFleetCLIPairedMiner(t, ctx, env)
 
 	t.Run("MinersList", func(t *testing.T) {
 		output, err := runFleetCLI(ctx, env, "miners", "list")
@@ -65,13 +64,14 @@ func TestFleetCLIWorkflow(t *testing.T) {
 		}
 		require.NoError(t, json.Unmarshal([]byte(output), &resp), "miners list output should be JSON: %s", output)
 		require.NotEmpty(t, resp.Miners, "miners list should return at least one miner")
+		found := false
 		for _, miner := range resp.Miners {
-			if miner.DeviceIdentifier != "" {
-				deviceIdentifier = miner.DeviceIdentifier
+			if miner.DeviceIdentifier == deviceIdentifier {
+				found = true
 				break
 			}
 		}
-		require.NotEmpty(t, deviceIdentifier, "miners list should expose a usable miner identifier")
+		require.Truef(t, found, "miners list should include paired miner %q", deviceIdentifier)
 		t.Logf("✓ Miners list contains %d miner(s)", len(resp.Miners))
 	})
 

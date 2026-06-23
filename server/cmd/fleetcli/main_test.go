@@ -359,16 +359,16 @@ func TestCollectionMutationsVerifyCollectionType(t *testing.T) {
 	}{
 		{
 			name:          "groups add-devices rejects rack id",
-			args:          []string{"groups", "add-devices", "--collection-id", "42", "--all-devices"},
+			args:          []string{"groups", "add-devices", "--target-group-id", "42", "--all-devices"},
 			actualType:    "COLLECTION_TYPE_RACK",
-			mutationRoute: "POST /collection.v1.DeviceCollectionService/AddDevicesToCollection",
+			mutationRoute: "POST /device_set.v1.DeviceSetService/AddDevicesToGroup",
 			wantError:     "collection 42 is a rack, not a group",
 		},
 		{
 			name:          "groups remove-devices rejects rack id",
-			args:          []string{"groups", "remove-devices", "--collection-id", "42", "--all-devices"},
+			args:          []string{"groups", "remove-devices", "--target-group-id", "42", "--all-devices"},
 			actualType:    "COLLECTION_TYPE_RACK",
-			mutationRoute: "POST /collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
+			mutationRoute: "POST /device_set.v1.DeviceSetService/RemoveDevicesFromGroup",
 			wantError:     "collection 42 is a rack, not a group",
 		},
 		{
@@ -380,16 +380,9 @@ func TestCollectionMutationsVerifyCollectionType(t *testing.T) {
 		},
 		{
 			name:          "racks add-devices rejects group id",
-			args:          []string{"racks", "add-devices", "--collection-id", "42", "--all-devices"},
+			args:          []string{"racks", "add-devices", "--target-rack-id", "42", "--all-devices"},
 			actualType:    "COLLECTION_TYPE_GROUP",
-			mutationRoute: "POST /collection.v1.DeviceCollectionService/AddDevicesToCollection",
-			wantError:     "collection 42 is a group, not a rack",
-		},
-		{
-			name:          "racks remove-devices rejects group id",
-			args:          []string{"racks", "remove-devices", "--collection-id", "42", "--all-devices"},
-			actualType:    "COLLECTION_TYPE_GROUP",
-			mutationRoute: "POST /collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
+			mutationRoute: "POST /device_set.v1.DeviceSetService/AssignDevicesToRack",
 			wantError:     "collection 42 is a group, not a rack",
 		},
 		{

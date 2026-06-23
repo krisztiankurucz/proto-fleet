@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
+	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"
 	proto "google.golang.org/protobuf/proto"
 )
@@ -17,27 +18,27 @@ func generatedGroupsCommand() *cli.Command {
 			generatedRequestCommand(
 				"add-devices",
 				"Add devices to a group",
-				"/collection.v1.DeviceCollectionService/AddDevicesToCollection",
+				"/device_set.v1.DeviceSetService/AddDevicesToGroup",
 				generatedAuthBearer,
 				append([]cli.Flag{
-					&cli.Int64Flag{Name: "collection-id", Usage: "collection id"},
+					&cli.Int64Flag{Name: "target-group-id", Usage: "target group id"},
 				}, generatedCommonSelectorFlags()...),
 				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
-					req := &collectionv1.AddDevicesToCollectionRequest{}
+					req := &devicesetv1.AddDevicesToGroupRequest{}
 					selector, err := generatedBuildCommonSelector(cmd)
 					if err != nil {
 						return nil, err
 					}
 					req.DeviceSelector = selector
-					if cmd.IsSet("collection-id") {
-						req.CollectionId = cmd.Int64("collection-id")
+					if cmd.IsSet("target-group-id") {
+						req.TargetGroupId = cmd.Int64("target-group-id")
 					}
-					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+					if err := generatedRequireCollectionType(ctx, client, req.TargetGroupId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
 						return nil, err
 					}
 					return req, nil
 				},
-				func() proto.Message { return &collectionv1.AddDevicesToCollectionResponse{} },
+				func() proto.Message { return &devicesetv1.AddDevicesToGroupResponse{} },
 			),
 			generatedRequestCommand(
 				"create",
@@ -191,27 +192,27 @@ func generatedGroupsCommand() *cli.Command {
 			generatedRequestCommand(
 				"remove-devices",
 				"Remove devices from a group",
-				"/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
+				"/device_set.v1.DeviceSetService/RemoveDevicesFromGroup",
 				generatedAuthBearer,
 				append([]cli.Flag{
-					&cli.Int64Flag{Name: "collection-id", Usage: "collection id"},
+					&cli.Int64Flag{Name: "target-group-id", Usage: "target group id"},
 				}, generatedCommonSelectorFlags()...),
 				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
-					req := &collectionv1.RemoveDevicesFromCollectionRequest{}
+					req := &devicesetv1.RemoveDevicesFromGroupRequest{}
 					selector, err := generatedBuildCommonSelector(cmd)
 					if err != nil {
 						return nil, err
 					}
 					req.DeviceSelector = selector
-					if cmd.IsSet("collection-id") {
-						req.CollectionId = cmd.Int64("collection-id")
+					if cmd.IsSet("target-group-id") {
+						req.TargetGroupId = cmd.Int64("target-group-id")
 					}
-					if err := generatedRequireCollectionType(ctx, client, req.CollectionId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
+					if err := generatedRequireCollectionType(ctx, client, req.TargetGroupId, collectionv1.CollectionType_COLLECTION_TYPE_GROUP); err != nil {
 						return nil, err
 					}
 					return req, nil
 				},
-				func() proto.Message { return &collectionv1.RemoveDevicesFromCollectionResponse{} },
+				func() proto.Message { return &devicesetv1.RemoveDevicesFromGroupResponse{} },
 			),
 			generatedRequestCommand(
 				"stats",

@@ -51,14 +51,14 @@
       "ignore_fields": ["type"]
     },
     {
-      "method": "/collection.v1.DeviceCollectionService/AddDevicesToCollection",
+      "method": "/device_set.v1.DeviceSetService/AddDevicesToGroup",
       "group": "groups",
       "command": "add-devices",
       "usage": "Add devices to a group",
       "require_collection_type": "group"
     },
     {
-      "method": "/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
+      "method": "/device_set.v1.DeviceSetService/RemoveDevicesFromGroup",
       "group": "groups",
       "command": "remove-devices",
       "usage": "Remove devices from a group",
@@ -127,17 +127,10 @@
       "require_collection_type": "rack"
     },
     {
-      "method": "/collection.v1.DeviceCollectionService/AddDevicesToCollection",
+      "method": "/device_set.v1.DeviceSetService/AssignDevicesToRack",
       "group": "racks",
       "command": "add-devices",
       "usage": "Add devices to a rack",
-      "require_collection_type": "rack"
-    },
-    {
-      "method": "/collection.v1.DeviceCollectionService/RemoveDevicesFromCollection",
-      "group": "racks",
-      "command": "remove-devices",
-      "usage": "Remove devices from a rack",
       "require_collection_type": "rack"
     },
     {

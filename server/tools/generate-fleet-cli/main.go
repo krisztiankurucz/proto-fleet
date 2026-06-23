@@ -1168,9 +1168,15 @@ func requireCollectionTypeLines(message protoreflect.MessageDescriptor, collecti
 		}, nil
 	}
 
-	field := message.Fields().ByName("collection_id")
+	var field protoreflect.FieldDescriptor
+	for _, fieldName := range []protoreflect.Name{"collection_id", "target_group_id", "target_rack_id"} {
+		field = message.Fields().ByName(fieldName)
+		if field != nil {
+			break
+		}
+	}
 	if field == nil {
-		return nil, fmt.Errorf("require_collection_type needs collection_id or collection_ids field on %s", message.FullName())
+		return nil, fmt.Errorf("require_collection_type needs collection_id, collection_ids, target_group_id, or target_rack_id field on %s", message.FullName())
 	}
 	goFieldName := toGoFieldName(field.Name())
 	if fieldNeedsPointer(field) {
