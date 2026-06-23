@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
 	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"
@@ -252,8 +253,7 @@ func generatedRacksCommand() *cli.Command {
 				"List all rack layouts",
 				"/collection.v1.DeviceCollectionService/ListRackTypes",
 				generatedAuthBearer,
-				[]cli.Flag{
-				},
+				[]cli.Flag{},
 				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
 					req := &collectionv1.ListRackTypesRequest{}
 					return req, nil
@@ -265,8 +265,7 @@ func generatedRacksCommand() *cli.Command {
 				"List all rack zones",
 				"/collection.v1.DeviceCollectionService/ListRackZones",
 				generatedAuthBearer,
-				[]cli.Flag{
-				},
+				[]cli.Flag{},
 				func(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {
 					req := &collectionv1.ListRackZonesRequest{}
 					return req, nil

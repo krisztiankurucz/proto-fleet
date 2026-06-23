@@ -56,6 +56,10 @@ const (
 	PermCurtailmentManage = "curtailment:manage"
 	PermCurtailmentIngest = "curtailment:ingest"
 
+	// cohort — desired-state cells and rig reservations.
+	PermCohortRead   = "cohort:read"
+	PermCohortManage = "cohort:manage"
+
 	// pool — org-level mining pool definitions applied to miners. Not
 	// site-scoped: pools are a global org resource.
 	PermPoolRead   = "pool:read"
@@ -101,6 +105,7 @@ const (
 	ResourceActivity    = "activity"
 	ResourceServerLog   = "serverlog"
 	ResourceCurtailment = "curtailment"
+	ResourceCohort      = "cohort"
 	ResourcePool        = "pool"
 	ResourceSchedule    = "schedule"
 	ResourceFleetNode   = "fleetnode"
@@ -157,6 +162,9 @@ var catalog = []CatalogEntry{
 	{PermCurtailmentRead, "View curtailment status, events, and policies.", ResourceCurtailment},
 	{PermCurtailmentManage, "Preview, start, stop, and manage curtailment policies.", ResourceCurtailment},
 	{PermCurtailmentIngest, "Accept curtailment dispatch signals from external providers.", ResourceCurtailment},
+
+	{PermCohortRead, "View cohorts, reservations, and effective desired state.", ResourceCohort},
+	{PermCohortManage, "Create, release, and manage cohorts and cohort memberships.", ResourceCohort},
 
 	{PermPoolRead, "View saved mining pool configurations.", ResourcePool},
 	{PermPoolManage, "Create, edit, and delete saved mining pool configurations.", ResourcePool},

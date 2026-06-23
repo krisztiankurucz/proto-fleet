@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
 	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"

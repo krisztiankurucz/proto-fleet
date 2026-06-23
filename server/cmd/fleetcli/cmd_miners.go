@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+
 	fleetmanagementv1 "github.com/block/proto-fleet/server/generated/grpc/fleetmanagement/v1"
 	"github.com/urfave/cli/v3"
 	proto "google.golang.org/protobuf/proto"
