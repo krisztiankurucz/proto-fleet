@@ -20,7 +20,7 @@ format: _format-server _format-client _format-plugins
 check: lint
 
 # run all code generation
-gen: _server-init _client-init _lint-protos _gen-protos _gen-server _format-client _format-server
+gen: _server-init _client-init _lint-protos _gen-protos _gen-proto-rig-api-protos _gen-server _format-client _format-server
 
 # --- Plugin builds ---
 
@@ -326,6 +326,7 @@ _python-gen-init:
 
 _lint-protos:
   buf lint
+  cd proto-rig-api/grpc && buf lint
 
 [working-directory: 'client']
 _lint-client:
@@ -357,6 +358,9 @@ _format-plugins:
 
 _gen-protos:
   PATH="$(pwd)/client/node_modules/.bin:$PATH" buf generate
+
+_gen-proto-rig-api-protos:
+  cd proto-rig-api/grpc && PATH="$(pwd)/../../client/node_modules/.bin:$PATH" buf generate
 
 [working-directory: 'server']
 _gen-server:

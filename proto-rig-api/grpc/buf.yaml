@@ -4,3 +4,6 @@ modules:
 lint:
   use:
     - MINIMAL
+  except:
+    - DIRECTORY_SAME_PACKAGE
+    - PACKAGE_DIRECTORY_MATCH
