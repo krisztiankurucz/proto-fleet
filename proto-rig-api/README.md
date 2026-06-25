@@ -6,16 +6,21 @@ This directory contains vendored API specifications for the Proto miner devices.
 
 ```
 proto-rig-api/
-├── grpc/           # Vendored gRPC + hashboard .proto files (reference only)
+├── grpc/           # Vendored gRPC + hashboard .proto files (NATS protobuf codegen + reference)
 ├── openapi/        # OpenAPI specification for REST API
 │   └── MDK-API.json
 ├── VERSION.md      # Version tracking (single source of truth)
 └── README.md       # This file
 ```
 
-The `grpc/` proto files are vendored as reference documentation of the on-rig
-gRPC surface; they are not inputs to Proto Fleet code generation. The OpenAPI
-spec is the source that drives generated code and the simulator (see below).
+Two code-generation paths consume this directory:
+
+- The OpenAPI spec drives the ProtoOS REST client and the simulator (see
+  below).
+- The `grpc/` proto files drive protobuf-es generation for binary NATS message
+  decoding in the ProtoOS dashboard. They remain a faithful vendored copy of
+  the on-rig surface, so they also serve as reference documentation for the
+  parts not yet consumed.
 
 ## Usage
 
@@ -35,6 +40,24 @@ The generated code is placed in `client/src/protoOS/api/generatedApi.ts`.
 
 The simulator (`server/fake-proto-rig/`) manually implements these endpoints - see its README for maintenance guidelines.
 
+### gRPC / hashboard Protos
+
+Used by:
+1. **Client** - To generate protobuf-es schemas (`protoc-gen-es`) for decoding
+   binary NATS messages in the ProtoOS dashboard (consumed under
+   `client/src/protoOS/nats/`)
+
+```bash
+# Generate protobuf-es schemas (part of `just gen`)
+just gen
+```
+
+The generated code is placed in `client/src/protoOS/api/generated/nats/`,
+configured by `proto-rig-api/grpc/buf.gen.yaml`. Generation covers every proto
+in the module; schemas that aren't imported are tree-shaken from the app
+bundle, so the full surface is generated even though only a subset is wired up
+today.
+
 ## Versioning
 
 The `VERSION.md` file in this directory contains:
@@ -51,6 +74,7 @@ When the miner API changes:
 2. Update `VERSION.md` with the new commit SHA(s) and dates
 3. Regenerate dependent code:
    - `cd client && npm run generate-api-types` (TypeScript types from the OpenAPI spec)
+   - `just gen` (protobuf-es schemas from the gRPC protos → `client/src/protoOS/api/generated/nats/`)
 4. Update the simulator REST API if the OpenAPI spec changed:
    - See `server/fake-proto-rig/README.md` for maintenance checklist
 5. Run tests to verify compatibility
