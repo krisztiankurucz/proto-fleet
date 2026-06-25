@@ -53,10 +53,12 @@ just gen
 ```
 
 The generated code is placed in `client/src/protoOS/api/generated/nats/`,
-configured by `proto-rig-api/grpc/buf.gen.yaml`. Generation covers every proto
-in the module; schemas that aren't imported are tree-shaken from the app
-bundle, so the full surface is generated even though only a subset is wired up
-today.
+configured by `proto-rig-api/grpc/buf.gen.yaml`. Generation is **type-filtered**
+via that file's `types:` list to only the messages ProtoOS decodes over NATS
+plus their transitive type dependencies; buf prunes everything else (all
+hashboard command protos and the unrelated API surfaces). **Contract: every
+message decoded over NATS must be listed in `types:`** or it will not be
+generated — add it there and rerun `just gen`.
 
 ## Versioning
 

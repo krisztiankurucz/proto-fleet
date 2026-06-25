@@ -3,3 +3,11 @@ plugins:
   - local: protoc-gen-es
     out: ../../client/src/protoOS/api/generated/nats
     opt: target=ts
+    # Generate ONLY the messages ProtoOS decodes over NATS, plus their transitive
+    # type dependencies. buf prunes everything else — including all hashboard_cmd*
+    # command protos, hashboard.proto, and the unrelated API protos. Adding a new
+    # NATS subscription? Add its fully-qualified message name here and regenerate.
+    types:
+      - miner_hb_api.HashboardOperatingStats   # hashboard.<slot>.data.board — board scalars
+      - miner_hb_api.AsicOperatingStats        # hashboard.<slot>.data.asic  — per-ASIC heatmap grid (asic_status)
+      - miner_psu_api.PsuMeasurements          # psu.<id>.data               — PSU scalars
