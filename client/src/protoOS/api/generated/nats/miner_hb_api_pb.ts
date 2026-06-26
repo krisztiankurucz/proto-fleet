@@ -2,8 +2,8 @@
 // @generated from file miner_hb_api.proto (package miner_hb_api, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { asic_status } from "./hashboard_async_pb";
 import { file_hashboard_async } from "./hashboard_async_pb";
 import type { Message } from "@bufbuild/protobuf";
@@ -14,9 +14,96 @@ import type { Message } from "@bufbuild/protobuf";
 export const file_miner_hb_api: GenFile =
   /*@__PURE__*/
   fileDesc(
-    "ChJtaW5lcl9oYl9hcGkucHJvdG8SDG1pbmVyX2hiX2FwaSKLAQoKQm9hcmRUZW1wcxIPCgdhdmVyYWdlGAEgASgCEgsKA21pbhgCIAEoAhILCgNtYXgYAyABKAISGAoLaW5sZXRfZnJvbnQYBCABKAJIAIgBARIYCgtvdXRsZXRfcmVhchgFIAEoAkgBiAEBQg4KDF9pbmxldF9mcm9udEIOCgxfb3V0bGV0X3JlYXIi8AEKF0hhc2hib2FyZE9wZXJhdGluZ1N0YXRzEhYKDmJvYXJkX2hhc2hyYXRlGAEgASgCEhwKFGJvYXJkX2hhc2hyYXRlX2lkZWFsGAIgASgCEhUKDWJvYXJkX3ZvbHRhZ2UYAyABKAISFQoNYm9hcmRfY3VycmVudBgEIAEoAhITCgtib2FyZF9wb3dlchgFIAEoAhIYChBib2FyZF9lZmZpY2llbmN5GAYgASgCEhMKC25vbmNlX2NvdW50GAcgASgNEi0KC2JvYXJkX3RlbXBzGAggASgLMhgubWluZXJfaGJfYXBpLkJvYXJkVGVtcHMiOwoSQXNpY09wZXJhdGluZ1N0YXRzEiUKCmFzaWNfc3RhdHMYASADKAsyES5md3BiLmFzaWNfc3RhdHVzQhVaE3BrZy9wcm90bzttaW5lcl9ycGNiBnByb3RvMw",
+    "ChJtaW5lcl9oYl9hcGkucHJvdG8SDG1pbmVyX2hiX2FwaSLVAQoZSGFzaGJvYXJkUGVyZm9ybWFuY2VTdGF0ZRIaChJwb3dlcl90YXJnZXRfd2F0dHMYASABKA0SHAoUcG93ZXJfdGhyb3R0bGVfd2F0dHMYAiABKAUSNAoEbW9kZRgDIAEoDjImLm1pbmVyX2hiX2FwaS5IYXNoYm9hcmRQZXJmb3JtYW5jZU1vZGUSOgoNcGxsX2FsZ29yaXRobRgEIAEoDjIjLm1pbmVyX2hiX2FwaS5IYXNoYm9hcmRQbGxBbGdvcml0aG0SDAoEc2VudBgFIAEoCCLfAQoPSGFzaGJvYXJkU3RhdHVzEjIKBXN0YXRlGAEgASgOMiMubWluZXJfaGJfYXBpLkhhc2hib2FyZFNlcnZpY2VTdGF0ZRIPCgd3b3JrX2lkGAIgASgNEhIKCmRpZmZpY3VsdHkYAyABKAQSQgoRcGVyZm9ybWFuY2Vfc3RhdGUYBCABKAsyJy5taW5lcl9oYl9hcGkuSGFzaGJvYXJkUGVyZm9ybWFuY2VTdGF0ZRIXCg9taW5pbmdfdXB0aW1lX3MYBSABKA0SFgoObWluaW5nX2VuYWJsZWQYBiABKAgiiwEKCkJvYXJkVGVtcHMSDwoHYXZlcmFnZRgBIAEoAhILCgNtaW4YAiABKAISCwoDbWF4GAMgASgCEhgKC2lubGV0X2Zyb250GAQgASgCSACIAQESGAoLb3V0bGV0X3JlYXIYBSABKAJIAYgBAUIOCgxfaW5sZXRfZnJvbnRCDgoMX291dGxldF9yZWFyIvABChdIYXNoYm9hcmRPcGVyYXRpbmdTdGF0cxIWCg5ib2FyZF9oYXNocmF0ZRgBIAEoAhIcChRib2FyZF9oYXNocmF0ZV9pZGVhbBgCIAEoAhIVCg1ib2FyZF92b2x0YWdlGAMgASgCEhUKDWJvYXJkX2N1cnJlbnQYBCABKAISEwoLYm9hcmRfcG93ZXIYBSABKAISGAoQYm9hcmRfZWZmaWNpZW5jeRgGIAEoAhITCgtub25jZV9jb3VudBgHIAEoDRItCgtib2FyZF90ZW1wcxgIIAEoCzIYLm1pbmVyX2hiX2FwaS5Cb2FyZFRlbXBzIjsKEkFzaWNPcGVyYXRpbmdTdGF0cxIlCgphc2ljX3N0YXRzGAEgAygLMhEuZndwYi5hc2ljX3N0YXR1cyItCgdGYW5EYXRhEg8KB2Zhbl9ycG0YASABKA0SEQoJY29ubmVjdGVkGAIgASgIKpwCChVIYXNoYm9hcmRTZXJ2aWNlU3RhdGUSIAocSEFTSEJPQVJEX1NFUlZJQ0VfU1RBVEVfSU5JVBAAEiUKIUhBU0hCT0FSRF9TRVJWSUNFX1NUQVRFX0RJU0NPVkVSWRABEigKJEhBU0hCT0FSRF9TRVJWSUNFX1NUQVRFX0RJU0NPTk5FQ1RFRBACEiEKHUhBU0hCT0FSRF9TRVJWSUNFX1NUQVRFX1JFQURZEAMSIgoeSEFTSEJPQVJEX1NFUlZJQ0VfU1RBVEVfTUlOSU5HEAQSJAogSEFTSEJPQVJEX1NFUlZJQ0VfU1RBVEVfRElTQUJMRUQQBRIjCh9IQVNIQk9BUkRfU0VSVklDRV9TVEFURV9VTktOT1dOEAYqbQoYSGFzaGJvYXJkUGVyZm9ybWFuY2VNb2RlEiYKIkhBU0hCT0FSRF9QRVJGT1JNQU5DRV9NT0RFX01BWElNVU0QABIpCiVIQVNIQk9BUkRfUEVSRk9STUFOQ0VfTU9ERV9FRkZJQ0lFTkNZEAEqmgEKFUhhc2hib2FyZFBsbEFsZ29yaXRobRIgChxIQVNIQk9BUkRfUExMX0FMR09SSVRITV9OT05FEAASOgo2SEFTSEJPQVJEX1BMTF9BTEdPUklUSE1fVk9MVEFHRV9JTUJBTEFOQ0VfQ09NUEVOU0FUSU9OEAESIwofSEFTSEJPQVJEX1BMTF9BTEdPUklUSE1fRlVaWklORxACQhVaE3BrZy9wcm90bzttaW5lcl9ycGNiBnByb3RvMw",
     [file_hashboard_async],
   );
+
+/**
+ * hashboard.<slot>.status — published every 1s
+ *
+ * @generated from message miner_hb_api.HashboardPerformanceState
+ */
+export type HashboardPerformanceState = Message<"miner_hb_api.HashboardPerformanceState"> & {
+  /**
+   * @generated from field: uint32 power_target_watts = 1;
+   */
+  powerTargetWatts: number;
+
+  /**
+   * @generated from field: int32 power_throttle_watts = 2;
+   */
+  powerThrottleWatts: number;
+
+  /**
+   * @generated from field: miner_hb_api.HashboardPerformanceMode mode = 3;
+   */
+  mode: HashboardPerformanceMode;
+
+  /**
+   * @generated from field: miner_hb_api.HashboardPllAlgorithm pll_algorithm = 4;
+   */
+  pllAlgorithm: HashboardPllAlgorithm;
+
+  /**
+   * Default to true when allocating — wait for a SetPowerTarget command before pushing to hardware.
+   *
+   * @generated from field: bool sent = 5;
+   */
+  sent: boolean;
+};
+
+/**
+ * Describes the message miner_hb_api.HashboardPerformanceState.
+ * Use `create(HashboardPerformanceStateSchema)` to create a new message.
+ */
+export const HashboardPerformanceStateSchema: GenMessage<HashboardPerformanceState> =
+  /*@__PURE__*/
+  messageDesc(file_miner_hb_api, 0);
+
+/**
+ * @generated from message miner_hb_api.HashboardStatus
+ */
+export type HashboardStatus = Message<"miner_hb_api.HashboardStatus"> & {
+  /**
+   * @generated from field: miner_hb_api.HashboardServiceState state = 1;
+   */
+  state: HashboardServiceState;
+
+  /**
+   * @generated from field: uint32 work_id = 2;
+   */
+  workId: number;
+
+  /**
+   * @generated from field: uint64 difficulty = 3;
+   */
+  difficulty: bigint;
+
+  /**
+   * @generated from field: miner_hb_api.HashboardPerformanceState performance_state = 4;
+   */
+  performanceState?: HashboardPerformanceState | undefined;
+
+  /**
+   * Accumulated seconds spent in the Mining state; pauses when not mining.
+   *
+   * @generated from field: uint32 mining_uptime_s = 5;
+   */
+  miningUptimeS: number;
+
+  /**
+   * Latched mining intent from the most recent StartMining/StopMining control command.
+   *
+   * @generated from field: bool mining_enabled = 6;
+   */
+  miningEnabled: boolean;
+};
+
+/**
+ * Describes the message miner_hb_api.HashboardStatus.
+ * Use `create(HashboardStatusSchema)` to create a new message.
+ */
+export const HashboardStatusSchema: GenMessage<HashboardStatus> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 1);
 
 /**
  * Board temperature breakdown — mirrors mcdd's BoardTemps struct.
@@ -55,7 +142,7 @@ export type BoardTemps = Message<"miner_hb_api.BoardTemps"> & {
  * Describes the message miner_hb_api.BoardTemps.
  * Use `create(BoardTempsSchema)` to create a new message.
  */
-export const BoardTempsSchema: GenMessage<BoardTemps> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 0);
+export const BoardTempsSchema: GenMessage<BoardTemps> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 2);
 
 /**
  * hashboard.<slot>.data.board — published on board stats update
@@ -110,7 +197,7 @@ export type HashboardOperatingStats = Message<"miner_hb_api.HashboardOperatingSt
  */
 export const HashboardOperatingStatsSchema: GenMessage<HashboardOperatingStats> =
   /*@__PURE__*/
-  messageDesc(file_miner_hb_api, 1);
+  messageDesc(file_miner_hb_api, 3);
 
 /**
  * hashboard.<slot>.data.asic — published on ASIC stats update
@@ -128,4 +215,119 @@ export type AsicOperatingStats = Message<"miner_hb_api.AsicOperatingStats"> & {
  * Describes the message miner_hb_api.AsicOperatingStats.
  * Use `create(AsicOperatingStatsSchema)` to create a new message.
  */
-export const AsicOperatingStatsSchema: GenMessage<AsicOperatingStats> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 2);
+export const AsicOperatingStatsSchema: GenMessage<AsicOperatingStats> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 4);
+
+/**
+ * fan.<fan_id>.data — published periodically with current fan state
+ *
+ * @generated from message miner_hb_api.FanData
+ */
+export type FanData = Message<"miner_hb_api.FanData"> & {
+  /**
+   * @generated from field: uint32 fan_rpm = 1;
+   */
+  fanRpm: number;
+
+  /**
+   * @generated from field: bool connected = 2;
+   */
+  connected: boolean;
+};
+
+/**
+ * Describes the message miner_hb_api.FanData.
+ * Use `create(FanDataSchema)` to create a new message.
+ */
+export const FanDataSchema: GenMessage<FanData> = /*@__PURE__*/ messageDesc(file_miner_hb_api, 5);
+
+/**
+ * @generated from enum miner_hb_api.HashboardServiceState
+ */
+export enum HashboardServiceState {
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_INIT = 0;
+   */
+  INIT = 0,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_DISCOVERY = 1;
+   */
+  DISCOVERY = 1,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_DISCONNECTED = 2;
+   */
+  DISCONNECTED = 2,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_READY = 3;
+   */
+  READY = 3,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_MINING = 4;
+   */
+  MINING = 4,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_DISABLED = 5;
+   */
+  DISABLED = 5,
+
+  /**
+   * @generated from enum value: HASHBOARD_SERVICE_STATE_UNKNOWN = 6;
+   */
+  UNKNOWN = 6,
+}
+
+/**
+ * Describes the enum miner_hb_api.HashboardServiceState.
+ */
+export const HashboardServiceStateSchema: GenEnum<HashboardServiceState> = /*@__PURE__*/ enumDesc(file_miner_hb_api, 0);
+
+/**
+ * @generated from enum miner_hb_api.HashboardPerformanceMode
+ */
+export enum HashboardPerformanceMode {
+  /**
+   * @generated from enum value: HASHBOARD_PERFORMANCE_MODE_MAXIMUM = 0;
+   */
+  MAXIMUM = 0,
+
+  /**
+   * @generated from enum value: HASHBOARD_PERFORMANCE_MODE_EFFICIENCY = 1;
+   */
+  EFFICIENCY = 1,
+}
+
+/**
+ * Describes the enum miner_hb_api.HashboardPerformanceMode.
+ */
+export const HashboardPerformanceModeSchema: GenEnum<HashboardPerformanceMode> =
+  /*@__PURE__*/
+  enumDesc(file_miner_hb_api, 1);
+
+/**
+ * @generated from enum miner_hb_api.HashboardPllAlgorithm
+ */
+export enum HashboardPllAlgorithm {
+  /**
+   * @generated from enum value: HASHBOARD_PLL_ALGORITHM_NONE = 0;
+   */
+  NONE = 0,
+
+  /**
+   * @generated from enum value: HASHBOARD_PLL_ALGORITHM_VOLTAGE_IMBALANCE_COMPENSATION = 1;
+   */
+  VOLTAGE_IMBALANCE_COMPENSATION = 1,
+
+  /**
+   * @generated from enum value: HASHBOARD_PLL_ALGORITHM_FUZZING = 2;
+   */
+  FUZZING = 2,
+}
+
+/**
+ * Describes the enum miner_hb_api.HashboardPllAlgorithm.
+ */
+export const HashboardPllAlgorithmSchema: GenEnum<HashboardPllAlgorithm> = /*@__PURE__*/ enumDesc(file_miner_hb_api, 2);

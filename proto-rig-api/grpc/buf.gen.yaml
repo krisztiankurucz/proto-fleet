@@ -8,6 +8,8 @@ plugins:
     # command protos, hashboard.proto, and the unrelated API protos. Adding a new
     # NATS subscription? Add its fully-qualified message name here and regenerate.
     types:
-      - miner_hb_api.HashboardOperatingStats   # hashboard.<slot>.data.board — board scalars
+      - miner_hb_api.HashboardStatus           # hashboard.<slot>.status     — mining state, power target, uptime
+      - miner_hb_api.HashboardOperatingStats   # hashboard.<slot>.data.board — board scalars (hashrate, power, temps)
       - miner_hb_api.AsicOperatingStats        # hashboard.<slot>.data.asic  — per-ASIC heatmap grid (asic_status)
+      - miner_hb_api.FanData                   # fan.<fan_id>.data           — fan RPM
       - miner_psu_api.PsuMeasurements          # psu.<id>.data               — PSU scalars
