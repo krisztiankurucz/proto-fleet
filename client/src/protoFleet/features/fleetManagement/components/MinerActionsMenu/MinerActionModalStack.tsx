@@ -112,6 +112,7 @@ const MinerActionModalStack = ({
         open={
           minerActions.currentAction === deviceActions.firmwareUpdate ? minerActions.showFirmwareUpdateModal : false
         }
+        target={minerActions.firmwareUpdateTarget}
         onConfirm={wrap(minerActions.handleFirmwareUpdateConfirm)}
         onDismiss={wrap(minerActions.handleFirmwareUpdateDismiss)}
       />

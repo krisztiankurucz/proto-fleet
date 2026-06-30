@@ -1,4 +1,13 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { clone, create } from "@bufbuild/protobuf";
 
 import {
@@ -13,6 +22,7 @@ import {
   MinerListFilterSchema,
   PairingStatus,
 } from "@/protoFleet/api/generated/fleetmanagement/v1/fleetmanagement_pb";
+import { useSites } from "@/protoFleet/api/sites";
 import { useDeviceSets } from "@/protoFleet/api/useDeviceSets";
 import useFleet from "@/protoFleet/api/useFleet";
 import type { SiteFilterFields } from "@/protoFleet/components/PageHeader/SitePicker";
@@ -32,6 +42,7 @@ import ProgressCircular from "@/shared/components/ProgressCircular";
 export type DeviceListItem = {
   deviceIdentifier: string;
   name: string;
+  manufacturer: string;
   model: string;
   ipAddress: string;
   rackLabel: string;
@@ -42,6 +53,7 @@ export type FilterConfig = {
   showTypeFilter?: boolean;
   showRackFilter?: boolean;
   showGroupFilter?: boolean;
+  showSiteFilter?: boolean;
 };
 
 export interface MinerSelectionListHandle {
@@ -56,9 +68,13 @@ export interface MinerSelectionListHandle {
 export interface MinerSelectionListProps {
   filterConfig?: FilterConfig;
   initialAllSelected?: boolean;
+  fixedModels?: string[];
   initialSelectedItems?: string[];
   isMembersLoading?: boolean;
   isRowDisabled?: (item: DeviceListItem) => boolean;
+  isRowVisible?: (item: DeviceListItem) => boolean;
+  noDataElement?: ReactNode;
+  visibleTotal?: number;
   /** When true, renders radio buttons for single-item selection instead of checkboxes. */
   singleSelect?: boolean;
   disableFilteredSelectAll?: boolean;
@@ -140,6 +156,7 @@ const SORT_FIELD_BY_COLUMN: Partial<Record<ModalColumn, SortField>> = {
 const ALL_SORTABLE_COLUMNS = new Set<ModalColumn>(Object.keys(SORT_FIELD_BY_COLUMN) as ModalColumn[]);
 
 const PAGE_SIZE = 50;
+const UNASSIGNED_SITE_FILTER_ID = "__unassigned";
 
 const hasUnsupportedAllSelectionFilter = (filter: MinerListFilter): boolean =>
   filter.models.length > 0 ||
@@ -151,6 +168,7 @@ const hasUnsupportedAllSelectionFilter = (filter: MinerListFilter): boolean =>
 const toDeviceListItem = (miner: ProtoMinerStateSnapshot): DeviceListItem => ({
   deviceIdentifier: miner.deviceIdentifier,
   name: miner.name,
+  manufacturer: miner.manufacturer,
   model: miner.model,
   ipAddress: miner.ipAddress,
   rackLabel: getMinerRackLabel(miner),
@@ -164,18 +182,27 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
     {
       filterConfig,
       initialAllSelected = false,
+      fixedModels,
       initialSelectedItems,
       isMembersLoading = false,
       isRowDisabled,
+      isRowVisible,
+      noDataElement,
       singleSelect = false,
       disableFilteredSelectAll = false,
       showSelectAllFooter = true,
       scope,
+      visibleTotal,
       onSelectionChange,
     },
     ref,
   ) => {
-    const { showTypeFilter = true, showRackFilter = true, showGroupFilter = true } = filterConfig ?? {};
+    const {
+      showTypeFilter = true,
+      showRackFilter = true,
+      showGroupFilter = true,
+      showSiteFilter = false,
+    } = filterConfig ?? {};
 
     const scopeSiteIds = useMemo(() => scope?.siteIds ?? [], [scope]);
     const scopeIncludeUnassigned = scope?.includeUnassigned ?? false;
@@ -185,12 +212,18 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
 
     const { listGroups, listRacks } = useDeviceSets();
     const [filter, setFilter] = useState(() =>
-      create(MinerListFilterSchema, { siteIds: scopeSiteIds, includeUnassigned: scopeIncludeUnassigned }),
+      create(MinerListFilterSchema, {
+        models: fixedModels ?? [],
+        siteIds: scopeSiteIds,
+        includeUnassigned: scopeIncludeUnassigned,
+      }),
     );
+    const { listSites } = useSites();
     const [selectedItems, setSelectedItems] = useState<string[]>(initialSelectedItems ?? []);
     const [allSelected, setAllSelected] = useState(initialAllSelected && !singleSelect);
     const [availableGroups, setAvailableGroups] = useState<DeviceSet[]>([]);
     const [availableRacks, setAvailableRacks] = useState<DeviceSet[]>([]);
+    const [availableSites, setAvailableSites] = useState<{ id: bigint; name: string }[]>([]);
     const [hasInitialSynced, setHasInitialSynced] = useState(!initialSelectedItems || initialSelectedItems.length > 0);
     const [currentSort, setCurrentSort] = useState<{ field: ModalColumn; direction: SortDirection } | undefined>(
       undefined,
@@ -230,8 +263,11 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
       return minerIds
         .map((id) => miners[id])
         .filter((snapshot): snapshot is ProtoMinerStateSnapshot => Boolean(snapshot))
-        .map(toDeviceListItem);
-    }, [minerIds, miners]);
+        .map(toDeviceListItem)
+        .filter((item) => (isRowVisible ? isRowVisible(item) : true));
+    }, [isRowVisible, minerIds, miners]);
+
+    const displayedTotalMiners = visibleTotal ?? totalMiners;
     const currentSelectableItemIds = useMemo(
       () =>
         (isRowDisabled ? currentPageItems.filter((device) => !isRowDisabled(device)) : currentPageItems).map(
@@ -276,8 +312,8 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
 
     // Notify parent of selection changes
     useEffect(() => {
-      onSelectionChange?.({ selectedItems, allSelected, totalMiners });
-    }, [selectedItems, allSelected, totalMiners, onSelectionChange]);
+      onSelectionChange?.({ selectedItems, allSelected, totalMiners: displayedTotalMiners });
+    }, [selectedItems, allSelected, displayedTotalMiners, onSelectionChange]);
 
     useEffect(() => {
       if (!allSelected || canSelectAll) {
@@ -291,9 +327,9 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
     useImperativeHandle(
       ref,
       () => ({
-        getSelection: () => ({ selectedItems, allSelected, totalMiners, filter }),
+        getSelection: () => ({ selectedItems, allSelected, totalMiners: displayedTotalMiners, filter }),
       }),
-      [selectedItems, allSelected, totalMiners, filter],
+      [selectedItems, allSelected, displayedTotalMiners, filter],
     );
 
     const handleSetSelectedItems = useCallback(
@@ -351,8 +387,20 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
       if (showGroupFilter) listGroups({ onSuccess: setAvailableGroups });
       if (showRackFilter)
         listRacks({ siteIds: scopeSiteIds, includeUnassigned: scopeIncludeUnassigned, onSuccess: setAvailableRacks });
+      if (showSiteFilter) {
+        void listSites({
+          onSuccess: (siteCounts) => {
+            setAvailableSites(
+              siteCounts.flatMap((siteWithCounts) => {
+                const site = siteWithCounts.site;
+                return site ? [{ id: site.id, name: site.name }] : [];
+              }),
+            );
+          },
+        });
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showGroupFilter, showRackFilter, listGroups, listRacks, scopeKey]);
+    }, [showGroupFilter, showRackFilter, showSiteFilter, listGroups, listRacks, listSites, scopeKey]);
 
     const filters = useMemo((): FilterItem[] => {
       const items: FilterItem[] = [];
@@ -383,8 +431,29 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
           defaultOptionIds: [],
         });
       }
+      if (showSiteFilter) {
+        items.push({
+          type: "dropdown",
+          title: "Site",
+          value: "site",
+          options: [
+            ...availableSites.map((site) => ({ id: site.id.toString(), label: site.name })),
+            { id: UNASSIGNED_SITE_FILTER_ID, label: "Unassigned" },
+          ],
+          defaultOptionIds: [],
+        });
+      }
       return items;
-    }, [showTypeFilter, showRackFilter, showGroupFilter, availableModels, availableRacks, availableGroups]);
+    }, [
+      showTypeFilter,
+      showRackFilter,
+      showGroupFilter,
+      showSiteFilter,
+      availableModels,
+      availableRacks,
+      availableGroups,
+      availableSites,
+    ]);
 
     const handleServerFilter = useCallback(
       async (activeFilters: ActiveFilters) => {
@@ -395,7 +464,9 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
         });
 
         const typeFilters = activeFilters.dropdownFilters.type;
-        if (typeFilters && typeFilters.length > 0) {
+        if (fixedModels && fixedModels.length > 0) {
+          minerFilter.models.push(...fixedModels);
+        } else if (typeFilters && typeFilters.length > 0) {
           minerFilter.models.push(...typeFilters);
         }
 
@@ -413,10 +484,20 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
           }
         }
 
+        if (showSiteFilter) {
+          const siteFilters = activeFilters.dropdownFilters.site;
+          if (siteFilters && siteFilters.length > 0) {
+            minerFilter.siteIds.push(
+              ...siteFilters.filter((id) => id !== UNASSIGNED_SITE_FILTER_ID).map((id) => BigInt(id)),
+            );
+            minerFilter.includeUnassigned = siteFilters.includes(UNASSIGNED_SITE_FILTER_ID);
+          }
+        }
+
         setFilter(minerFilter);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [showRackFilter, showGroupFilter, scopeSiteIds, scopeIncludeUnassigned],
+      [fixedModels, showRackFilter, showGroupFilter, showSiteFilter, scopeSiteIds, scopeIncludeUnassigned],
     );
 
     const showSpinner = (isLoading || isMembersLoading) && currentPageItems.length === 0;
@@ -440,6 +521,7 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
             onServerFilter={handleServerFilter}
             items={currentPageItems}
             itemKey="deviceIdentifier"
+            noDataElement={noDataElement}
             itemSelectable
             selectionType={singleSelect ? "radio" : "checkbox"}
             sortableColumns={ALL_SORTABLE_COLUMNS}
@@ -449,18 +531,19 @@ const MinerSelectionList = forwardRef<MinerSelectionListHandle, MinerSelectionLi
             customSetSelectedItems={handleSetSelectedItems}
             preserveOffPageSelection
             isRowDisabled={isRowDisabled}
-            total={totalMiners}
+            total={displayedTotalMiners}
             hideTotal
             itemName={{ singular: "miner", plural: "miners" }}
             containerClassName="min-h-0"
             overflowContainer
             stickyBgColor="bg-surface-elevated-base"
             footerContent={
-              !isLoading && totalMiners !== undefined && totalMiners > 0 ? (
+              !isLoading && displayedTotalMiners !== undefined && displayedTotalMiners > 0 ? (
                 <div className="flex flex-col items-center gap-4 py-6">
                   <span className="text-300 text-text-primary">
-                    Showing {currentPage * PAGE_SIZE + 1}–{currentPage * PAGE_SIZE + currentPageItems.length} of{" "}
-                    {totalMiners} miners
+                    {visibleTotal === undefined
+                      ? `Showing ${currentPage * PAGE_SIZE + 1}-${currentPage * PAGE_SIZE + currentPageItems.length} of ${displayedTotalMiners} miners`
+                      : `${displayedTotalMiners} available ${displayedTotalMiners === 1 ? "miner" : "miners"}`}
                   </span>
                   <div className="flex gap-3">
                     <Button
