@@ -159,6 +159,18 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.countBuildingsBySiteStmt, err = db.PrepareContext(ctx, countBuildingsBySite); err != nil {
 		return nil, fmt.Errorf("error preparing query CountBuildingsBySite: %w", err)
 	}
+	if q.countCohortDevicesStmt, err = db.PrepareContext(ctx, countCohortDevices); err != nil {
+		return nil, fmt.Errorf("error preparing query CountCohortDevices: %w", err)
+	}
+	if q.countCohortMembershipsStmt, err = db.PrepareContext(ctx, countCohortMemberships); err != nil {
+		return nil, fmt.Errorf("error preparing query CountCohortMemberships: %w", err)
+	}
+	if q.countCohortsStmt, err = db.PrepareContext(ctx, countCohorts); err != nil {
+		return nil, fmt.Errorf("error preparing query CountCohorts: %w", err)
+	}
+	if q.countCohortsByOwnerStmt, err = db.PrepareContext(ctx, countCohortsByOwner); err != nil {
+		return nil, fmt.Errorf("error preparing query CountCohortsByOwner: %w", err)
+	}
 	if q.countComponentsWithErrorsStmt, err = db.PrepareContext(ctx, countComponentsWithErrors); err != nil {
 		return nil, fmt.Errorf("error preparing query CountComponentsWithErrors: %w", err)
 	}
@@ -249,11 +261,17 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.curtailmentEventHasInFlightTargetsStmt, err = db.PrepareContext(ctx, curtailmentEventHasInFlightTargets); err != nil {
 		return nil, fmt.Errorf("error preparing query CurtailmentEventHasInFlightTargets: %w", err)
 	}
+	if q.deleteCohortFirmwareTargetStmt, err = db.PrepareContext(ctx, deleteCohortFirmwareTarget); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteCohortFirmwareTarget: %w", err)
+	}
 	if q.deleteCohortMembershipsStmt, err = db.PrepareContext(ctx, deleteCohortMemberships); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteCohortMemberships: %w", err)
 	}
 	if q.deleteCohortMembershipsByCohortStmt, err = db.PrepareContext(ctx, deleteCohortMembershipsByCohort); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteCohortMembershipsByCohort: %w", err)
+	}
+	if q.deleteCohortMembershipsByDeviceStmt, err = db.PrepareContext(ctx, deleteCohortMembershipsByDevice); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteCohortMembershipsByDevice: %w", err)
 	}
 	if q.deleteCurtailmentAutomationRuleByOrgStmt, err = db.PrepareContext(ctx, deleteCurtailmentAutomationRuleByOrg); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteCurtailmentAutomationRuleByOrg: %w", err)
@@ -780,6 +798,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listActiveOrganizationIDsStmt, err = db.PrepareContext(ctx, listActiveOrganizationIDs); err != nil {
 		return nil, fmt.Errorf("error preparing query ListActiveOrganizationIDs: %w", err)
 	}
+	if q.listActiveOwnedCohortMembershipsStmt, err = db.PrepareContext(ctx, listActiveOwnedCohortMemberships); err != nil {
+		return nil, fmt.Errorf("error preparing query ListActiveOwnedCohortMemberships: %w", err)
+	}
 	if q.listActivityLogsStmt, err = db.PrepareContext(ctx, listActivityLogs); err != nil {
 		return nil, fmt.Errorf("error preparing query ListActivityLogs: %w", err)
 	}
@@ -803,6 +824,15 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.listBuiltinRolesForOrgStmt, err = db.PrepareContext(ctx, listBuiltinRolesForOrg); err != nil {
 		return nil, fmt.Errorf("error preparing query ListBuiltinRolesForOrg: %w", err)
+	}
+	if q.listCohortDeviceOwnershipStmt, err = db.PrepareContext(ctx, listCohortDeviceOwnership); err != nil {
+		return nil, fmt.Errorf("error preparing query ListCohortDeviceOwnership: %w", err)
+	}
+	if q.listCohortDevicesStmt, err = db.PrepareContext(ctx, listCohortDevices); err != nil {
+		return nil, fmt.Errorf("error preparing query ListCohortDevices: %w", err)
+	}
+	if q.listCohortFirmwareTargetsStmt, err = db.PrepareContext(ctx, listCohortFirmwareTargets); err != nil {
+		return nil, fmt.Errorf("error preparing query ListCohortFirmwareTargets: %w", err)
 	}
 	if q.listCohortMembersStmt, err = db.PrepareContext(ctx, listCohortMembers); err != nil {
 		return nil, fmt.Errorf("error preparing query ListCohortMembers: %w", err)
@@ -855,6 +885,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listDeviceSetMembersPaginatedFilteredAfterStmt, err = db.PrepareContext(ctx, listDeviceSetMembersPaginatedFilteredAfter); err != nil {
 		return nil, fmt.Errorf("error preparing query ListDeviceSetMembersPaginatedFilteredAfter: %w", err)
 	}
+	if q.listDeviceSitesForIdentifiersStmt, err = db.PrepareContext(ctx, listDeviceSitesForIdentifiers); err != nil {
+		return nil, fmt.Errorf("error preparing query ListDeviceSitesForIdentifiers: %w", err)
+	}
 	if q.listEffectivePermissionsForUserStmt, err = db.PrepareContext(ctx, listEffectivePermissionsForUser); err != nil {
 		return nil, fmt.Errorf("error preparing query ListEffectivePermissionsForUser: %w", err)
 	}
@@ -869,6 +902,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.listExistingDeviceIdentifiersStmt, err = db.PrepareContext(ctx, listExistingDeviceIdentifiers); err != nil {
 		return nil, fmt.Errorf("error preparing query ListExistingDeviceIdentifiers: %w", err)
+	}
+	if q.listExpiredActiveCohortsStmt, err = db.PrepareContext(ctx, listExpiredActiveCohorts); err != nil {
+		return nil, fmt.Errorf("error preparing query ListExpiredActiveCohorts: %w", err)
 	}
 	if q.listFleetNodeDeviceIDsForRevocationStmt, err = db.PrepareContext(ctx, listFleetNodeDeviceIDsForRevocation); err != nil {
 		return nil, fmt.Errorf("error preparing query ListFleetNodeDeviceIDsForRevocation: %w", err)
@@ -1233,6 +1269,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.updateBuildingStmt, err = db.PrepareContext(ctx, updateBuilding); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateBuilding: %w", err)
 	}
+	if q.updateCohortStmt, err = db.PrepareContext(ctx, updateCohort); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateCohort: %w", err)
+	}
 	if q.updateCurtailmentAutomationRuleStmt, err = db.PrepareContext(ctx, updateCurtailmentAutomationRule); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateCurtailmentAutomationRule: %w", err)
 	}
@@ -1250,6 +1289,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.updateCustomRoleNameStmt, err = db.PrepareContext(ctx, updateCustomRoleName); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateCustomRoleName: %w", err)
+	}
+	if q.updateDefaultCohortFirmwareStmt, err = db.PrepareContext(ctx, updateDefaultCohortFirmware); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateDefaultCohortFirmware: %w", err)
 	}
 	if q.updateDeviceIPAssignmentStmt, err = db.PrepareContext(ctx, updateDeviceIPAssignment); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateDeviceIPAssignment: %w", err)
@@ -1349,6 +1391,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.upsertBuiltinRoleForOrgStmt, err = db.PrepareContext(ctx, upsertBuiltinRoleForOrg); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertBuiltinRoleForOrg: %w", err)
+	}
+	if q.upsertCohortFirmwareTargetStmt, err = db.PrepareContext(ctx, upsertCohortFirmwareTarget); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertCohortFirmwareTarget: %w", err)
 	}
 	if q.upsertCommandOnDeviceLogStmt, err = db.PrepareContext(ctx, upsertCommandOnDeviceLog); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertCommandOnDeviceLog: %w", err)
@@ -1619,6 +1664,26 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing countBuildingsBySiteStmt: %w", cerr)
 		}
 	}
+	if q.countCohortDevicesStmt != nil {
+		if cerr := q.countCohortDevicesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countCohortDevicesStmt: %w", cerr)
+		}
+	}
+	if q.countCohortMembershipsStmt != nil {
+		if cerr := q.countCohortMembershipsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countCohortMembershipsStmt: %w", cerr)
+		}
+	}
+	if q.countCohortsStmt != nil {
+		if cerr := q.countCohortsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countCohortsStmt: %w", cerr)
+		}
+	}
+	if q.countCohortsByOwnerStmt != nil {
+		if cerr := q.countCohortsByOwnerStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countCohortsByOwnerStmt: %w", cerr)
+		}
+	}
 	if q.countComponentsWithErrorsStmt != nil {
 		if cerr := q.countComponentsWithErrorsStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing countComponentsWithErrorsStmt: %w", cerr)
@@ -1769,6 +1834,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing curtailmentEventHasInFlightTargetsStmt: %w", cerr)
 		}
 	}
+	if q.deleteCohortFirmwareTargetStmt != nil {
+		if cerr := q.deleteCohortFirmwareTargetStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteCohortFirmwareTargetStmt: %w", cerr)
+		}
+	}
 	if q.deleteCohortMembershipsStmt != nil {
 		if cerr := q.deleteCohortMembershipsStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteCohortMembershipsStmt: %w", cerr)
@@ -1777,6 +1847,11 @@ func (q *Queries) Close() error {
 	if q.deleteCohortMembershipsByCohortStmt != nil {
 		if cerr := q.deleteCohortMembershipsByCohortStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteCohortMembershipsByCohortStmt: %w", cerr)
+		}
+	}
+	if q.deleteCohortMembershipsByDeviceStmt != nil {
+		if cerr := q.deleteCohortMembershipsByDeviceStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteCohortMembershipsByDeviceStmt: %w", cerr)
 		}
 	}
 	if q.deleteCurtailmentAutomationRuleByOrgStmt != nil {
@@ -2654,6 +2729,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listActiveOrganizationIDsStmt: %w", cerr)
 		}
 	}
+	if q.listActiveOwnedCohortMembershipsStmt != nil {
+		if cerr := q.listActiveOwnedCohortMembershipsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listActiveOwnedCohortMembershipsStmt: %w", cerr)
+		}
+	}
 	if q.listActivityLogsStmt != nil {
 		if cerr := q.listActivityLogsStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listActivityLogsStmt: %w", cerr)
@@ -2692,6 +2772,21 @@ func (q *Queries) Close() error {
 	if q.listBuiltinRolesForOrgStmt != nil {
 		if cerr := q.listBuiltinRolesForOrgStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listBuiltinRolesForOrgStmt: %w", cerr)
+		}
+	}
+	if q.listCohortDeviceOwnershipStmt != nil {
+		if cerr := q.listCohortDeviceOwnershipStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listCohortDeviceOwnershipStmt: %w", cerr)
+		}
+	}
+	if q.listCohortDevicesStmt != nil {
+		if cerr := q.listCohortDevicesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listCohortDevicesStmt: %w", cerr)
+		}
+	}
+	if q.listCohortFirmwareTargetsStmt != nil {
+		if cerr := q.listCohortFirmwareTargetsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listCohortFirmwareTargetsStmt: %w", cerr)
 		}
 	}
 	if q.listCohortMembersStmt != nil {
@@ -2779,6 +2874,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listDeviceSetMembersPaginatedFilteredAfterStmt: %w", cerr)
 		}
 	}
+	if q.listDeviceSitesForIdentifiersStmt != nil {
+		if cerr := q.listDeviceSitesForIdentifiersStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listDeviceSitesForIdentifiersStmt: %w", cerr)
+		}
+	}
 	if q.listEffectivePermissionsForUserStmt != nil {
 		if cerr := q.listEffectivePermissionsForUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listEffectivePermissionsForUserStmt: %w", cerr)
@@ -2802,6 +2902,11 @@ func (q *Queries) Close() error {
 	if q.listExistingDeviceIdentifiersStmt != nil {
 		if cerr := q.listExistingDeviceIdentifiersStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listExistingDeviceIdentifiersStmt: %w", cerr)
+		}
+	}
+	if q.listExpiredActiveCohortsStmt != nil {
+		if cerr := q.listExpiredActiveCohortsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listExpiredActiveCohortsStmt: %w", cerr)
 		}
 	}
 	if q.listFleetNodeDeviceIDsForRevocationStmt != nil {
@@ -3409,6 +3514,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing updateBuildingStmt: %w", cerr)
 		}
 	}
+	if q.updateCohortStmt != nil {
+		if cerr := q.updateCohortStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateCohortStmt: %w", cerr)
+		}
+	}
 	if q.updateCurtailmentAutomationRuleStmt != nil {
 		if cerr := q.updateCurtailmentAutomationRuleStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateCurtailmentAutomationRuleStmt: %w", cerr)
@@ -3437,6 +3547,11 @@ func (q *Queries) Close() error {
 	if q.updateCustomRoleNameStmt != nil {
 		if cerr := q.updateCustomRoleNameStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateCustomRoleNameStmt: %w", cerr)
+		}
+	}
+	if q.updateDefaultCohortFirmwareStmt != nil {
+		if cerr := q.updateDefaultCohortFirmwareStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateDefaultCohortFirmwareStmt: %w", cerr)
 		}
 	}
 	if q.updateDeviceIPAssignmentStmt != nil {
@@ -3604,6 +3719,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing upsertBuiltinRoleForOrgStmt: %w", cerr)
 		}
 	}
+	if q.upsertCohortFirmwareTargetStmt != nil {
+		if cerr := q.upsertCohortFirmwareTargetStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertCohortFirmwareTargetStmt: %w", cerr)
+		}
+	}
 	if q.upsertCommandOnDeviceLogStmt != nil {
 		if cerr := q.upsertCommandOnDeviceLogStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertCommandOnDeviceLogStmt: %w", cerr)
@@ -3753,6 +3873,10 @@ type Queries struct {
 	countActiveUnpairedDiscoveredDevicesStmt                   *sql.Stmt
 	countActivityLogsStmt                                      *sql.Stmt
 	countBuildingsBySiteStmt                                   *sql.Stmt
+	countCohortDevicesStmt                                     *sql.Stmt
+	countCohortMembershipsStmt                                 *sql.Stmt
+	countCohortsStmt                                           *sql.Stmt
+	countCohortsByOwnerStmt                                    *sql.Stmt
 	countComponentsWithErrorsStmt                              *sql.Stmt
 	countCurtailmentAutomationRulesByMQTTSourceStmt            *sql.Stmt
 	countCurtailmentAutomationRulesByResponseProfileStmt       *sql.Stmt
@@ -3783,8 +3907,10 @@ type Queries struct {
 	createUserStmt                                             *sql.Stmt
 	createUserOrganizationStmt                                 *sql.Stmt
 	curtailmentEventHasInFlightTargetsStmt                     *sql.Stmt
+	deleteCohortFirmwareTargetStmt                             *sql.Stmt
 	deleteCohortMembershipsStmt                                *sql.Stmt
 	deleteCohortMembershipsByCohortStmt                        *sql.Stmt
+	deleteCohortMembershipsByDeviceStmt                        *sql.Stmt
 	deleteCurtailmentAutomationRuleByOrgStmt                   *sql.Stmt
 	deleteCurtailmentResponseProfileByOrgStmt                  *sql.Stmt
 	deleteCurtailmentResponseProfilesBySiteStmt                *sql.Stmt
@@ -3960,6 +4086,7 @@ type Queries struct {
 	listActiveCurtailmentTargetDevicesByOrgStmt                *sql.Stmt
 	listActiveNotificationsStmt                                *sql.Stmt
 	listActiveOrganizationIDsStmt                              *sql.Stmt
+	listActiveOwnedCohortMembershipsStmt                       *sql.Stmt
 	listActivityLogsStmt                                       *sql.Stmt
 	listApiKeysByOrganizationStmt                              *sql.Stmt
 	listAssignmentsForRoleStmt                                 *sql.Stmt
@@ -3968,6 +4095,9 @@ type Queries struct {
 	listBuildingRacksStmt                                      *sql.Stmt
 	listBuildingsByOrgStmt                                     *sql.Stmt
 	listBuiltinRolesForOrgStmt                                 *sql.Stmt
+	listCohortDeviceOwnershipStmt                              *sql.Stmt
+	listCohortDevicesStmt                                      *sql.Stmt
+	listCohortFirmwareTargetsStmt                              *sql.Stmt
 	listCohortMembersStmt                                      *sql.Stmt
 	listCohortsStmt                                            *sql.Stmt
 	listCohortsByOwnerStmt                                     *sql.Stmt
@@ -3985,11 +4115,13 @@ type Queries struct {
 	listDeviceSetMembersPaginatedAfterStmt                     *sql.Stmt
 	listDeviceSetMembersPaginatedFilteredStmt                  *sql.Stmt
 	listDeviceSetMembersPaginatedFilteredAfterStmt             *sql.Stmt
+	listDeviceSitesForIdentifiersStmt                          *sql.Stmt
 	listEffectivePermissionsForUserStmt                        *sql.Stmt
 	listEffectivePermissionsForUserForUpdateStmt               *sql.Stmt
 	listEnabledCurtailmentAutomationRulesByMQTTSourceStmt      *sql.Stmt
 	listEnabledMQTTSourcesStmt                                 *sql.Stmt
 	listExistingDeviceIdentifiersStmt                          *sql.Stmt
+	listExpiredActiveCohortsStmt                               *sql.Stmt
 	listFleetNodeDeviceIDsForRevocationStmt                    *sql.Stmt
 	listFleetNodeDevicesStmt                                   *sql.Stmt
 	listFleetNodeDiscoveredDevicesStmt                         *sql.Stmt
@@ -4111,12 +4243,14 @@ type Queries struct {
 	unpairDeviceStmt                                           *sql.Stmt
 	updateApiKeyLastUsedStmt                                   *sql.Stmt
 	updateBuildingStmt                                         *sql.Stmt
+	updateCohortStmt                                           *sql.Stmt
 	updateCurtailmentAutomationRuleStmt                        *sql.Stmt
 	updateCurtailmentEventOperatorFieldsStmt                   *sql.Stmt
 	updateCurtailmentEventStateStmt                            *sql.Stmt
 	updateCurtailmentResponseProfileStmt                       *sql.Stmt
 	updateCurtailmentTargetStateStmt                           *sql.Stmt
 	updateCustomRoleNameStmt                                   *sql.Stmt
+	updateDefaultCohortFirmwareStmt                            *sql.Stmt
 	updateDeviceIPAssignmentStmt                               *sql.Stmt
 	updateDeviceInfoStmt                                       *sql.Stmt
 	updateDevicePairingStatusByIdentifierStmt                  *sql.Stmt
@@ -4150,6 +4284,7 @@ type Queries struct {
 	updateUserRoleStmt                                         *sql.Stmt
 	updateUserUsernameStmt                                     *sql.Stmt
 	upsertBuiltinRoleForOrgStmt                                *sql.Stmt
+	upsertCohortFirmwareTargetStmt                             *sql.Stmt
 	upsertCommandOnDeviceLogStmt                               *sql.Stmt
 	upsertCurtailmentAutomationSignalStateStmt                 *sql.Stmt
 	upsertCurtailmentReconcilerHeartbeatStmt                   *sql.Stmt
@@ -4214,6 +4349,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		countActiveUnpairedDiscoveredDevicesStmt:                   q.countActiveUnpairedDiscoveredDevicesStmt,
 		countActivityLogsStmt:                                      q.countActivityLogsStmt,
 		countBuildingsBySiteStmt:                                   q.countBuildingsBySiteStmt,
+		countCohortDevicesStmt:                                     q.countCohortDevicesStmt,
+		countCohortMembershipsStmt:                                 q.countCohortMembershipsStmt,
+		countCohortsStmt:                                           q.countCohortsStmt,
+		countCohortsByOwnerStmt:                                    q.countCohortsByOwnerStmt,
 		countComponentsWithErrorsStmt:                              q.countComponentsWithErrorsStmt,
 		countCurtailmentAutomationRulesByMQTTSourceStmt:            q.countCurtailmentAutomationRulesByMQTTSourceStmt,
 		countCurtailmentAutomationRulesByResponseProfileStmt:       q.countCurtailmentAutomationRulesByResponseProfileStmt,
@@ -4244,8 +4383,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createUserStmt:                                             q.createUserStmt,
 		createUserOrganizationStmt:                                 q.createUserOrganizationStmt,
 		curtailmentEventHasInFlightTargetsStmt:                     q.curtailmentEventHasInFlightTargetsStmt,
+		deleteCohortFirmwareTargetStmt:                             q.deleteCohortFirmwareTargetStmt,
 		deleteCohortMembershipsStmt:                                q.deleteCohortMembershipsStmt,
 		deleteCohortMembershipsByCohortStmt:                        q.deleteCohortMembershipsByCohortStmt,
+		deleteCohortMembershipsByDeviceStmt:                        q.deleteCohortMembershipsByDeviceStmt,
 		deleteCurtailmentAutomationRuleByOrgStmt:                   q.deleteCurtailmentAutomationRuleByOrgStmt,
 		deleteCurtailmentResponseProfileByOrgStmt:                  q.deleteCurtailmentResponseProfileByOrgStmt,
 		deleteCurtailmentResponseProfilesBySiteStmt:                q.deleteCurtailmentResponseProfilesBySiteStmt,
@@ -4421,6 +4562,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listActiveCurtailmentTargetDevicesByOrgStmt:                q.listActiveCurtailmentTargetDevicesByOrgStmt,
 		listActiveNotificationsStmt:                                q.listActiveNotificationsStmt,
 		listActiveOrganizationIDsStmt:                              q.listActiveOrganizationIDsStmt,
+		listActiveOwnedCohortMembershipsStmt:                       q.listActiveOwnedCohortMembershipsStmt,
 		listActivityLogsStmt:                                       q.listActivityLogsStmt,
 		listApiKeysByOrganizationStmt:                              q.listApiKeysByOrganizationStmt,
 		listAssignmentsForRoleStmt:                                 q.listAssignmentsForRoleStmt,
@@ -4429,6 +4571,9 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listBuildingRacksStmt:                                      q.listBuildingRacksStmt,
 		listBuildingsByOrgStmt:                                     q.listBuildingsByOrgStmt,
 		listBuiltinRolesForOrgStmt:                                 q.listBuiltinRolesForOrgStmt,
+		listCohortDeviceOwnershipStmt:                              q.listCohortDeviceOwnershipStmt,
+		listCohortDevicesStmt:                                      q.listCohortDevicesStmt,
+		listCohortFirmwareTargetsStmt:                              q.listCohortFirmwareTargetsStmt,
 		listCohortMembersStmt:                                      q.listCohortMembersStmt,
 		listCohortsStmt:                                            q.listCohortsStmt,
 		listCohortsByOwnerStmt:                                     q.listCohortsByOwnerStmt,
@@ -4446,11 +4591,13 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listDeviceSetMembersPaginatedAfterStmt:                     q.listDeviceSetMembersPaginatedAfterStmt,
 		listDeviceSetMembersPaginatedFilteredStmt:                  q.listDeviceSetMembersPaginatedFilteredStmt,
 		listDeviceSetMembersPaginatedFilteredAfterStmt:             q.listDeviceSetMembersPaginatedFilteredAfterStmt,
+		listDeviceSitesForIdentifiersStmt:                          q.listDeviceSitesForIdentifiersStmt,
 		listEffectivePermissionsForUserStmt:                        q.listEffectivePermissionsForUserStmt,
 		listEffectivePermissionsForUserForUpdateStmt:               q.listEffectivePermissionsForUserForUpdateStmt,
 		listEnabledCurtailmentAutomationRulesByMQTTSourceStmt:      q.listEnabledCurtailmentAutomationRulesByMQTTSourceStmt,
 		listEnabledMQTTSourcesStmt:                                 q.listEnabledMQTTSourcesStmt,
 		listExistingDeviceIdentifiersStmt:                          q.listExistingDeviceIdentifiersStmt,
+		listExpiredActiveCohortsStmt:                               q.listExpiredActiveCohortsStmt,
 		listFleetNodeDeviceIDsForRevocationStmt:                    q.listFleetNodeDeviceIDsForRevocationStmt,
 		listFleetNodeDevicesStmt:                                   q.listFleetNodeDevicesStmt,
 		listFleetNodeDiscoveredDevicesStmt:                         q.listFleetNodeDiscoveredDevicesStmt,
@@ -4572,12 +4719,14 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		unpairDeviceStmt:                                           q.unpairDeviceStmt,
 		updateApiKeyLastUsedStmt:                                   q.updateApiKeyLastUsedStmt,
 		updateBuildingStmt:                                         q.updateBuildingStmt,
+		updateCohortStmt:                                           q.updateCohortStmt,
 		updateCurtailmentAutomationRuleStmt:                        q.updateCurtailmentAutomationRuleStmt,
 		updateCurtailmentEventOperatorFieldsStmt:                   q.updateCurtailmentEventOperatorFieldsStmt,
 		updateCurtailmentEventStateStmt:                            q.updateCurtailmentEventStateStmt,
 		updateCurtailmentResponseProfileStmt:                       q.updateCurtailmentResponseProfileStmt,
 		updateCurtailmentTargetStateStmt:                           q.updateCurtailmentTargetStateStmt,
 		updateCustomRoleNameStmt:                                   q.updateCustomRoleNameStmt,
+		updateDefaultCohortFirmwareStmt:                            q.updateDefaultCohortFirmwareStmt,
 		updateDeviceIPAssignmentStmt:                               q.updateDeviceIPAssignmentStmt,
 		updateDeviceInfoStmt:                                       q.updateDeviceInfoStmt,
 		updateDevicePairingStatusByIdentifierStmt:                  q.updateDevicePairingStatusByIdentifierStmt,
@@ -4611,6 +4760,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		updateUserRoleStmt:                                         q.updateUserRoleStmt,
 		updateUserUsernameStmt:                                     q.updateUserUsernameStmt,
 		upsertBuiltinRoleForOrgStmt:                                q.upsertBuiltinRoleForOrgStmt,
+		upsertCohortFirmwareTargetStmt:                             q.upsertCohortFirmwareTargetStmt,
 		upsertCommandOnDeviceLogStmt:                               q.upsertCommandOnDeviceLogStmt,
 		upsertCurtailmentAutomationSignalStateStmt:                 q.upsertCurtailmentAutomationSignalStateStmt,
 		upsertCurtailmentReconcilerHeartbeatStmt:                   q.upsertCurtailmentReconcilerHeartbeatStmt,

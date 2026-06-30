@@ -20,29 +20,20 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file fleetnodeadmin/v1/fleetnodeadmin.proto.
  */
-export const file_fleetnodeadmin_v1_fleetnodeadmin: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "CiZmbGVldG5vZGVhZG1pbi92MS9mbGVldG5vZGVhZG1pbi5wcm90bxIRZmxlZXRub2RlYWRtaW4udjEiHQobQ3JlYXRlRW5yb2xsbWVudENvZGVSZXF1ZXN0IlwKHENyZWF0ZUVucm9sbG1lbnRDb2RlUmVzcG9uc2USDAoEY29kZRgBIAEoCRIuCgpleHBpcmVzX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIXChVMaXN0RmxlZXROb2Rlc1JlcXVlc3QiUgoWTGlzdEZsZWV0Tm9kZXNSZXNwb25zZRI4CgtmbGVldF9ub2RlcxgBIAMoCzIjLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZVN1bW1hcnkilgIKEEZsZWV0Tm9kZVN1bW1hcnkSFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIMCgRuYW1lGAIgASgJEkcKEWVucm9sbG1lbnRfc3RhdHVzGAMgASgOMiwuZmxlZXRub2RlYWRtaW4udjEuRmxlZXROb2RlRW5yb2xsbWVudFN0YXR1cxIcChRpZGVudGl0eV9maW5nZXJwcmludBgEIAEoCRIuCgpjcmVhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBI1CgxsYXN0X3NlZW5fYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSACIAQFCDwoNX2xhc3Rfc2Vlbl9hdCI5ChdDb25maXJtRmxlZXROb2RlUmVxdWVzdBIeCg1mbGVldF9ub2RlX2lkGAEgASgDQge6SAQiAiAAIm8KGENvbmZpcm1GbGVldE5vZGVSZXNwb25zZRIPCgdhcGlfa2V5GAEgASgJEjMKCmV4cGlyZXNfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSACIAQFCDQoLX2V4cGlyZXNfYXQiOAoWUmV2b2tlRmxlZXROb2RlUmVxdWVzdBIeCg1mbGVldF9ub2RlX2lkGAEgASgDQge6SAQiAiAAIhkKF1Jldm9rZUZsZWV0Tm9kZVJlc3BvbnNlIloKHFBhaXJEZXZpY2VUb0ZsZWV0Tm9kZVJlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIgABIaCglkZXZpY2VfaWQYAiABKANCB7pIBCICIAAiHwodUGFpckRldmljZVRvRmxlZXROb2RlUmVzcG9uc2UiMQoTVW5wYWlyRGV2aWNlUmVxdWVzdBIaCglkZXZpY2VfaWQYASABKANCB7pIBCICIAAiFgoUVW5wYWlyRGV2aWNlUmVzcG9uc2UiPQobTGlzdEZsZWV0Tm9kZURldmljZXNSZXF1ZXN0Eh4KDWZsZWV0X25vZGVfaWQYASABKANCB7pIBCICKAAiWAocTGlzdEZsZWV0Tm9kZURldmljZXNSZXNwb25zZRI4CgVwYWlycxgBIAMoCzIpLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZURldmljZVN1bW1hcnkizQEKFkZsZWV0Tm9kZURldmljZVN1bW1hcnkSFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIRCglkZXZpY2VfaWQYAiABKAMSGQoRZGV2aWNlX2lkZW50aWZpZXIYAyABKAkSEwoLZGV2aWNlX3R5cGUYBCABKAkSLwoLYXNzaWduZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhgKC2Fzc2lnbmVkX2J5GAYgASgDSACIAQFCDgoMX2Fzc2lnbmVkX2J5InIKGkRpc2NvdmVyT25GbGVldE5vZGVSZXF1ZXN0Eh4KDWZsZWV0X25vZGVfaWQYASABKANCB7pIBCICIAASNAoHcmVxdWVzdBgCIAEoCzIbLnBhaXJpbmcudjEuRGlzY292ZXJSZXF1ZXN0Qga6SAPIAQEiTQobRGlzY292ZXJPbkZsZWV0Tm9kZVJlc3BvbnNlEi4KCHJlc3BvbnNlGAEgASgLMhwucGFpcmluZy52MS5EaXNjb3ZlclJlc3BvbnNlInsKJUxpc3RGbGVldE5vZGVEaXNjb3ZlcmVkRGV2aWNlc1JlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIoABIZCgVsaW1pdBgCIAEoBUIKukgHGgUYgAgoABIXCgZjdXJzb3IYAyABKANCB7pIBCICKAAifAomTGlzdEZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2VzUmVzcG9uc2USPQoHZGV2aWNlcxgBIAMoCzIsLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2USEwoLbmV4dF9jdXJzb3IYAiABKAMipwIKGUZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2USFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIZChFkZXZpY2VfaWRlbnRpZmllchgCIAEoCRISCgppcF9hZGRyZXNzGAMgASgJEgwKBHBvcnQYBCABKAkSEgoKdXJsX3NjaGVtZRgFIAEoCRITCgtkcml2ZXJfbmFtZRgGIAEoCRINCgVtb2RlbBgHIAEoCRIUCgxtYW51ZmFjdHVyZXIYCCABKAkSGAoQZmlybXdhcmVfdmVyc2lvbhgJIAEoCRItCglsYXN0X3NlZW4YCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEh8KDnBhaXJpbmdfc3RhdHVzGAsgASgJQge6SARyAhhAIsIBCidQYWlyRGlzY292ZXJlZERldmljZXNPbkZsZWV0Tm9kZVJlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIgABIuChJkZXZpY2VfaWRlbnRpZmllcnMYAiADKAlCErpID5IBDBCACCIHcgUQARj/ARIZChFwYWlyX2FsbF91bnBhaXJlZBgDIAEoCBIsCgtjcmVkZW50aWFscxgEIAEoCzIXLnBhaXJpbmcudjEuQ3JlZGVudGlhbHMiYwooUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygLMiYuZmxlZXRub2RlYWRtaW4udjEuRGV2aWNlUGFpcmluZ1Jlc3VsdCKEAQoTRGV2aWNlUGFpcmluZ1Jlc3VsdBIZChFkZXZpY2VfaWRlbnRpZmllchgBIAEoCRI5Cg5wYWlyaW5nX3N0YXR1cxgCIAEoDjIhLmZsZWV0bWFuYWdlbWVudC52MS5QYWlyaW5nU3RhdHVzEhcKBWVycm9yGAMgASgJQgi6SAVyAxiAICqBAgoZRmxlZXROb2RlRW5yb2xsbWVudFN0YXR1cxIsCihGTEVFVF9OT0RFX0VOUk9MTE1FTlRfU1RBVFVTX1VOU1BFQ0lGSUVEEAASKAokRkxFRVRfTk9ERV9FTlJPTExNRU5UX1NUQVRVU19QRU5ESU5HEAESNgoyRkxFRVRfTk9ERV9FTlJPTExNRU5UX1NUQVRVU19BV0FJVElOR19DT05GSVJNQVRJT04QAhIqCiZGTEVFVF9OT0RFX0VOUk9MTE1FTlRfU1RBVFVTX0NPTkZJUk1FRBADEigKJEZMRUVUX05PREVfRU5ST0xMTUVOVF9TVEFUVVNfUkVWT0tFRBAEMtQJChVGbGVldE5vZGVBZG1pblNlcnZpY2USdwoUQ3JlYXRlRW5yb2xsbWVudENvZGUSLi5mbGVldG5vZGVhZG1pbi52MS5DcmVhdGVFbnJvbGxtZW50Q29kZVJlcXVlc3QaLy5mbGVldG5vZGVhZG1pbi52MS5DcmVhdGVFbnJvbGxtZW50Q29kZVJlc3BvbnNlEmUKDkxpc3RGbGVldE5vZGVzEiguZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZXNSZXF1ZXN0GikuZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZXNSZXNwb25zZRJrChBDb25maXJtRmxlZXROb2RlEiouZmxlZXRub2RlYWRtaW4udjEuQ29uZmlybUZsZWV0Tm9kZVJlcXVlc3QaKy5mbGVldG5vZGVhZG1pbi52MS5Db25maXJtRmxlZXROb2RlUmVzcG9uc2USaAoPUmV2b2tlRmxlZXROb2RlEikuZmxlZXRub2RlYWRtaW4udjEuUmV2b2tlRmxlZXROb2RlUmVxdWVzdBoqLmZsZWV0bm9kZWFkbWluLnYxLlJldm9rZUZsZWV0Tm9kZVJlc3BvbnNlEnoKFVBhaXJEZXZpY2VUb0ZsZWV0Tm9kZRIvLmZsZWV0bm9kZWFkbWluLnYxLlBhaXJEZXZpY2VUb0ZsZWV0Tm9kZVJlcXVlc3QaMC5mbGVldG5vZGVhZG1pbi52MS5QYWlyRGV2aWNlVG9GbGVldE5vZGVSZXNwb25zZRJfCgxVbnBhaXJEZXZpY2USJi5mbGVldG5vZGVhZG1pbi52MS5VbnBhaXJEZXZpY2VSZXF1ZXN0GicuZmxlZXRub2RlYWRtaW4udjEuVW5wYWlyRGV2aWNlUmVzcG9uc2USdwoUTGlzdEZsZWV0Tm9kZURldmljZXMSLi5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGV2aWNlc1JlcXVlc3QaLy5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGV2aWNlc1Jlc3BvbnNlEnYKE0Rpc2NvdmVyT25GbGVldE5vZGUSLS5mbGVldG5vZGVhZG1pbi52MS5EaXNjb3Zlck9uRmxlZXROb2RlUmVxdWVzdBouLmZsZWV0bm9kZWFkbWluLnYxLkRpc2NvdmVyT25GbGVldE5vZGVSZXNwb25zZTABEpUBCh5MaXN0RmxlZXROb2RlRGlzY292ZXJlZERldmljZXMSOC5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGlzY292ZXJlZERldmljZXNSZXF1ZXN0GjkuZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2VzUmVzcG9uc2USnQEKIFBhaXJEaXNjb3ZlcmVkRGV2aWNlc09uRmxlZXROb2RlEjouZmxlZXRub2RlYWRtaW4udjEuUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXF1ZXN0GjsuZmxlZXRub2RlYWRtaW4udjEuUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXNwb25zZTABQugBChVjb20uZmxlZXRub2RlYWRtaW4udjFCE0ZsZWV0bm9kZWFkbWluUHJvdG9QAVpVZ2l0aHViLmNvbS9ibG9jay9wcm90by1mbGVldC9zZXJ2ZXIvZ2VuZXJhdGVkL2dycGMvZmxlZXRub2RlYWRtaW4vdjE7ZmxlZXRub2RlYWRtaW52MaICA0ZYWKoCEUZsZWV0bm9kZWFkbWluLlYxygIRRmxlZXRub2RlYWRtaW5cVjHiAh1GbGVldG5vZGVhZG1pblxWMVxHUEJNZXRhZGF0YeoCEkZsZWV0bm9kZWFkbWluOjpWMWIGcHJvdG8z",
-    [
-      file_buf_validate_validate,
-      file_fleetmanagement_v1_fleetmanagement,
-      file_google_protobuf_timestamp,
-      file_pairing_v1_pairing,
-    ],
-  );
+export const file_fleetnodeadmin_v1_fleetnodeadmin: GenFile = /*@__PURE__*/
+  fileDesc("CiZmbGVldG5vZGVhZG1pbi92MS9mbGVldG5vZGVhZG1pbi5wcm90bxIRZmxlZXRub2RlYWRtaW4udjEiHQobQ3JlYXRlRW5yb2xsbWVudENvZGVSZXF1ZXN0IlwKHENyZWF0ZUVucm9sbG1lbnRDb2RlUmVzcG9uc2USDAoEY29kZRgBIAEoCRIuCgpleHBpcmVzX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIXChVMaXN0RmxlZXROb2Rlc1JlcXVlc3QiUgoWTGlzdEZsZWV0Tm9kZXNSZXNwb25zZRI4CgtmbGVldF9ub2RlcxgBIAMoCzIjLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZVN1bW1hcnkilgIKEEZsZWV0Tm9kZVN1bW1hcnkSFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIMCgRuYW1lGAIgASgJEkcKEWVucm9sbG1lbnRfc3RhdHVzGAMgASgOMiwuZmxlZXRub2RlYWRtaW4udjEuRmxlZXROb2RlRW5yb2xsbWVudFN0YXR1cxIcChRpZGVudGl0eV9maW5nZXJwcmludBgEIAEoCRIuCgpjcmVhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBI1CgxsYXN0X3NlZW5fYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSACIAQFCDwoNX2xhc3Rfc2Vlbl9hdCI5ChdDb25maXJtRmxlZXROb2RlUmVxdWVzdBIeCg1mbGVldF9ub2RlX2lkGAEgASgDQge6SAQiAiAAIm8KGENvbmZpcm1GbGVldE5vZGVSZXNwb25zZRIPCgdhcGlfa2V5GAEgASgJEjMKCmV4cGlyZXNfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSACIAQFCDQoLX2V4cGlyZXNfYXQiOAoWUmV2b2tlRmxlZXROb2RlUmVxdWVzdBIeCg1mbGVldF9ub2RlX2lkGAEgASgDQge6SAQiAiAAIhkKF1Jldm9rZUZsZWV0Tm9kZVJlc3BvbnNlIloKHFBhaXJEZXZpY2VUb0ZsZWV0Tm9kZVJlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIgABIaCglkZXZpY2VfaWQYAiABKANCB7pIBCICIAAiHwodUGFpckRldmljZVRvRmxlZXROb2RlUmVzcG9uc2UiMQoTVW5wYWlyRGV2aWNlUmVxdWVzdBIaCglkZXZpY2VfaWQYASABKANCB7pIBCICIAAiFgoUVW5wYWlyRGV2aWNlUmVzcG9uc2UiPQobTGlzdEZsZWV0Tm9kZURldmljZXNSZXF1ZXN0Eh4KDWZsZWV0X25vZGVfaWQYASABKANCB7pIBCICKAAiWAocTGlzdEZsZWV0Tm9kZURldmljZXNSZXNwb25zZRI4CgVwYWlycxgBIAMoCzIpLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZURldmljZVN1bW1hcnkizQEKFkZsZWV0Tm9kZURldmljZVN1bW1hcnkSFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIRCglkZXZpY2VfaWQYAiABKAMSGQoRZGV2aWNlX2lkZW50aWZpZXIYAyABKAkSEwoLZGV2aWNlX3R5cGUYBCABKAkSLwoLYXNzaWduZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhgKC2Fzc2lnbmVkX2J5GAYgASgDSACIAQFCDgoMX2Fzc2lnbmVkX2J5InIKGkRpc2NvdmVyT25GbGVldE5vZGVSZXF1ZXN0Eh4KDWZsZWV0X25vZGVfaWQYASABKANCB7pIBCICIAASNAoHcmVxdWVzdBgCIAEoCzIbLnBhaXJpbmcudjEuRGlzY292ZXJSZXF1ZXN0Qga6SAPIAQEiTQobRGlzY292ZXJPbkZsZWV0Tm9kZVJlc3BvbnNlEi4KCHJlc3BvbnNlGAEgASgLMhwucGFpcmluZy52MS5EaXNjb3ZlclJlc3BvbnNlInsKJUxpc3RGbGVldE5vZGVEaXNjb3ZlcmVkRGV2aWNlc1JlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIoABIZCgVsaW1pdBgCIAEoBUIKukgHGgUYgAgoABIXCgZjdXJzb3IYAyABKANCB7pIBCICKAAifAomTGlzdEZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2VzUmVzcG9uc2USPQoHZGV2aWNlcxgBIAMoCzIsLmZsZWV0bm9kZWFkbWluLnYxLkZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2USEwoLbmV4dF9jdXJzb3IYAiABKAMipwIKGUZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2USFQoNZmxlZXRfbm9kZV9pZBgBIAEoAxIZChFkZXZpY2VfaWRlbnRpZmllchgCIAEoCRISCgppcF9hZGRyZXNzGAMgASgJEgwKBHBvcnQYBCABKAkSEgoKdXJsX3NjaGVtZRgFIAEoCRITCgtkcml2ZXJfbmFtZRgGIAEoCRINCgVtb2RlbBgHIAEoCRIUCgxtYW51ZmFjdHVyZXIYCCABKAkSGAoQZmlybXdhcmVfdmVyc2lvbhgJIAEoCRItCglsYXN0X3NlZW4YCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEh8KDnBhaXJpbmdfc3RhdHVzGAsgASgJQge6SARyAhhAIsIBCidQYWlyRGlzY292ZXJlZERldmljZXNPbkZsZWV0Tm9kZVJlcXVlc3QSHgoNZmxlZXRfbm9kZV9pZBgBIAEoA0IHukgEIgIgABIuChJkZXZpY2VfaWRlbnRpZmllcnMYAiADKAlCErpID5IBDBCACCIHcgUQARj/ARIZChFwYWlyX2FsbF91bnBhaXJlZBgDIAEoCBIsCgtjcmVkZW50aWFscxgEIAEoCzIXLnBhaXJpbmcudjEuQ3JlZGVudGlhbHMiYwooUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygLMiYuZmxlZXRub2RlYWRtaW4udjEuRGV2aWNlUGFpcmluZ1Jlc3VsdCKEAQoTRGV2aWNlUGFpcmluZ1Jlc3VsdBIZChFkZXZpY2VfaWRlbnRpZmllchgBIAEoCRI5Cg5wYWlyaW5nX3N0YXR1cxgCIAEoDjIhLmZsZWV0bWFuYWdlbWVudC52MS5QYWlyaW5nU3RhdHVzEhcKBWVycm9yGAMgASgJQgi6SAVyAxiAICqBAgoZRmxlZXROb2RlRW5yb2xsbWVudFN0YXR1cxIsCihGTEVFVF9OT0RFX0VOUk9MTE1FTlRfU1RBVFVTX1VOU1BFQ0lGSUVEEAASKAokRkxFRVRfTk9ERV9FTlJPTExNRU5UX1NUQVRVU19QRU5ESU5HEAESNgoyRkxFRVRfTk9ERV9FTlJPTExNRU5UX1NUQVRVU19BV0FJVElOR19DT05GSVJNQVRJT04QAhIqCiZGTEVFVF9OT0RFX0VOUk9MTE1FTlRfU1RBVFVTX0NPTkZJUk1FRBADEigKJEZMRUVUX05PREVfRU5ST0xMTUVOVF9TVEFUVVNfUkVWT0tFRBAEMtQJChVGbGVldE5vZGVBZG1pblNlcnZpY2USdwoUQ3JlYXRlRW5yb2xsbWVudENvZGUSLi5mbGVldG5vZGVhZG1pbi52MS5DcmVhdGVFbnJvbGxtZW50Q29kZVJlcXVlc3QaLy5mbGVldG5vZGVhZG1pbi52MS5DcmVhdGVFbnJvbGxtZW50Q29kZVJlc3BvbnNlEmUKDkxpc3RGbGVldE5vZGVzEiguZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZXNSZXF1ZXN0GikuZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZXNSZXNwb25zZRJrChBDb25maXJtRmxlZXROb2RlEiouZmxlZXRub2RlYWRtaW4udjEuQ29uZmlybUZsZWV0Tm9kZVJlcXVlc3QaKy5mbGVldG5vZGVhZG1pbi52MS5Db25maXJtRmxlZXROb2RlUmVzcG9uc2USaAoPUmV2b2tlRmxlZXROb2RlEikuZmxlZXRub2RlYWRtaW4udjEuUmV2b2tlRmxlZXROb2RlUmVxdWVzdBoqLmZsZWV0bm9kZWFkbWluLnYxLlJldm9rZUZsZWV0Tm9kZVJlc3BvbnNlEnoKFVBhaXJEZXZpY2VUb0ZsZWV0Tm9kZRIvLmZsZWV0bm9kZWFkbWluLnYxLlBhaXJEZXZpY2VUb0ZsZWV0Tm9kZVJlcXVlc3QaMC5mbGVldG5vZGVhZG1pbi52MS5QYWlyRGV2aWNlVG9GbGVldE5vZGVSZXNwb25zZRJfCgxVbnBhaXJEZXZpY2USJi5mbGVldG5vZGVhZG1pbi52MS5VbnBhaXJEZXZpY2VSZXF1ZXN0GicuZmxlZXRub2RlYWRtaW4udjEuVW5wYWlyRGV2aWNlUmVzcG9uc2USdwoUTGlzdEZsZWV0Tm9kZURldmljZXMSLi5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGV2aWNlc1JlcXVlc3QaLy5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGV2aWNlc1Jlc3BvbnNlEnYKE0Rpc2NvdmVyT25GbGVldE5vZGUSLS5mbGVldG5vZGVhZG1pbi52MS5EaXNjb3Zlck9uRmxlZXROb2RlUmVxdWVzdBouLmZsZWV0bm9kZWFkbWluLnYxLkRpc2NvdmVyT25GbGVldE5vZGVSZXNwb25zZTABEpUBCh5MaXN0RmxlZXROb2RlRGlzY292ZXJlZERldmljZXMSOC5mbGVldG5vZGVhZG1pbi52MS5MaXN0RmxlZXROb2RlRGlzY292ZXJlZERldmljZXNSZXF1ZXN0GjkuZmxlZXRub2RlYWRtaW4udjEuTGlzdEZsZWV0Tm9kZURpc2NvdmVyZWREZXZpY2VzUmVzcG9uc2USnQEKIFBhaXJEaXNjb3ZlcmVkRGV2aWNlc09uRmxlZXROb2RlEjouZmxlZXRub2RlYWRtaW4udjEuUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXF1ZXN0GjsuZmxlZXRub2RlYWRtaW4udjEuUGFpckRpc2NvdmVyZWREZXZpY2VzT25GbGVldE5vZGVSZXNwb25zZTABQugBChVjb20uZmxlZXRub2RlYWRtaW4udjFCE0ZsZWV0bm9kZWFkbWluUHJvdG9QAVpVZ2l0aHViLmNvbS9ibG9jay9wcm90by1mbGVldC9zZXJ2ZXIvZ2VuZXJhdGVkL2dycGMvZmxlZXRub2RlYWRtaW4vdjE7ZmxlZXRub2RlYWRtaW52MaICA0ZYWKoCEUZsZWV0bm9kZWFkbWluLlYxygIRRmxlZXRub2RlYWRtaW5cVjHiAh1GbGVldG5vZGVhZG1pblxWMVxHUEJNZXRhZGF0YeoCEkZsZWV0bm9kZWFkbWluOjpWMWIGcHJvdG8z", [file_buf_validate_validate, file_fleetmanagement_v1_fleetmanagement, file_google_protobuf_timestamp, file_pairing_v1_pairing]);
 
 /**
  * @generated from message fleetnodeadmin.v1.CreateEnrollmentCodeRequest
  */
-export type CreateEnrollmentCodeRequest = Message<"fleetnodeadmin.v1.CreateEnrollmentCodeRequest"> & {};
+export type CreateEnrollmentCodeRequest = Message<"fleetnodeadmin.v1.CreateEnrollmentCodeRequest"> & {
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.CreateEnrollmentCodeRequest.
  * Use `create(CreateEnrollmentCodeRequestSchema)` to create a new message.
  */
-export const CreateEnrollmentCodeRequestSchema: GenMessage<CreateEnrollmentCodeRequest> =
-  /*@__PURE__*/
+export const CreateEnrollmentCodeRequestSchema: GenMessage<CreateEnrollmentCodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 0);
 
 /**
@@ -66,21 +57,20 @@ export type CreateEnrollmentCodeResponse = Message<"fleetnodeadmin.v1.CreateEnro
  * Describes the message fleetnodeadmin.v1.CreateEnrollmentCodeResponse.
  * Use `create(CreateEnrollmentCodeResponseSchema)` to create a new message.
  */
-export const CreateEnrollmentCodeResponseSchema: GenMessage<CreateEnrollmentCodeResponse> =
-  /*@__PURE__*/
+export const CreateEnrollmentCodeResponseSchema: GenMessage<CreateEnrollmentCodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 1);
 
 /**
  * @generated from message fleetnodeadmin.v1.ListFleetNodesRequest
  */
-export type ListFleetNodesRequest = Message<"fleetnodeadmin.v1.ListFleetNodesRequest"> & {};
+export type ListFleetNodesRequest = Message<"fleetnodeadmin.v1.ListFleetNodesRequest"> & {
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.ListFleetNodesRequest.
  * Use `create(ListFleetNodesRequestSchema)` to create a new message.
  */
-export const ListFleetNodesRequestSchema: GenMessage<ListFleetNodesRequest> =
-  /*@__PURE__*/
+export const ListFleetNodesRequestSchema: GenMessage<ListFleetNodesRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 2);
 
 /**
@@ -97,8 +87,7 @@ export type ListFleetNodesResponse = Message<"fleetnodeadmin.v1.ListFleetNodesRe
  * Describes the message fleetnodeadmin.v1.ListFleetNodesResponse.
  * Use `create(ListFleetNodesResponseSchema)` to create a new message.
  */
-export const ListFleetNodesResponseSchema: GenMessage<ListFleetNodesResponse> =
-  /*@__PURE__*/
+export const ListFleetNodesResponseSchema: GenMessage<ListFleetNodesResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 3);
 
 /**
@@ -140,8 +129,7 @@ export type FleetNodeSummary = Message<"fleetnodeadmin.v1.FleetNodeSummary"> & {
  * Describes the message fleetnodeadmin.v1.FleetNodeSummary.
  * Use `create(FleetNodeSummarySchema)` to create a new message.
  */
-export const FleetNodeSummarySchema: GenMessage<FleetNodeSummary> =
-  /*@__PURE__*/
+export const FleetNodeSummarySchema: GenMessage<FleetNodeSummary> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 4);
 
 /**
@@ -158,8 +146,7 @@ export type ConfirmFleetNodeRequest = Message<"fleetnodeadmin.v1.ConfirmFleetNod
  * Describes the message fleetnodeadmin.v1.ConfirmFleetNodeRequest.
  * Use `create(ConfirmFleetNodeRequestSchema)` to create a new message.
  */
-export const ConfirmFleetNodeRequestSchema: GenMessage<ConfirmFleetNodeRequest> =
-  /*@__PURE__*/
+export const ConfirmFleetNodeRequestSchema: GenMessage<ConfirmFleetNodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 5);
 
 /**
@@ -183,8 +170,7 @@ export type ConfirmFleetNodeResponse = Message<"fleetnodeadmin.v1.ConfirmFleetNo
  * Describes the message fleetnodeadmin.v1.ConfirmFleetNodeResponse.
  * Use `create(ConfirmFleetNodeResponseSchema)` to create a new message.
  */
-export const ConfirmFleetNodeResponseSchema: GenMessage<ConfirmFleetNodeResponse> =
-  /*@__PURE__*/
+export const ConfirmFleetNodeResponseSchema: GenMessage<ConfirmFleetNodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 6);
 
 /**
@@ -201,21 +187,20 @@ export type RevokeFleetNodeRequest = Message<"fleetnodeadmin.v1.RevokeFleetNodeR
  * Describes the message fleetnodeadmin.v1.RevokeFleetNodeRequest.
  * Use `create(RevokeFleetNodeRequestSchema)` to create a new message.
  */
-export const RevokeFleetNodeRequestSchema: GenMessage<RevokeFleetNodeRequest> =
-  /*@__PURE__*/
+export const RevokeFleetNodeRequestSchema: GenMessage<RevokeFleetNodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 7);
 
 /**
  * @generated from message fleetnodeadmin.v1.RevokeFleetNodeResponse
  */
-export type RevokeFleetNodeResponse = Message<"fleetnodeadmin.v1.RevokeFleetNodeResponse"> & {};
+export type RevokeFleetNodeResponse = Message<"fleetnodeadmin.v1.RevokeFleetNodeResponse"> & {
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.RevokeFleetNodeResponse.
  * Use `create(RevokeFleetNodeResponseSchema)` to create a new message.
  */
-export const RevokeFleetNodeResponseSchema: GenMessage<RevokeFleetNodeResponse> =
-  /*@__PURE__*/
+export const RevokeFleetNodeResponseSchema: GenMessage<RevokeFleetNodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 8);
 
 /**
@@ -237,21 +222,20 @@ export type PairDeviceToFleetNodeRequest = Message<"fleetnodeadmin.v1.PairDevice
  * Describes the message fleetnodeadmin.v1.PairDeviceToFleetNodeRequest.
  * Use `create(PairDeviceToFleetNodeRequestSchema)` to create a new message.
  */
-export const PairDeviceToFleetNodeRequestSchema: GenMessage<PairDeviceToFleetNodeRequest> =
-  /*@__PURE__*/
+export const PairDeviceToFleetNodeRequestSchema: GenMessage<PairDeviceToFleetNodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 9);
 
 /**
  * @generated from message fleetnodeadmin.v1.PairDeviceToFleetNodeResponse
  */
-export type PairDeviceToFleetNodeResponse = Message<"fleetnodeadmin.v1.PairDeviceToFleetNodeResponse"> & {};
+export type PairDeviceToFleetNodeResponse = Message<"fleetnodeadmin.v1.PairDeviceToFleetNodeResponse"> & {
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.PairDeviceToFleetNodeResponse.
  * Use `create(PairDeviceToFleetNodeResponseSchema)` to create a new message.
  */
-export const PairDeviceToFleetNodeResponseSchema: GenMessage<PairDeviceToFleetNodeResponse> =
-  /*@__PURE__*/
+export const PairDeviceToFleetNodeResponseSchema: GenMessage<PairDeviceToFleetNodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 10);
 
 /**
@@ -268,21 +252,20 @@ export type UnpairDeviceRequest = Message<"fleetnodeadmin.v1.UnpairDeviceRequest
  * Describes the message fleetnodeadmin.v1.UnpairDeviceRequest.
  * Use `create(UnpairDeviceRequestSchema)` to create a new message.
  */
-export const UnpairDeviceRequestSchema: GenMessage<UnpairDeviceRequest> =
-  /*@__PURE__*/
+export const UnpairDeviceRequestSchema: GenMessage<UnpairDeviceRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 11);
 
 /**
  * @generated from message fleetnodeadmin.v1.UnpairDeviceResponse
  */
-export type UnpairDeviceResponse = Message<"fleetnodeadmin.v1.UnpairDeviceResponse"> & {};
+export type UnpairDeviceResponse = Message<"fleetnodeadmin.v1.UnpairDeviceResponse"> & {
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.UnpairDeviceResponse.
  * Use `create(UnpairDeviceResponseSchema)` to create a new message.
  */
-export const UnpairDeviceResponseSchema: GenMessage<UnpairDeviceResponse> =
-  /*@__PURE__*/
+export const UnpairDeviceResponseSchema: GenMessage<UnpairDeviceResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 12);
 
 /**
@@ -301,8 +284,7 @@ export type ListFleetNodeDevicesRequest = Message<"fleetnodeadmin.v1.ListFleetNo
  * Describes the message fleetnodeadmin.v1.ListFleetNodeDevicesRequest.
  * Use `create(ListFleetNodeDevicesRequestSchema)` to create a new message.
  */
-export const ListFleetNodeDevicesRequestSchema: GenMessage<ListFleetNodeDevicesRequest> =
-  /*@__PURE__*/
+export const ListFleetNodeDevicesRequestSchema: GenMessage<ListFleetNodeDevicesRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 13);
 
 /**
@@ -319,8 +301,7 @@ export type ListFleetNodeDevicesResponse = Message<"fleetnodeadmin.v1.ListFleetN
  * Describes the message fleetnodeadmin.v1.ListFleetNodeDevicesResponse.
  * Use `create(ListFleetNodeDevicesResponseSchema)` to create a new message.
  */
-export const ListFleetNodeDevicesResponseSchema: GenMessage<ListFleetNodeDevicesResponse> =
-  /*@__PURE__*/
+export const ListFleetNodeDevicesResponseSchema: GenMessage<ListFleetNodeDevicesResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 14);
 
 /**
@@ -362,8 +343,7 @@ export type FleetNodeDeviceSummary = Message<"fleetnodeadmin.v1.FleetNodeDeviceS
  * Describes the message fleetnodeadmin.v1.FleetNodeDeviceSummary.
  * Use `create(FleetNodeDeviceSummarySchema)` to create a new message.
  */
-export const FleetNodeDeviceSummarySchema: GenMessage<FleetNodeDeviceSummary> =
-  /*@__PURE__*/
+export const FleetNodeDeviceSummarySchema: GenMessage<FleetNodeDeviceSummary> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 15);
 
 /**
@@ -385,8 +365,7 @@ export type DiscoverOnFleetNodeRequest = Message<"fleetnodeadmin.v1.DiscoverOnFl
  * Describes the message fleetnodeadmin.v1.DiscoverOnFleetNodeRequest.
  * Use `create(DiscoverOnFleetNodeRequestSchema)` to create a new message.
  */
-export const DiscoverOnFleetNodeRequestSchema: GenMessage<DiscoverOnFleetNodeRequest> =
-  /*@__PURE__*/
+export const DiscoverOnFleetNodeRequestSchema: GenMessage<DiscoverOnFleetNodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 16);
 
 /**
@@ -403,70 +382,65 @@ export type DiscoverOnFleetNodeResponse = Message<"fleetnodeadmin.v1.DiscoverOnF
  * Describes the message fleetnodeadmin.v1.DiscoverOnFleetNodeResponse.
  * Use `create(DiscoverOnFleetNodeResponseSchema)` to create a new message.
  */
-export const DiscoverOnFleetNodeResponseSchema: GenMessage<DiscoverOnFleetNodeResponse> =
-  /*@__PURE__*/
+export const DiscoverOnFleetNodeResponseSchema: GenMessage<DiscoverOnFleetNodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 17);
 
 /**
  * @generated from message fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesRequest
  */
-export type ListFleetNodeDiscoveredDevicesRequest =
-  Message<"fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesRequest"> & {
-    /**
-     * 0 = all fleet nodes in org; > 0 restricts to that fleet node.
-     *
-     * @generated from field: int64 fleet_node_id = 1;
-     */
-    fleetNodeId: bigint;
+export type ListFleetNodeDiscoveredDevicesRequest = Message<"fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesRequest"> & {
+  /**
+   * 0 = all fleet nodes in org; > 0 restricts to that fleet node.
+   *
+   * @generated from field: int64 fleet_node_id = 1;
+   */
+  fleetNodeId: bigint;
 
-    /**
-     * Max devices to return; 0 = server default page size (1024, also the cap).
-     * A node can discover thousands of devices, so operators page via next_cursor.
-     *
-     * @generated from field: int32 limit = 2;
-     */
-    limit: number;
+  /**
+   * Max devices to return; 0 = server default page size (1024, also the cap).
+   * A node can discover thousands of devices, so operators page via next_cursor.
+   *
+   * @generated from field: int32 limit = 2;
+   */
+  limit: number;
 
-    /**
-     * Forward cursor: pass the previous response's next_cursor; 0 = first page.
-     *
-     * @generated from field: int64 cursor = 3;
-     */
-    cursor: bigint;
-  };
+  /**
+   * Forward cursor: pass the previous response's next_cursor; 0 = first page.
+   *
+   * @generated from field: int64 cursor = 3;
+   */
+  cursor: bigint;
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesRequest.
  * Use `create(ListFleetNodeDiscoveredDevicesRequestSchema)` to create a new message.
  */
-export const ListFleetNodeDiscoveredDevicesRequestSchema: GenMessage<ListFleetNodeDiscoveredDevicesRequest> =
-  /*@__PURE__*/
+export const ListFleetNodeDiscoveredDevicesRequestSchema: GenMessage<ListFleetNodeDiscoveredDevicesRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 18);
 
 /**
  * @generated from message fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesResponse
  */
-export type ListFleetNodeDiscoveredDevicesResponse =
-  Message<"fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesResponse"> & {
-    /**
-     * @generated from field: repeated fleetnodeadmin.v1.FleetNodeDiscoveredDevice devices = 1;
-     */
-    devices: FleetNodeDiscoveredDevice[];
+export type ListFleetNodeDiscoveredDevicesResponse = Message<"fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesResponse"> & {
+  /**
+   * @generated from field: repeated fleetnodeadmin.v1.FleetNodeDiscoveredDevice devices = 1;
+   */
+  devices: FleetNodeDiscoveredDevice[];
 
-    /**
-     * Cursor for the next page; 0 when no further rows remain.
-     *
-     * @generated from field: int64 next_cursor = 2;
-     */
-    nextCursor: bigint;
-  };
+  /**
+   * Cursor for the next page; 0 when no further rows remain.
+   *
+   * @generated from field: int64 next_cursor = 2;
+   */
+  nextCursor: bigint;
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.ListFleetNodeDiscoveredDevicesResponse.
  * Use `create(ListFleetNodeDiscoveredDevicesResponseSchema)` to create a new message.
  */
-export const ListFleetNodeDiscoveredDevicesResponseSchema: GenMessage<ListFleetNodeDiscoveredDevicesResponse> =
-  /*@__PURE__*/
+export const ListFleetNodeDiscoveredDevicesResponseSchema: GenMessage<ListFleetNodeDiscoveredDevicesResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 19);
 
 /**
@@ -539,69 +513,64 @@ export type FleetNodeDiscoveredDevice = Message<"fleetnodeadmin.v1.FleetNodeDisc
  * Describes the message fleetnodeadmin.v1.FleetNodeDiscoveredDevice.
  * Use `create(FleetNodeDiscoveredDeviceSchema)` to create a new message.
  */
-export const FleetNodeDiscoveredDeviceSchema: GenMessage<FleetNodeDiscoveredDevice> =
-  /*@__PURE__*/
+export const FleetNodeDiscoveredDeviceSchema: GenMessage<FleetNodeDiscoveredDevice> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 20);
 
 /**
  * @generated from message fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeRequest
  */
-export type PairDiscoveredDevicesOnFleetNodeRequest =
-  Message<"fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeRequest"> & {
-    /**
-     * @generated from field: int64 fleet_node_id = 1;
-     */
-    fleetNodeId: bigint;
+export type PairDiscoveredDevicesOnFleetNodeRequest = Message<"fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeRequest"> & {
+  /**
+   * @generated from field: int64 fleet_node_id = 1;
+   */
+  fleetNodeId: bigint;
 
-    /**
-     * Explicit selection by discovered device_identifier. Ignored when
-     * pair_all_unpaired is true.
-     *
-     * @generated from field: repeated string device_identifiers = 2;
-     */
-    deviceIdentifiers: string[];
+  /**
+   * Explicit selection by discovered device_identifier. Ignored when
+   * pair_all_unpaired is true.
+   *
+   * @generated from field: repeated string device_identifiers = 2;
+   */
+  deviceIdentifiers: string[];
 
-    /**
-     * Pair every not-yet-paired device discovered on this node.
-     *
-     * @generated from field: bool pair_all_unpaired = 3;
-     */
-    pairAllUnpaired: boolean;
+  /**
+   * Pair every not-yet-paired device discovered on this node.
+   *
+   * @generated from field: bool pair_all_unpaired = 3;
+   */
+  pairAllUnpaired: boolean;
 
-    /**
-     * Applied to devices in the batch. When omitted, drivers may use their
-     * default credentials.
-     *
-     * @generated from field: pairing.v1.Credentials credentials = 4;
-     */
-    credentials?: Credentials | undefined;
-  };
+  /**
+   * Applied to devices in the batch. When omitted, drivers may use their
+   * default credentials.
+   *
+   * @generated from field: pairing.v1.Credentials credentials = 4;
+   */
+  credentials?: Credentials | undefined;
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeRequest.
  * Use `create(PairDiscoveredDevicesOnFleetNodeRequestSchema)` to create a new message.
  */
-export const PairDiscoveredDevicesOnFleetNodeRequestSchema: GenMessage<PairDiscoveredDevicesOnFleetNodeRequest> =
-  /*@__PURE__*/
+export const PairDiscoveredDevicesOnFleetNodeRequestSchema: GenMessage<PairDiscoveredDevicesOnFleetNodeRequest> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 21);
 
 /**
  * @generated from message fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeResponse
  */
-export type PairDiscoveredDevicesOnFleetNodeResponse =
-  Message<"fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeResponse"> & {
-    /**
-     * @generated from field: repeated fleetnodeadmin.v1.DevicePairingResult results = 1;
-     */
-    results: DevicePairingResult[];
-  };
+export type PairDiscoveredDevicesOnFleetNodeResponse = Message<"fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeResponse"> & {
+  /**
+   * @generated from field: repeated fleetnodeadmin.v1.DevicePairingResult results = 1;
+   */
+  results: DevicePairingResult[];
+};
 
 /**
  * Describes the message fleetnodeadmin.v1.PairDiscoveredDevicesOnFleetNodeResponse.
  * Use `create(PairDiscoveredDevicesOnFleetNodeResponseSchema)` to create a new message.
  */
-export const PairDiscoveredDevicesOnFleetNodeResponseSchema: GenMessage<PairDiscoveredDevicesOnFleetNodeResponse> =
-  /*@__PURE__*/
+export const PairDiscoveredDevicesOnFleetNodeResponseSchema: GenMessage<PairDiscoveredDevicesOnFleetNodeResponse> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 22);
 
 /**
@@ -635,8 +604,7 @@ export type DevicePairingResult = Message<"fleetnodeadmin.v1.DevicePairingResult
  * Describes the message fleetnodeadmin.v1.DevicePairingResult.
  * Use `create(DevicePairingResultSchema)` to create a new message.
  */
-export const DevicePairingResultSchema: GenMessage<DevicePairingResult> =
-  /*@__PURE__*/
+export const DevicePairingResultSchema: GenMessage<DevicePairingResult> = /*@__PURE__*/
   messageDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 23);
 
 /**
@@ -672,8 +640,7 @@ export enum FleetNodeEnrollmentStatus {
 /**
  * Describes the enum fleetnodeadmin.v1.FleetNodeEnrollmentStatus.
  */
-export const FleetNodeEnrollmentStatusSchema: GenEnum<FleetNodeEnrollmentStatus> =
-  /*@__PURE__*/
+export const FleetNodeEnrollmentStatusSchema: GenEnum<FleetNodeEnrollmentStatus> = /*@__PURE__*/
   enumDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 0);
 
 /**
@@ -687,7 +654,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof CreateEnrollmentCodeRequestSchema;
     output: typeof CreateEnrollmentCodeResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.ListFleetNodes
    */
@@ -695,7 +662,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof ListFleetNodesRequestSchema;
     output: typeof ListFleetNodesResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.ConfirmFleetNode
    */
@@ -703,7 +670,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof ConfirmFleetNodeRequestSchema;
     output: typeof ConfirmFleetNodeResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.RevokeFleetNode
    */
@@ -711,7 +678,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof RevokeFleetNodeRequestSchema;
     output: typeof RevokeFleetNodeResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.PairDeviceToFleetNode
    */
@@ -719,7 +686,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof PairDeviceToFleetNodeRequestSchema;
     output: typeof PairDeviceToFleetNodeResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.UnpairDevice
    */
@@ -727,7 +694,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof UnpairDeviceRequestSchema;
     output: typeof UnpairDeviceResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.ListFleetNodeDevices
    */
@@ -735,7 +702,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof ListFleetNodeDevicesRequestSchema;
     output: typeof ListFleetNodeDevicesResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.DiscoverOnFleetNode
    */
@@ -743,7 +710,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "server_streaming";
     input: typeof DiscoverOnFleetNodeRequestSchema;
     output: typeof DiscoverOnFleetNodeResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.ListFleetNodeDiscoveredDevices
    */
@@ -751,7 +718,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "unary";
     input: typeof ListFleetNodeDiscoveredDevicesRequestSchema;
     output: typeof ListFleetNodeDiscoveredDevicesResponseSchema;
-  };
+  },
   /**
    * @generated from rpc fleetnodeadmin.v1.FleetNodeAdminService.PairDiscoveredDevicesOnFleetNode
    */
@@ -759,5 +726,7 @@ export const FleetNodeAdminService: GenService<{
     methodKind: "server_streaming";
     input: typeof PairDiscoveredDevicesOnFleetNodeRequestSchema;
     output: typeof PairDiscoveredDevicesOnFleetNodeResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_fleetnodeadmin_v1_fleetnodeadmin, 0);
+
