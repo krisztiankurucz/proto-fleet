@@ -476,13 +476,13 @@ func boundedSelectorDeviceIDsFromArgs(t *testing.T, srv *httptest.Server, args .
 			selector, err := generatedBuildBoundedMinerSelector(ctx, cmd, client)
 			if err != nil {
 				buildErr = err
-				return nil
+				return err
 			}
 			deviceIDs = selector.GetIncludeDevices().GetDeviceIdentifiers()
 			return nil
 		},
 	}
-	if err := cmd.Run(context.Background(), append([]string{"selector-test"}, args...)); err != nil {
+	if err := cmd.Run(context.Background(), append([]string{"selector-test"}, args...)); err != nil && buildErr == nil {
 		t.Fatalf("run selector harness: %v", err)
 	}
 	return deviceIDs, buildErr

@@ -4,7 +4,6 @@ package main
 
 import (
 	"context"
-
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
 	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"
@@ -15,7 +14,7 @@ func generatedGroupsCommand() *cli.Command {
 	return &cli.Command{
 		Name:  "groups",
 		Usage: "Manage groups commands",
-		Commands: []*cli.Command{
+		Commands: append(manualGroupCommands("groups"), []*cli.Command{
 			generatedRequestCommand(
 				"add-devices",
 				"Add devices to a group",
@@ -282,6 +281,6 @@ func generatedGroupsCommand() *cli.Command {
 				},
 				func() proto.Message { return &collectionv1.UpdateCollectionResponse{} },
 			),
-		},
+		}...),
 	}
 }

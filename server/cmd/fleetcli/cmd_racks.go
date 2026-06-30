@@ -4,7 +4,6 @@ package main
 
 import (
 	"context"
-
 	collectionv1 "github.com/block/proto-fleet/server/generated/grpc/collection/v1"
 	devicesetv1 "github.com/block/proto-fleet/server/generated/grpc/device_set/v1"
 	"github.com/urfave/cli/v3"
@@ -15,7 +14,7 @@ func generatedRacksCommand() *cli.Command {
 	return &cli.Command{
 		Name:  "racks",
 		Usage: "Manage racks commands",
-		Commands: []*cli.Command{
+		Commands: append(manualGroupCommands("racks"), []*cli.Command{
 			generatedRequestCommand(
 				"add-devices",
 				"Add devices to a rack",
@@ -272,6 +271,6 @@ func generatedRacksCommand() *cli.Command {
 				},
 				func() proto.Message { return &collectionv1.ListRackZonesResponse{} },
 			),
-		},
+		}...),
 	}
 }

@@ -684,6 +684,12 @@ func analyzeRequest(
 			analysis.Reason = "request includes pool config, so the generated command exposes pool flags plus --json fallback"
 			continue
 		}
+		if isTimestampField(field) {
+			flag, lines := buildTimestampFieldPlan(field, messageInfo)
+			analysis.flags = append(analysis.flags, flag)
+			analysis.lines = append(analysis.lines, lines...)
+			continue
+		}
 		if field.IsMap() {
 			hasUnsupported = true
 			continue
@@ -909,6 +915,36 @@ func buildFieldPlan(
 	return flag, lines, needsFmt, nil
 }
 
+func isTimestampField(field protoreflect.FieldDescriptor) bool {
+	return !field.IsList() && !field.IsMap() &&
+		field.Kind() == protoreflect.MessageKind &&
+		field.Message().FullName() == "google.protobuf.Timestamp"
+}
+
+func buildTimestampFieldPlan(field protoreflect.FieldDescriptor, messageInfo messageInfo) (string, []string) {
+	flagName := strings.ReplaceAll(string(field.Name()), "_", "-")
+	goFieldName := toGoFieldName(field.Name())
+	usage := fieldUsage(field)
+	flag := fmt.Sprintf("&cli.StringFlag{Name: %q, Usage: %q}", flagName, usage)
+
+	lines := []string{
+		fmt.Sprintf("if cmd.IsSet(%q) {", flagName),
+		fmt.Sprintf("\tparsed, err := parseRFC3339Timestamp(cmd.String(%q), %q)", flagName, flagName),
+		"\tif err != nil {",
+		"\t\treturn nil, err",
+		"\t}",
+	}
+	if oneof := field.ContainingOneof(); oneof != nil && !oneof.IsSynthetic() {
+		oneofGoFieldName := toGoFieldName(oneof.Name())
+		wrapperType := messageInfo.GoAlias + "." + messageInfo.GoIdent + "_" + goFieldName
+		lines = append(lines, fmt.Sprintf("\treq.%s = &%s{%s: parsed}", oneofGoFieldName, wrapperType, goFieldName))
+	} else {
+		lines = append(lines, fmt.Sprintf("\treq.%s = parsed", goFieldName))
+	}
+	lines = append(lines, "}")
+	return flag, lines
+}
+
 func unsupportedResponseReason(message protoreflect.MessageDescriptor) string {
 	for i := range message.Fields().Len() {
 		field := message.Fields().Get(i)
@@ -1099,25 +1135,36 @@ func renderSimpleExpr(
 	buf.WriteString(fmt.Sprintf("\t%q,\n", usage))
 	buf.WriteString(fmt.Sprintf("\t%q,\n", methodPath))
 	buf.WriteString(fmt.Sprintf("\t%s,\n", auth))
-	if len(analysis.flagHelpers) > 0 {
+	hasLiteralFlags := analysis.jsonFallback || len(analysis.flags) > 0
+	if len(analysis.flagHelpers) == 0 && !hasLiteralFlags {
+		buf.WriteString("\t[]cli.Flag{},\n")
+	} else if len(analysis.flagHelpers) > 0 {
 		buf.WriteString("\tappend([]cli.Flag{\n")
 	} else {
 		buf.WriteString("\t[]cli.Flag{\n")
 	}
-	if analysis.jsonFallback {
-		buf.WriteString("\t\t&cli.StringFlag{Name: \"json\", Usage: \"Path to a request JSON file, or - for stdin\"},\n")
-	}
-	for _, flag := range analysis.flags {
-		buf.WriteString("\t\t" + flag + ",\n")
-	}
-	if len(analysis.flagHelpers) > 0 {
+	if hasLiteralFlags {
+		if analysis.jsonFallback {
+			buf.WriteString("\t\t&cli.StringFlag{Name: \"json\", Usage: \"Path to a request JSON file, or - for stdin\"},\n")
+		}
+		for _, flag := range analysis.flags {
+			buf.WriteString("\t\t" + flag + ",\n")
+		}
+		if len(analysis.flagHelpers) > 0 {
+			buf.WriteString("\t}")
+			for _, helper := range analysis.flagHelpers {
+				buf.WriteString(", " + helper + "...")
+			}
+			buf.WriteString("),\n")
+		} else {
+			buf.WriteString("\t},\n")
+		}
+	} else if len(analysis.flagHelpers) > 0 {
 		buf.WriteString("\t}")
 		for _, helper := range analysis.flagHelpers {
 			buf.WriteString(", " + helper + "...")
 		}
 		buf.WriteString("),\n")
-	} else {
-		buf.WriteString("\t},\n")
 	}
 	buf.WriteString("\tfunc(ctx context.Context, cmd *cli.Command, client *Client) (proto.Message, error) {\n")
 	buf.WriteString(fmt.Sprintf("\t\treq := &%s.%s{}\n", request.GoAlias, request.GoIdent))

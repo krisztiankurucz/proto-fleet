@@ -100,6 +100,9 @@ func generatedCallAndPrintWithClient(
 		err = client.CallBearer(ctx, method, req, resp)
 	}
 	if err != nil {
+		if isConflict(err) {
+			return cliExitError{code: 2, err: err}
+		}
 		return err
 	}
 	return printProto(resp)

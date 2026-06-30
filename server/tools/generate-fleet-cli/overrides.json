@@ -8,11 +8,40 @@
       "group": "pools",
       "auth": "bearer",
       "all_methods": true
+    },
+    "cohort.v1.CohortService": {
+      "group": "cohorts",
+      "auth": "bearer",
+      "all_methods": true
     }
   },
   "methods": {
     "fleetmanagement.v1.FleetManagementService/ListMinerStateSnapshots": {
       "command": "list"
+    },
+    "cohort.v1.CohortService/AddDevicesToCohort": {
+      "command": "add-devices"
+    },
+    "cohort.v1.CohortService/AdminReleaseCohort": {
+      "command": "admin-release"
+    },
+    "cohort.v1.CohortService/GetCohort": {
+      "command": "status"
+    },
+    "cohort.v1.CohortService/GetMyCohorts": {
+      "command": "my"
+    },
+    "cohort.v1.CohortService/ListDevices": {
+      "command": "rigs"
+    },
+    "cohort.v1.CohortService/RemoveDevicesFromCohort": {
+      "command": "remove-devices"
+    },
+    "cohort.v1.CohortService/ReleaseCohort": {
+      "command": "release"
+    },
+    "cohort.v1.CohortService/UpdateCohort": {
+      "command": "extend"
     }
   },
   "commands": [

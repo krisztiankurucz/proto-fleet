@@ -4,7 +4,6 @@ package main
 
 import (
 	"context"
-
 	onboardingv1 "github.com/block/proto-fleet/server/generated/grpc/onboarding/v1"
 	"github.com/urfave/cli/v3"
 	proto "google.golang.org/protobuf/proto"
@@ -14,7 +13,7 @@ func generatedOnboardingCommand() *cli.Command {
 	return &cli.Command{
 		Name:  "onboarding",
 		Usage: "Manage onboarding commands",
-		Commands: []*cli.Command{
+		Commands: append(manualGroupCommands("onboarding"), []*cli.Command{
 			generatedRequestCommand(
 				"create-admin",
 				"Create the initial Fleet admin login",
@@ -36,6 +35,6 @@ func generatedOnboardingCommand() *cli.Command {
 				},
 				func() proto.Message { return &onboardingv1.CreateAdminLoginResponse{} },
 			),
-		},
+		}...),
 	}
 }
