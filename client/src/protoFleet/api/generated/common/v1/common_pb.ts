@@ -9,8 +9,11 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file common/v1/common.proto.
  */
-export const file_common_v1_common: GenFile = /*@__PURE__*/
-  fileDesc("ChZjb21tb24vdjEvY29tbW9uLnByb3RvEgljb21tb24udjEiKAoLUmVzb3VyY2VSZWYSCgoCaWQYASABKAMSDQoFbGFiZWwYAiABKAkirQEKDVBsYWNlbWVudFJlZnMSJAoEc2l0ZRgBIAEoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZhIoCghidWlsZGluZxgCIAEoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZhIkCgRyYWNrGAMgASgLMhYuY29tbW9uLnYxLlJlc291cmNlUmVmEiYKBmdyb3VwcxgEIAMoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZiJvChFGbGVldEVycm9yRGV0YWlscxIrCgZjb21tb24YASABKA4yGS5jb21tb24udjEuRmxlZXRFcnJvckNvZGVIABIRCgdzZXJ2aWNlGAIgASgFSAASEgoIZW5kcG9pbnQYAyABKAVIAEIGCgRjb2RlKjIKDkZsZWV0RXJyb3JDb2RlEiAKHEZMRUVUX0VSUk9SX0NPREVfVU5TUEVDSUZJRUQQAEKoAQoNY29tLmNvbW1vbi52MUILQ29tbW9uUHJvdG9QAVpFZ2l0aHViLmNvbS9ibG9jay9wcm90by1mbGVldC9zZXJ2ZXIvZ2VuZXJhdGVkL2dycGMvY29tbW9uL3YxO2NvbW1vbnYxogIDQ1hYqgIJQ29tbW9uLlYxygIJQ29tbW9uXFYx4gIVQ29tbW9uXFYxXEdQQk1ldGFkYXRh6gIKQ29tbW9uOjpWMWIGcHJvdG8z");
+export const file_common_v1_common: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChZjb21tb24vdjEvY29tbW9uLnByb3RvEgljb21tb24udjEiKAoLUmVzb3VyY2VSZWYSCgoCaWQYASABKAMSDQoFbGFiZWwYAiABKAkirQEKDVBsYWNlbWVudFJlZnMSJAoEc2l0ZRgBIAEoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZhIoCghidWlsZGluZxgCIAEoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZhIkCgRyYWNrGAMgASgLMhYuY29tbW9uLnYxLlJlc291cmNlUmVmEiYKBmdyb3VwcxgEIAMoCzIWLmNvbW1vbi52MS5SZXNvdXJjZVJlZiJvChFGbGVldEVycm9yRGV0YWlscxIrCgZjb21tb24YASABKA4yGS5jb21tb24udjEuRmxlZXRFcnJvckNvZGVIABIRCgdzZXJ2aWNlGAIgASgFSAASEgoIZW5kcG9pbnQYAyABKAVIAEIGCgRjb2RlKjIKDkZsZWV0RXJyb3JDb2RlEiAKHEZMRUVUX0VSUk9SX0NPREVfVU5TUEVDSUZJRUQQAEKoAQoNY29tLmNvbW1vbi52MUILQ29tbW9uUHJvdG9QAVpFZ2l0aHViLmNvbS9ibG9jay9wcm90by1mbGVldC9zZXJ2ZXIvZ2VuZXJhdGVkL2dycGMvY29tbW9uL3YxO2NvbW1vbnYxogIDQ1hYqgIJQ29tbW9uLlYxygIJQ29tbW9uXFYx4gIVQ29tbW9uXFYxXEdQQk1ldGFkYXRh6gIKQ29tbW9uOjpWMWIGcHJvdG8z",
+  );
 
 /**
  * Lightweight identity + display label for related resources embedded in
@@ -34,8 +37,7 @@ export type ResourceRef = Message<"common.v1.ResourceRef"> & {
  * Describes the message common.v1.ResourceRef.
  * Use `create(ResourceRefSchema)` to create a new message.
  */
-export const ResourceRefSchema: GenMessage<ResourceRef> = /*@__PURE__*/
-  messageDesc(file_common_v1_common, 0);
+export const ResourceRefSchema: GenMessage<ResourceRef> = /*@__PURE__*/ messageDesc(file_common_v1_common, 0);
 
 /**
  * Shared placement references for fleet list rows.
@@ -68,8 +70,7 @@ export type PlacementRefs = Message<"common.v1.PlacementRefs"> & {
  * Describes the message common.v1.PlacementRefs.
  * Use `create(PlacementRefsSchema)` to create a new message.
  */
-export const PlacementRefsSchema: GenMessage<PlacementRefs> = /*@__PURE__*/
-  messageDesc(file_common_v1_common, 1);
+export const PlacementRefsSchema: GenMessage<PlacementRefs> = /*@__PURE__*/ messageDesc(file_common_v1_common, 1);
 
 /**
  * @generated from message common.v1.FleetErrorDetails
@@ -78,32 +79,37 @@ export type FleetErrorDetails = Message<"common.v1.FleetErrorDetails"> & {
   /**
    * @generated from oneof common.v1.FleetErrorDetails.code
    */
-  code: {
-    /**
-     * @generated from field: common.v1.FleetErrorCode common = 1;
-     */
-    value: FleetErrorCode;
-    case: "common";
-  } | {
-    /**
-     * @generated from field: int32 service = 2;
-     */
-    value: number;
-    case: "service";
-  } | {
-    /**
-     * @generated from field: int32 endpoint = 3;
-     */
-    value: number;
-    case: "endpoint";
-  } | { case: undefined; value?: undefined };
+  code:
+    | {
+        /**
+         * @generated from field: common.v1.FleetErrorCode common = 1;
+         */
+        value: FleetErrorCode;
+        case: "common";
+      }
+    | {
+        /**
+         * @generated from field: int32 service = 2;
+         */
+        value: number;
+        case: "service";
+      }
+    | {
+        /**
+         * @generated from field: int32 endpoint = 3;
+         */
+        value: number;
+        case: "endpoint";
+      }
+    | { case: undefined; value?: undefined };
 };
 
 /**
  * Describes the message common.v1.FleetErrorDetails.
  * Use `create(FleetErrorDetailsSchema)` to create a new message.
  */
-export const FleetErrorDetailsSchema: GenMessage<FleetErrorDetails> = /*@__PURE__*/
+export const FleetErrorDetailsSchema: GenMessage<FleetErrorDetails> =
+  /*@__PURE__*/
   messageDesc(file_common_v1_common, 2);
 
 /**
@@ -119,6 +125,4 @@ export enum FleetErrorCode {
 /**
  * Describes the enum common.v1.FleetErrorCode.
  */
-export const FleetErrorCodeSchema: GenEnum<FleetErrorCode> = /*@__PURE__*/
-  enumDesc(file_common_v1_common, 0);
-
+export const FleetErrorCodeSchema: GenEnum<FleetErrorCode> = /*@__PURE__*/ enumDesc(file_common_v1_common, 0);
