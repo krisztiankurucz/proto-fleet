@@ -1276,6 +1276,10 @@ func formatMinerType(manufacturer, model string) string {
 	}
 }
 
+func sameMinerType(left, right string) bool {
+	return strings.EqualFold(strings.TrimSpace(left), strings.TrimSpace(right))
+}
+
 func (s *Service) UpdateMiningPools(
 	ctx context.Context,
 	deviceSelector *pb.DeviceSelector,
@@ -1537,7 +1541,7 @@ func (s *Service) validateFirmwareUpdateTarget(ctx context.Context, deviceSelect
 			}
 		}
 
-		if selectedManufacturer != metadata.TargetManufacturer || selectedModel != metadata.TargetModel {
+		if !sameMinerType(selectedManufacturer, metadata.TargetManufacturer) || !sameMinerType(selectedModel, metadata.TargetModel) {
 			return struct{}{}, fleeterror.NewInvalidArgumentErrorf(
 				"firmware target %s does not match selected miners %s",
 				formatMinerType(metadata.TargetManufacturer, metadata.TargetModel),

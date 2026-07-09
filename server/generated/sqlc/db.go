@@ -111,8 +111,17 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.claimClosedLoopFullFleetTargetsStmt, err = db.PrepareContext(ctx, claimClosedLoopFullFleetTargets); err != nil {
 		return nil, fmt.Errorf("error preparing query ClaimClosedLoopFullFleetTargets: %w", err)
 	}
+	if q.claimFirmwareDispatchStmt, err = db.PrepareContext(ctx, claimFirmwareDispatch); err != nil {
+		return nil, fmt.Errorf("error preparing query ClaimFirmwareDispatch: %w", err)
+	}
 	if q.claimMessageForProcessingStmt, err = db.PrepareContext(ctx, claimMessageForProcessing); err != nil {
 		return nil, fmt.Errorf("error preparing query ClaimMessageForProcessing: %w", err)
+	}
+	if q.clearCohortDesiredFirmwareFileReferencesStmt, err = db.PrepareContext(ctx, clearCohortDesiredFirmwareFileReferences); err != nil {
+		return nil, fmt.Errorf("error preparing query ClearCohortDesiredFirmwareFileReferences: %w", err)
+	}
+	if q.clearCohortFirmwareTargetFileReferencesStmt, err = db.PrepareContext(ctx, clearCohortFirmwareTargetFileReferences); err != nil {
+		return nil, fmt.Errorf("error preparing query ClearCohortFirmwareTargetFileReferences: %w", err)
 	}
 	if q.clearCurtailmentAutomationActiveEventStmt, err = db.PrepareContext(ctx, clearCurtailmentAutomationActiveEvent); err != nil {
 		return nil, fmt.Errorf("error preparing query ClearCurtailmentAutomationActiveEvent: %w", err)
@@ -906,6 +915,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listExpiredActiveCohortsStmt, err = db.PrepareContext(ctx, listExpiredActiveCohorts); err != nil {
 		return nil, fmt.Errorf("error preparing query ListExpiredActiveCohorts: %w", err)
 	}
+	if q.listFirmwareEnforcementCandidatesStmt, err = db.PrepareContext(ctx, listFirmwareEnforcementCandidates); err != nil {
+		return nil, fmt.Errorf("error preparing query ListFirmwareEnforcementCandidates: %w", err)
+	}
 	if q.listFleetNodeDeviceIDsForRevocationStmt, err = db.PrepareContext(ctx, listFleetNodeDeviceIDsForRevocation); err != nil {
 		return nil, fmt.Errorf("error preparing query ListFleetNodeDeviceIDsForRevocation: %w", err)
 	}
@@ -935,6 +947,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.listOrganizationsStmt, err = db.PrepareContext(ctx, listOrganizations); err != nil {
 		return nil, fmt.Errorf("error preparing query ListOrganizations: %w", err)
+	}
+	if q.listOrgsWithFirmwareTargetsStmt, err = db.PrepareContext(ctx, listOrgsWithFirmwareTargets); err != nil {
+		return nil, fmt.Errorf("error preparing query ListOrgsWithFirmwareTargets: %w", err)
 	}
 	if q.listPermissionsStmt, err = db.PrepareContext(ctx, listPermissions); err != nil {
 		return nil, fmt.Errorf("error preparing query ListPermissions: %w", err)
@@ -1026,6 +1041,21 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.markCommandBatchProcessingStmt, err = db.PrepareContext(ctx, markCommandBatchProcessing); err != nil {
 		return nil, fmt.Errorf("error preparing query MarkCommandBatchProcessing: %w", err)
 	}
+	if q.markFirmwareConfirmedStmt, err = db.PrepareContext(ctx, markFirmwareConfirmed); err != nil {
+		return nil, fmt.Errorf("error preparing query MarkFirmwareConfirmed: %w", err)
+	}
+	if q.markFirmwareDispatchFailureStmt, err = db.PrepareContext(ctx, markFirmwareDispatchFailure); err != nil {
+		return nil, fmt.Errorf("error preparing query MarkFirmwareDispatchFailure: %w", err)
+	}
+	if q.markFirmwareDispatchHeldStmt, err = db.PrepareContext(ctx, markFirmwareDispatchHeld); err != nil {
+		return nil, fmt.Errorf("error preparing query MarkFirmwareDispatchHeld: %w", err)
+	}
+	if q.markFirmwareDispatchedStmt, err = db.PrepareContext(ctx, markFirmwareDispatched); err != nil {
+		return nil, fmt.Errorf("error preparing query MarkFirmwareDispatched: %w", err)
+	}
+	if q.markFirmwareDriftedStmt, err = db.PrepareContext(ctx, markFirmwareDrifted); err != nil {
+		return nil, fmt.Errorf("error preparing query MarkFirmwareDrifted: %w", err)
+	}
 	if q.negateSchedulePrioritiesStmt, err = db.PrepareContext(ctx, negateSchedulePriorities); err != nil {
 		return nil, fmt.Errorf("error preparing query NegateSchedulePriorities: %w", err)
 	}
@@ -1094,6 +1124,18 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.resetCurtailmentTargetsForRestoreStmt, err = db.PrepareContext(ctx, resetCurtailmentTargetsForRestore); err != nil {
 		return nil, fmt.Errorf("error preparing query ResetCurtailmentTargetsForRestore: %w", err)
+	}
+	if q.resetFirmwareEnforcementForCohortMembersStmt, err = db.PrepareContext(ctx, resetFirmwareEnforcementForCohortMembers); err != nil {
+		return nil, fmt.Errorf("error preparing query ResetFirmwareEnforcementForCohortMembers: %w", err)
+	}
+	if q.resetFirmwareEnforcementForCohortTargetStmt, err = db.PrepareContext(ctx, resetFirmwareEnforcementForCohortTarget); err != nil {
+		return nil, fmt.Errorf("error preparing query ResetFirmwareEnforcementForCohortTarget: %w", err)
+	}
+	if q.resetFirmwareEnforcementForDevicesStmt, err = db.PrepareContext(ctx, resetFirmwareEnforcementForDevices); err != nil {
+		return nil, fmt.Errorf("error preparing query ResetFirmwareEnforcementForDevices: %w", err)
+	}
+	if q.resetFirmwareEnforcementForFirmwareFileStmt, err = db.PrepareContext(ctx, resetFirmwareEnforcementForFirmwareFile); err != nil {
+		return nil, fmt.Errorf("error preparing query ResetFirmwareEnforcementForFirmwareFile: %w", err)
 	}
 	if q.resolveEffectiveCohortForDeviceStmt, err = db.PrepareContext(ctx, resolveEffectiveCohortForDevice); err != nil {
 		return nil, fmt.Errorf("error preparing query ResolveEffectiveCohortForDevice: %w", err)
@@ -1395,6 +1437,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.upsertCohortFirmwareTargetStmt, err = db.PrepareContext(ctx, upsertCohortFirmwareTarget); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertCohortFirmwareTarget: %w", err)
 	}
+	if q.upsertCohortReconcilerHeartbeatStmt, err = db.PrepareContext(ctx, upsertCohortReconcilerHeartbeat); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertCohortReconcilerHeartbeat: %w", err)
+	}
 	if q.upsertCommandOnDeviceLogStmt, err = db.PrepareContext(ctx, upsertCommandOnDeviceLog); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertCommandOnDeviceLog: %w", err)
 	}
@@ -1406,6 +1451,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.upsertCustomRoleForOrgStmt, err = db.PrepareContext(ctx, upsertCustomRoleForOrg); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertCustomRoleForOrg: %w", err)
+	}
+	if q.upsertDeviceFirmwareStateStmt, err = db.PrepareContext(ctx, upsertDeviceFirmwareState); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertDeviceFirmwareState: %w", err)
 	}
 	if q.upsertDevicePairingStmt, err = db.PrepareContext(ctx, upsertDevicePairing); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertDevicePairing: %w", err)
@@ -1584,9 +1632,24 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing claimClosedLoopFullFleetTargetsStmt: %w", cerr)
 		}
 	}
+	if q.claimFirmwareDispatchStmt != nil {
+		if cerr := q.claimFirmwareDispatchStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing claimFirmwareDispatchStmt: %w", cerr)
+		}
+	}
 	if q.claimMessageForProcessingStmt != nil {
 		if cerr := q.claimMessageForProcessingStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing claimMessageForProcessingStmt: %w", cerr)
+		}
+	}
+	if q.clearCohortDesiredFirmwareFileReferencesStmt != nil {
+		if cerr := q.clearCohortDesiredFirmwareFileReferencesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing clearCohortDesiredFirmwareFileReferencesStmt: %w", cerr)
+		}
+	}
+	if q.clearCohortFirmwareTargetFileReferencesStmt != nil {
+		if cerr := q.clearCohortFirmwareTargetFileReferencesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing clearCohortFirmwareTargetFileReferencesStmt: %w", cerr)
 		}
 	}
 	if q.clearCurtailmentAutomationActiveEventStmt != nil {
@@ -2909,6 +2972,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listExpiredActiveCohortsStmt: %w", cerr)
 		}
 	}
+	if q.listFirmwareEnforcementCandidatesStmt != nil {
+		if cerr := q.listFirmwareEnforcementCandidatesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listFirmwareEnforcementCandidatesStmt: %w", cerr)
+		}
+	}
 	if q.listFleetNodeDeviceIDsForRevocationStmt != nil {
 		if cerr := q.listFleetNodeDeviceIDsForRevocationStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listFleetNodeDeviceIDsForRevocationStmt: %w", cerr)
@@ -2957,6 +3025,11 @@ func (q *Queries) Close() error {
 	if q.listOrganizationsStmt != nil {
 		if cerr := q.listOrganizationsStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listOrganizationsStmt: %w", cerr)
+		}
+	}
+	if q.listOrgsWithFirmwareTargetsStmt != nil {
+		if cerr := q.listOrgsWithFirmwareTargetsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listOrgsWithFirmwareTargetsStmt: %w", cerr)
 		}
 	}
 	if q.listPermissionsStmt != nil {
@@ -3109,6 +3182,31 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing markCommandBatchProcessingStmt: %w", cerr)
 		}
 	}
+	if q.markFirmwareConfirmedStmt != nil {
+		if cerr := q.markFirmwareConfirmedStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing markFirmwareConfirmedStmt: %w", cerr)
+		}
+	}
+	if q.markFirmwareDispatchFailureStmt != nil {
+		if cerr := q.markFirmwareDispatchFailureStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing markFirmwareDispatchFailureStmt: %w", cerr)
+		}
+	}
+	if q.markFirmwareDispatchHeldStmt != nil {
+		if cerr := q.markFirmwareDispatchHeldStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing markFirmwareDispatchHeldStmt: %w", cerr)
+		}
+	}
+	if q.markFirmwareDispatchedStmt != nil {
+		if cerr := q.markFirmwareDispatchedStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing markFirmwareDispatchedStmt: %w", cerr)
+		}
+	}
+	if q.markFirmwareDriftedStmt != nil {
+		if cerr := q.markFirmwareDriftedStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing markFirmwareDriftedStmt: %w", cerr)
+		}
+	}
 	if q.negateSchedulePrioritiesStmt != nil {
 		if cerr := q.negateSchedulePrioritiesStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing negateSchedulePrioritiesStmt: %w", cerr)
@@ -3222,6 +3320,26 @@ func (q *Queries) Close() error {
 	if q.resetCurtailmentTargetsForRestoreStmt != nil {
 		if cerr := q.resetCurtailmentTargetsForRestoreStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing resetCurtailmentTargetsForRestoreStmt: %w", cerr)
+		}
+	}
+	if q.resetFirmwareEnforcementForCohortMembersStmt != nil {
+		if cerr := q.resetFirmwareEnforcementForCohortMembersStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing resetFirmwareEnforcementForCohortMembersStmt: %w", cerr)
+		}
+	}
+	if q.resetFirmwareEnforcementForCohortTargetStmt != nil {
+		if cerr := q.resetFirmwareEnforcementForCohortTargetStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing resetFirmwareEnforcementForCohortTargetStmt: %w", cerr)
+		}
+	}
+	if q.resetFirmwareEnforcementForDevicesStmt != nil {
+		if cerr := q.resetFirmwareEnforcementForDevicesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing resetFirmwareEnforcementForDevicesStmt: %w", cerr)
+		}
+	}
+	if q.resetFirmwareEnforcementForFirmwareFileStmt != nil {
+		if cerr := q.resetFirmwareEnforcementForFirmwareFileStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing resetFirmwareEnforcementForFirmwareFileStmt: %w", cerr)
 		}
 	}
 	if q.resolveEffectiveCohortForDeviceStmt != nil {
@@ -3724,6 +3842,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing upsertCohortFirmwareTargetStmt: %w", cerr)
 		}
 	}
+	if q.upsertCohortReconcilerHeartbeatStmt != nil {
+		if cerr := q.upsertCohortReconcilerHeartbeatStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertCohortReconcilerHeartbeatStmt: %w", cerr)
+		}
+	}
 	if q.upsertCommandOnDeviceLogStmt != nil {
 		if cerr := q.upsertCommandOnDeviceLogStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertCommandOnDeviceLogStmt: %w", cerr)
@@ -3742,6 +3865,11 @@ func (q *Queries) Close() error {
 	if q.upsertCustomRoleForOrgStmt != nil {
 		if cerr := q.upsertCustomRoleForOrgStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertCustomRoleForOrgStmt: %w", cerr)
+		}
+	}
+	if q.upsertDeviceFirmwareStateStmt != nil {
+		if cerr := q.upsertDeviceFirmwareStateStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertDeviceFirmwareStateStmt: %w", cerr)
 		}
 	}
 	if q.upsertDevicePairingStmt != nil {
@@ -3857,7 +3985,10 @@ type Queries struct {
 	cascadeRackDeviceSitesStmt                                 *sql.Stmt
 	cascadeRackDeviceSitesBulkStmt                             *sql.Stmt
 	claimClosedLoopFullFleetTargetsStmt                        *sql.Stmt
+	claimFirmwareDispatchStmt                                  *sql.Stmt
 	claimMessageForProcessingStmt                              *sql.Stmt
+	clearCohortDesiredFirmwareFileReferencesStmt               *sql.Stmt
+	clearCohortFirmwareTargetFileReferencesStmt                *sql.Stmt
 	clearCurtailmentAutomationActiveEventStmt                  *sql.Stmt
 	clearDeviceBuildingsByBuildingStmt                         *sql.Stmt
 	clearDeviceBuildingsBySiteStmt                             *sql.Stmt
@@ -4122,6 +4253,7 @@ type Queries struct {
 	listEnabledMQTTSourcesStmt                                 *sql.Stmt
 	listExistingDeviceIdentifiersStmt                          *sql.Stmt
 	listExpiredActiveCohortsStmt                               *sql.Stmt
+	listFirmwareEnforcementCandidatesStmt                      *sql.Stmt
 	listFleetNodeDeviceIDsForRevocationStmt                    *sql.Stmt
 	listFleetNodeDevicesStmt                                   *sql.Stmt
 	listFleetNodeDiscoveredDevicesStmt                         *sql.Stmt
@@ -4132,6 +4264,7 @@ type Queries struct {
 	listNonTerminalCurtailmentEventsStmt                       *sql.Stmt
 	listNotificationHistoryStmt                                *sql.Stmt
 	listOrganizationsStmt                                      *sql.Stmt
+	listOrgsWithFirmwareTargetsStmt                            *sql.Stmt
 	listPermissionsStmt                                        *sql.Stmt
 	listPoolsStmt                                              *sql.Stmt
 	listRackTypesStmt                                          *sql.Stmt
@@ -4162,6 +4295,11 @@ type Queries struct {
 	markCommandBatchFinishedStmt                               *sql.Stmt
 	markCommandBatchFinishedWithStartedAtStmt                  *sql.Stmt
 	markCommandBatchProcessingStmt                             *sql.Stmt
+	markFirmwareConfirmedStmt                                  *sql.Stmt
+	markFirmwareDispatchFailureStmt                            *sql.Stmt
+	markFirmwareDispatchHeldStmt                               *sql.Stmt
+	markFirmwareDispatchedStmt                                 *sql.Stmt
+	markFirmwareDriftedStmt                                    *sql.Stmt
 	negateSchedulePrioritiesStmt                               *sql.Stmt
 	pairDeviceToFleetNodeStmt                                  *sql.Stmt
 	passwordUpdatedAtStmt                                      *sql.Stmt
@@ -4185,6 +4323,10 @@ type Queries struct {
 	removeDevicesFromDeviceSetStmt                             *sql.Stmt
 	resetCurtailmentTargetsForRecurtailStmt                    *sql.Stmt
 	resetCurtailmentTargetsForRestoreStmt                      *sql.Stmt
+	resetFirmwareEnforcementForCohortMembersStmt               *sql.Stmt
+	resetFirmwareEnforcementForCohortTargetStmt                *sql.Stmt
+	resetFirmwareEnforcementForDevicesStmt                     *sql.Stmt
+	resetFirmwareEnforcementForFirmwareFileStmt                *sql.Stmt
 	resolveEffectiveCohortForDeviceStmt                        *sql.Stmt
 	resumeCurtailmentFromRestoringStmt                         *sql.Stmt
 	resumePausedScheduleStmt                                   *sql.Stmt
@@ -4285,10 +4427,12 @@ type Queries struct {
 	updateUserUsernameStmt                                     *sql.Stmt
 	upsertBuiltinRoleForOrgStmt                                *sql.Stmt
 	upsertCohortFirmwareTargetStmt                             *sql.Stmt
+	upsertCohortReconcilerHeartbeatStmt                        *sql.Stmt
 	upsertCommandOnDeviceLogStmt                               *sql.Stmt
 	upsertCurtailmentAutomationSignalStateStmt                 *sql.Stmt
 	upsertCurtailmentReconcilerHeartbeatStmt                   *sql.Stmt
 	upsertCustomRoleForOrgStmt                                 *sql.Stmt
+	upsertDeviceFirmwareStateStmt                              *sql.Stmt
 	upsertDevicePairingStmt                                    *sql.Stmt
 	upsertDeviceStatusStmt                                     *sql.Stmt
 	upsertDiscoveredDeviceStmt                                 *sql.Stmt
@@ -4333,7 +4477,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		cascadeRackDeviceSitesStmt:                                 q.cascadeRackDeviceSitesStmt,
 		cascadeRackDeviceSitesBulkStmt:                             q.cascadeRackDeviceSitesBulkStmt,
 		claimClosedLoopFullFleetTargetsStmt:                        q.claimClosedLoopFullFleetTargetsStmt,
+		claimFirmwareDispatchStmt:                                  q.claimFirmwareDispatchStmt,
 		claimMessageForProcessingStmt:                              q.claimMessageForProcessingStmt,
+		clearCohortDesiredFirmwareFileReferencesStmt:               q.clearCohortDesiredFirmwareFileReferencesStmt,
+		clearCohortFirmwareTargetFileReferencesStmt:                q.clearCohortFirmwareTargetFileReferencesStmt,
 		clearCurtailmentAutomationActiveEventStmt:                  q.clearCurtailmentAutomationActiveEventStmt,
 		clearDeviceBuildingsByBuildingStmt:                         q.clearDeviceBuildingsByBuildingStmt,
 		clearDeviceBuildingsBySiteStmt:                             q.clearDeviceBuildingsBySiteStmt,
@@ -4598,6 +4745,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listEnabledMQTTSourcesStmt:                                 q.listEnabledMQTTSourcesStmt,
 		listExistingDeviceIdentifiersStmt:                          q.listExistingDeviceIdentifiersStmt,
 		listExpiredActiveCohortsStmt:                               q.listExpiredActiveCohortsStmt,
+		listFirmwareEnforcementCandidatesStmt:                      q.listFirmwareEnforcementCandidatesStmt,
 		listFleetNodeDeviceIDsForRevocationStmt:                    q.listFleetNodeDeviceIDsForRevocationStmt,
 		listFleetNodeDevicesStmt:                                   q.listFleetNodeDevicesStmt,
 		listFleetNodeDiscoveredDevicesStmt:                         q.listFleetNodeDiscoveredDevicesStmt,
@@ -4608,6 +4756,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listNonTerminalCurtailmentEventsStmt:                       q.listNonTerminalCurtailmentEventsStmt,
 		listNotificationHistoryStmt:                                q.listNotificationHistoryStmt,
 		listOrganizationsStmt:                                      q.listOrganizationsStmt,
+		listOrgsWithFirmwareTargetsStmt:                            q.listOrgsWithFirmwareTargetsStmt,
 		listPermissionsStmt:                                        q.listPermissionsStmt,
 		listPoolsStmt:                                              q.listPoolsStmt,
 		listRackTypesStmt:                                          q.listRackTypesStmt,
@@ -4638,6 +4787,11 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		markCommandBatchFinishedStmt:                               q.markCommandBatchFinishedStmt,
 		markCommandBatchFinishedWithStartedAtStmt:                  q.markCommandBatchFinishedWithStartedAtStmt,
 		markCommandBatchProcessingStmt:                             q.markCommandBatchProcessingStmt,
+		markFirmwareConfirmedStmt:                                  q.markFirmwareConfirmedStmt,
+		markFirmwareDispatchFailureStmt:                            q.markFirmwareDispatchFailureStmt,
+		markFirmwareDispatchHeldStmt:                               q.markFirmwareDispatchHeldStmt,
+		markFirmwareDispatchedStmt:                                 q.markFirmwareDispatchedStmt,
+		markFirmwareDriftedStmt:                                    q.markFirmwareDriftedStmt,
 		negateSchedulePrioritiesStmt:                               q.negateSchedulePrioritiesStmt,
 		pairDeviceToFleetNodeStmt:                                  q.pairDeviceToFleetNodeStmt,
 		passwordUpdatedAtStmt:                                      q.passwordUpdatedAtStmt,
@@ -4661,6 +4815,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		removeDevicesFromDeviceSetStmt:                             q.removeDevicesFromDeviceSetStmt,
 		resetCurtailmentTargetsForRecurtailStmt:                    q.resetCurtailmentTargetsForRecurtailStmt,
 		resetCurtailmentTargetsForRestoreStmt:                      q.resetCurtailmentTargetsForRestoreStmt,
+		resetFirmwareEnforcementForCohortMembersStmt:               q.resetFirmwareEnforcementForCohortMembersStmt,
+		resetFirmwareEnforcementForCohortTargetStmt:                q.resetFirmwareEnforcementForCohortTargetStmt,
+		resetFirmwareEnforcementForDevicesStmt:                     q.resetFirmwareEnforcementForDevicesStmt,
+		resetFirmwareEnforcementForFirmwareFileStmt:                q.resetFirmwareEnforcementForFirmwareFileStmt,
 		resolveEffectiveCohortForDeviceStmt:                        q.resolveEffectiveCohortForDeviceStmt,
 		resumeCurtailmentFromRestoringStmt:                         q.resumeCurtailmentFromRestoringStmt,
 		resumePausedScheduleStmt:                                   q.resumePausedScheduleStmt,
@@ -4761,10 +4919,12 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		updateUserUsernameStmt:                                     q.updateUserUsernameStmt,
 		upsertBuiltinRoleForOrgStmt:                                q.upsertBuiltinRoleForOrgStmt,
 		upsertCohortFirmwareTargetStmt:                             q.upsertCohortFirmwareTargetStmt,
+		upsertCohortReconcilerHeartbeatStmt:                        q.upsertCohortReconcilerHeartbeatStmt,
 		upsertCommandOnDeviceLogStmt:                               q.upsertCommandOnDeviceLogStmt,
 		upsertCurtailmentAutomationSignalStateStmt:                 q.upsertCurtailmentAutomationSignalStateStmt,
 		upsertCurtailmentReconcilerHeartbeatStmt:                   q.upsertCurtailmentReconcilerHeartbeatStmt,
 		upsertCustomRoleForOrgStmt:                                 q.upsertCustomRoleForOrgStmt,
+		upsertDeviceFirmwareStateStmt:                              q.upsertDeviceFirmwareStateStmt,
 		upsertDevicePairingStmt:                                    q.upsertDevicePairingStmt,
 		upsertDeviceStatusStmt:                                     q.upsertDeviceStatusStmt,
 		upsertDiscoveredDeviceStmt:                                 q.upsertDiscoveredDeviceStmt,
