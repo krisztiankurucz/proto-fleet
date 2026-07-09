@@ -54,14 +54,20 @@ const FirmwareUpdateModal = ({ open, target, onConfirm, onDismiss }: FirmwareUpd
   const [showUploadZone, setShowUploadZone] = useState(false);
   const [targetManufacturer, setTargetManufacturer] = useState("");
   const [targetModel, setTargetModel] = useState("");
+  const [firmwareVersion, setFirmwareVersion] = useState("");
 
   const effectiveTargetManufacturer = target?.targetManufacturer ?? targetManufacturer;
   const effectiveTargetModel = target?.targetModel ?? targetModel;
   const uploadTarget = useMemo(
-    () => ({ targetManufacturer: effectiveTargetManufacturer.trim(), targetModel: effectiveTargetModel.trim() }),
-    [effectiveTargetManufacturer, effectiveTargetModel],
+    () => ({
+      targetManufacturer: effectiveTargetManufacturer.trim(),
+      targetModel: effectiveTargetModel.trim(),
+      firmwareVersion: firmwareVersion.trim(),
+    }),
+    [effectiveTargetManufacturer, effectiveTargetModel, firmwareVersion],
   );
-  const hasUploadTarget = uploadTarget.targetManufacturer !== "" && uploadTarget.targetModel !== "";
+  const hasUploadTarget =
+    uploadTarget.targetManufacturer !== "" && uploadTarget.targetModel !== "" && uploadTarget.firmwareVersion !== "";
 
   useEffect(() => {
     if (open) {
@@ -119,6 +125,7 @@ const FirmwareUpdateModal = ({ open, target, onConfirm, onDismiss }: FirmwareUpd
       setShowUploadZone(false);
       setTargetManufacturer("");
       setTargetModel("");
+      setFirmwareVersion("");
     }
   }, [effectiveFirmwareFileId, onConfirm, reset]);
 
@@ -129,6 +136,7 @@ const FirmwareUpdateModal = ({ open, target, onConfirm, onDismiss }: FirmwareUpd
     setShowUploadZone(false);
     setTargetManufacturer("");
     setTargetModel("");
+    setFirmwareVersion("");
     onDismiss();
   }, [onDismiss, reset]);
 
@@ -188,7 +196,8 @@ const FirmwareUpdateModal = ({ open, target, onConfirm, onDismiss }: FirmwareUpd
                   <div className="flex min-w-0 flex-col">
                     <div className="truncate text-300 text-text-primary">{f.filename}</div>
                     <div className="text-text-secondary text-200">
-                      {f.target_manufacturer} {f.target_model} · {formatFileSize(f.size)} ·{" "}
+                      {f.target_manufacturer} {f.target_model}
+                      {f.firmware_version ? ` · ${f.firmware_version}` : ""} · {formatFileSize(f.size)} ·{" "}
                       {formatTimestamp(isoToEpochSeconds(f.uploaded_at))}
                     </div>
                   </div>
@@ -233,6 +242,13 @@ const FirmwareUpdateModal = ({ open, target, onConfirm, onDismiss }: FirmwareUpd
                 required
               />
             </div>
+            <Input
+              id="firmware-update-version"
+              label="Firmware version"
+              initValue={firmwareVersion}
+              onChange={setFirmwareVersion}
+              required
+            />
             <FileDropZone
               extensions={serverConfig.allowedExtensions}
               onFileSelect={handleUploadFileSelect}
